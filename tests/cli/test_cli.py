@@ -9,6 +9,8 @@ from typing import List
 
 import pytest
 
+from metatrain import PACKAGE_ROOT, __version__
+
 
 COMPFILE = Path(__file__).parents[2] / "src/metatrain/share/metatrain-completion.bash"
 
@@ -31,10 +33,13 @@ def test_available_modules(module):
     subprocess.check_call(["mtt", module, "--help"])
 
 
-@pytest.mark.parametrize("args", ("version", "help"))
-def test_extra_options(args):
-    """Test extra options."""
-    subprocess.check_call(["mtt", "--" + args])
+def test_help():
+    subprocess.check_call(["mtt", "--help"])
+
+
+def test_version():
+    stdout = subprocess.run(["mtt", "--version"], capture_output=True).stdout
+    assert stdout.decode("ascii") == f"metatrain {__version__}\n"
 
 
 def test_debug_flag():
@@ -134,7 +139,21 @@ def test_error(subcommand, capfd, monkeypatch, tmp_path):
     with open(error_file) as f:
         error_log = f.read()
 
-    print(error_file)
     assert f"please include the full traceback log from {error_file!r}" in stdout_log
     assert "No such file or directory" in stdout_log
     assert "Traceback" in error_log
+
+
+def test_run_information(capfd, monkeypatch, tmp_path):
+    """Test that run informations are displayed correctly"""
+    monkeypatch.chdir(tmp_path)
+
+    with pytest.raises(CalledProcessError):
+        subprocess.check_call(["mtt", "export", "experimental.soap_bpnn", "model.ckpt"])
+
+    stdout_log = capfd.readouterr().out
+
+    assert f"Package dir: {PACKAGE_ROOT}" in stdout_log
+    assert f"Working dir: {Path('.').absolute()}" in stdout_log
+    assert f"Version: {__version__}" in stdout_log
+    assert "Command line: mtt export experimental.soap_bpnn model.ckpt" in stdout_log

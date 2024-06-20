@@ -129,6 +129,8 @@ def train_model(
     check_architecture_name(architecture_name)
     architecture = importlib.import_module(f"metatrain.{architecture_name}")
 
+    logger.info(f"Running training for {architecture_name!r} architecture")
+
     Model = architecture.__model__
     Trainer = architecture.__trainer__
 

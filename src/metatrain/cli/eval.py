@@ -207,7 +207,7 @@ def _eval_targets(
     rmse_values = rmse_accumulator.finalize(not_per_atom=["positions_gradients"])
     # print the RMSEs with MetricLogger
     metric_logger = MetricLogger(
-        logobj=logger,
+        log_obj=logger,
         dataset_info=model.capabilities(),
         initial_metrics=rmse_values,
     )

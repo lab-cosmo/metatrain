@@ -281,7 +281,7 @@ class Trainer:
 
             if epoch == 0:
                 metric_logger = MetricLogger(
-                    logobj=logger,
+                    log_obj=logger,
                     dataset_info=model.dataset_info,
                     initial_metrics=[finalized_train_info, finalized_val_info],
                     names=["training", "validation"],
