@@ -153,7 +153,10 @@ def test_train_unknonw_arch_options(monkeypatch, tmp_path):
     """
     options = OmegaConf.create(options_str)
 
-    match = r"Additional properties are not allowed \('num_epoch' was unexpected\)"
+    match = (
+        r"Additional properties are not allowed \('num_epoch' was unexpected\). "
+        r"Do you mean 'num_epochs'?"
+    )
     with pytest.raises(ValidationError, match=match):
         train_model(options)
 

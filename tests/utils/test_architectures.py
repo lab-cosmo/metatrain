@@ -44,7 +44,17 @@ def test_check_architecture_name():
 
 
 def test_check_architecture_name_suggest():
-    name = "soap-bpnn"
+    name = "experimental.soap-bpnn"
+    match = (
+        rf"Architecture {name!r} is not a valid architecture. "
+        r"Do you mean 'experimental.soap_bpnn'?"
+    )
+    with pytest.raises(ValueError, match=match):
+        check_architecture_name(name)
+
+
+def test_check_architecture_no_name_suggest():
+    name = "sdlfijwpeofj"
     match = f"Architecture {name!r} is not a valid architecture."
     with pytest.raises(ValueError, match=match):
         check_architecture_name(name)

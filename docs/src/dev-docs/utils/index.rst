@@ -16,6 +16,7 @@ This is the API for the ``utils`` module of ``metatrain``.
    external_naming
    export
    io
+   jsonschema
    logging
    loss
    metrics

@@ -27,6 +27,7 @@ from ..utils.devices import pick_devices
 from ..utils.distributed.logging import is_main_process
 from ..utils.errors import ArchitectureError
 from ..utils.io import check_suffix
+from ..utils.jsonschema import validate
 from ..utils.omegaconf import BASE_OPTIONS, check_units, expand_dataset_config
 from .eval import _eval_targets
 from .formatter import CustomHelpFormatter
@@ -124,7 +125,7 @@ def train_model(
     with open(PACKAGE_ROOT / "share/schema-base.json", "r") as f:
         schema_base = json.load(f)
 
-    jsonschema.validate(instance=OmegaConf.to_container(options), schema=schema_base)
+    validate(instance=OmegaConf.to_container(options), schema=schema_base)
 
     ###########################
     # LOAD ARCHITECTURE #######
