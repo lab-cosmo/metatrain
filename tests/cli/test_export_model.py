@@ -8,6 +8,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
+import torch
 from metatensor.torch.atomistic import load_atomistic_model
 
 from metatrain.cli.export import export_model
@@ -43,14 +44,17 @@ def test_export(monkeypatch, tmp_path, path):
 
 
 @pytest.mark.parametrize("output", [None, "exported.pt"])
-def test_export_cli(monkeypatch, tmp_path, output):
+@pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
+def test_export_cli(monkeypatch, tmp_path, output, dtype):
     """Test that the export cli runs without an error raise."""
     monkeypatch.chdir(tmp_path)
+
+    dtype_string = "64" if dtype == torch.float64 else "32"
     command = [
         "mtt",
         "export",
         "experimental.soap_bpnn",
-        str(RESOURCES_PATH / "model-32-bit.ckpt"),
+        str(RESOURCES_PATH / f"model-{dtype_string}-bit.ckpt"),
     ]
 
     if output is not None:
@@ -64,6 +68,13 @@ def test_export_cli(monkeypatch, tmp_path, output):
     # Test if extensions are saved
     extensions_glob = glob.glob("extensions/")
     assert len(extensions_glob) == 1
+
+    # Test that the model can be loaded
+    model = load_atomistic_model(output, extensions_directory="extensions/")
+
+    # Check that the model has the correct dtype and is on cpu
+    assert next(model.parameters()).dtype == dtype
+    assert next(model.parameters()).device.type == "cpu"
 
 
 def test_export_cli_architecture_names_choices():

@@ -132,12 +132,13 @@ class PET(torch.nn.Module):
             name = name.replace("model.pet_model.", "")
             new_state_dict[name] = value
 
-        raw_pet.load_state_dict(new_state_dict)
+        dtype = next(iter(new_state_dict.values())).dtype
+        raw_pet.to(dtype).load_state_dict(new_state_dict)
 
         self_contributions = checkpoint["self_contributions"]
         wrapper = SelfContributionsWrapper(raw_pet, self_contributions)
 
-        model.set_trained_model(wrapper)
+        model.to(dtype).set_trained_model(wrapper)
 
         return model
 

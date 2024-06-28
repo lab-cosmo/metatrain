@@ -1,5 +1,6 @@
 import argparse
 import importlib
+import itertools
 import json
 import logging
 import os
@@ -10,6 +11,7 @@ from typing import Dict, Optional, Union
 import jsonschema
 import numpy as np
 import torch
+from metatensor.torch.atomistic import load_atomistic_model
 from omegaconf import DictConfig, OmegaConf
 
 from .. import PACKAGE_ROOT
@@ -406,11 +408,26 @@ def train_model(
     logger.info(
         f"Exporting model to `{output_checked}` and extensions to `{extensions_path}`"
     )
+    # get device from the model
+    device = next(
+        itertools.chain(
+            mts_atomistic_model.parameters(),
+            mts_atomistic_model.buffers(),
+        )
+    ).device
+    # always save on CPU. TODO: remove after release of
+    # https://github.com/lab-cosmo/metatensor/pull/668
+    mts_atomistic_model = mts_atomistic_model.to("cpu")
     mts_atomistic_model.save(str(output_checked), collect_extensions=extensions_path)
 
     ###########################
     # EVALUATE FINAL MODEL ####
     ###########################
+
+    mts_atomistic_model = load_atomistic_model(
+        str(output_checked), extensions_directory=extensions_path
+    )
+    mts_atomistic_model = mts_atomistic_model.to(device)
 
     for i, train_dataset in enumerate(train_datasets):
         if len(train_datasets) == 1:

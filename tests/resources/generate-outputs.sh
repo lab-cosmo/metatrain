@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Generate data for testing..."
+echo "Generating data for testing..."
 
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 

@@ -135,7 +135,8 @@ class AlchemicalModel(torch.nn.Module):
 
         # Create the model
         model = cls(**model_hypers)
-        model.load_state_dict(model_state_dict)
+        dtype = next(iter(model_state_dict.values())).dtype
+        model.to(dtype).load_state_dict(model_state_dict)
 
         return model
 
