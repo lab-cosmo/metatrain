@@ -72,6 +72,7 @@ def test_train(capfd, monkeypatch, tmp_path, output):
     assert file_log == stdout_log
 
     assert "This log is also available" in stdout_log
+    assert "Running training for 'experimental.soap_bpnn' architecture"
     assert re.search(r"Random seed of this run is [1-9]\d*", stdout_log)
     assert "Training dataset:" in stdout_log
     assert "Validation dataset:" in stdout_log

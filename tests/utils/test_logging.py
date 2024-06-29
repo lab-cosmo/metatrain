@@ -1,10 +1,11 @@
 import logging
 import re
+import sys
 import warnings
 
 from metatensor.torch.atomistic import ModelCapabilities, ModelOutput
 
-from metatrain.utils.logging import MetricLogger, setup_logging
+from metatrain.utils.logging import MetricLogger, get_cli_input, setup_logging
 
 
 def assert_log_entry(logtext: str, loglevel: str, message: str) -> None:
@@ -131,3 +132,20 @@ def test_metric_logger(caplog, capsys):
     assert "train loss: 1.000e-01" in stdout_log
     assert "train mtt::foo RMSE: 1000.0 meV" in stdout_log  # eV converted to meV
     assert "train mtt::bar RMSE: 0.10000 hartree" in stdout_log
+
+
+def get_argv():
+    argv = ["mypgroam", "option1", "-o", "optional", "--long", "extra options"]
+    argv_str = 'mypgroam option1 -o optional --long "extra options"'
+    return argv, argv_str
+
+
+def test_get_cli_input():
+    argv, argv_str = get_argv()
+    assert get_cli_input(argv) == argv_str
+
+
+def test_get_cli_input_sys(monkeypatch):
+    argv, argv_str = get_argv()
+    monkeypatch.setattr(sys, "argv", argv)
+    assert get_cli_input() == argv_str

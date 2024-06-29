@@ -20,7 +20,7 @@ from .units import ev_to_mev, get_gradient_units
 class MetricLogger:
     def __init__(
         self,
-        logobj: logging.Logger,
+        log_obj: logging.Logger,
         dataset_info: Union[ModelCapabilities, DatasetInfo],
         initial_metrics: Union[Dict[str, float], List[Dict[str, float]]],
         names: Union[str, List[str]] = "",
@@ -34,13 +34,13 @@ class MetricLogger:
         In this way, and by assuming that these metrics never increase, the logger can
         align the output to make it easier to read.
 
-        :param logobj: A logging instance
+        :param log_obj: A logging instance
         :param model_outputs: outputs of the model. Used to infer physical quantities
             and units
         :param initial_metrics: initial training metrics
         :param names: names of the metrics (e.g., "train", "validation")
         """
-        self.logobj = logobj
+        self.log_obj = log_obj
 
         # Length units will be used to infer units of forces/virials
         assert isinstance(dataset_info.length_unit, str)
@@ -137,7 +137,7 @@ class MetricLogger:
             logging_string = logging_string[2:]
 
         if rank is None or rank == 0:
-            self.logobj.info(logging_string)
+            self.log_obj.info(logging_string)
 
     def _get_units(self, output: str) -> str:
         # Gets the units of an output
@@ -195,7 +195,7 @@ def setup_logging(
     log_file: Optional[Union[str, Path]] = None,
     level: int = logging.WARNING,
 ):
-    """Create a logging environment for a given ``logobj``.
+    """Create a logging environment for a given ``log_obj``.
 
     Extracted and adjusted from
     github.com/MDAnalysis/mdacli/blob/main/src/mdacli/logger.py
@@ -249,3 +249,18 @@ def setup_logging(
             handler.flush()
             handler.close()
             log_obj.removeHandler(handler)
+
+
+def get_cli_input(argv: Optional[List[str]] = None) -> str:
+    """Propper formatted string of the command line input.
+
+    :param argv: List of strings to parse. If :py:obj:`None` taken from
+        :py:obj:`sys.argv`.
+    """
+    if argv is None:
+        argv = sys.argv
+
+    program_name = Path(argv[0]).name
+    # Add additional quotes for connected arguments.
+    arguments = [f'"{arg}"' if " " in arg else arg for arg in argv[1:]]
+    return f"{program_name} {' '.join(arguments)}"

@@ -16,7 +16,7 @@ from .cli.export import (
     export_model,
 )
 from .cli.train import _add_train_model_parser, _prepare_train_model_args, train_model
-from .utils.logging import setup_logging
+from .utils.logging import get_cli_input, setup_logging
 
 
 logger = logging.getLogger(__name__)
@@ -88,6 +88,11 @@ def main():
         error_file = checkpoint_dir / error_file
 
     with setup_logging(logger, log_file=log_file, level=level):
+        logging.info(f"Package dir: {PACKAGE_ROOT}")
+        logging.info(f"Working dir: {Path('.').absolute()}")
+        logging.info(f"Version: {__version__}")
+        logging.info(f"Command line: {get_cli_input()}")
+
         try:
             if callable == "eval_model":
                 _prepare_eval_model_args(args)
