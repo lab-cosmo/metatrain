@@ -1,3 +1,4 @@
+import pytest
 import torch
 from pet.hypers import Hypers
 from pet.pet import PET
@@ -22,7 +23,13 @@ def test_torchscript():
     ARCHITECTURAL_HYPERS = Hypers(model.hypers)
     raw_pet = PET(ARCHITECTURAL_HYPERS, 0.0, len(model.atomic_types))
     model.set_trained_model(raw_pet)
-    torch.jit.script(model)
+
+    match = (
+        "The TorchScript type system doesn't support instance-level annotations on "
+        "empty"
+    )
+    with pytest.warns(UserWarning, match=match):
+        torch.jit.script(model)
 
 
 def test_torchscript_save_load():
@@ -37,7 +44,14 @@ def test_torchscript_save_load():
     ARCHITECTURAL_HYPERS = Hypers(model.hypers)
     raw_pet = PET(ARCHITECTURAL_HYPERS, 0.0, len(model.atomic_types))
     model.set_trained_model(raw_pet)
-    torch.jit.script(model)
+
+    match = (
+        "The TorchScript type system doesn't support instance-level annotations on "
+        "empty"
+    )
+    with pytest.warns(UserWarning, match=match):
+        torch.jit.script(model)
+
     torch.jit.save(
         torch.jit.script(model),
         "pet.pt",

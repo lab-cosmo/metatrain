@@ -501,6 +501,12 @@ def test_train_issue_290(monkeypatch, tmp_path):
 
     structures = ase.io.read("ethanol_reduced_100.xyz", ":")
     more_structures = structures * 15 + [structures[0]]
+
+    # delete calculator to avoid warnings during writing. Remove once updated to ase >=
+    # 3.23.0
+    for atoms in more_structures:
+        atoms.calc = None
+
     ase.io.write("ethanol_1501.xyz", more_structures)
 
     # run training with original options
