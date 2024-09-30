@@ -5,9 +5,9 @@ from typing import Any, Union
 
 import torch
 
-from ..utils.architectures import find_all_architectures, import_architecture
+from ..utils.architectures import find_all_architectures
 from ..utils.export import is_exported
-from ..utils.io import check_file_extension
+from ..utils.io import check_file_extension, load_model
 from .formatter import CustomHelpFormatter
 
 
@@ -40,7 +40,10 @@ def _add_export_model_parser(subparser: argparse._SubParsersAction) -> None:
     parser.add_argument(
         "path",
         type=str,
-        help="Saved model which should be exported",
+        help=(
+            "Saved model which should be exported. Path can be either a URL or a "
+            "local file."
+        ),
     )
     parser.add_argument(
         "-o",
@@ -55,14 +58,14 @@ def _add_export_model_parser(subparser: argparse._SubParsersAction) -> None:
 
 def _prepare_export_model_args(args: argparse.Namespace) -> None:
     """Prepare arguments for export_model."""
-    architecture_name = args.__dict__.pop("architecture_name")
-    architecture = import_architecture(architecture_name)
-
-    args.model = architecture.__model__.load_checkpoint(args.__dict__.pop("path"))
+    args.model = load_model(
+        architecture_name=args.__dict__.pop("architecture_name"),
+        path=args.__dict__.pop("path"),
+    )
 
 
 def export_model(model: Any, output: Union[Path, str] = "exported-model.pt") -> None:
-    """Export a trained model to allow it to make predictions.
+    """Export a trained model allowing it to make predictions.
 
     This includes predictions within molecular simulation engines. Exported models will
     be saved with a ``.pt`` file ending. If ``path`` does not end with this file
