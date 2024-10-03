@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Callable, Dict, List, Optional
 
 import metatensor.torch
 import numpy as np
@@ -11,6 +11,11 @@ from metatensor.torch.atomistic import (
     System,
 )
 from torch.utils.data import DataLoader
+
+from .data import DatasetInfo, TargetInfoDict, get_atomic_types
+from .data.extract_targets import get_targets_dict
+from .evaluate_model import evaluate_model
+from .per_atom import average_by_num_atoms
 
 
 class LLPRUncertaintyModel(torch.nn.Module):
@@ -229,12 +234,13 @@ class LLPRUncertaintyModel(torch.nn.Module):
             class in ``metatrain``.
         """
         device = self.covariance.device
+        dtype = self.covariance.dtype
         for batch in train_loader:
             systems, _ = batch
             n_atoms = torch.tensor(
                 [len(system.positions) for system in systems], device=device
             )
-            systems = [system.to(device=device) for system in systems]
+            systems = [system.to(device=device, dtype=dtype) for system in systems]
             outputs = {
                 "mtt::aux::last_layer_features": ModelOutput(
                     quantity="",
@@ -248,9 +254,99 @@ class LLPRUncertaintyModel(torch.nn.Module):
             )
             output = self.model(systems, options, check_consistency=False)
             ll_feat_tmap = output["mtt::aux::last_layer_features"]
-            ll_feats = ll_feat_tmap.block().values / n_atoms.unsqueeze(1)
+            ll_feats = ll_feat_tmap.block().values.detach() / n_atoms.unsqueeze(1)
             self.covariance += ll_feats.T @ ll_feats
         self.covariance_computed = True
+
+    def compute_covariance_as_pseudo_hessian(
+        self,
+        train_loader: DataLoader,
+        target_infos: TargetInfoDict,
+        loss_fn: Callable,
+        parameters: List[torch.nn.Parameter],
+    ) -> None:
+        """A function to compute the covariance matrix for a training set
+        as the pseudo-Hessian of the loss function.
+
+        The covariance/pseudo-Hessian is stored as a buffer in the model. The
+        loss function must be compatible with the Dataloader (i.e., it should
+        have the same structure as the outputs of the model and as the targets
+        in the dataset). All contributions to the loss functions are assumed to
+        be per-atom, except for quantities that are already per-atom (e.g.,
+        forces).
+
+        :param train_loader: A PyTorch DataLoader with the training data.
+            The individual samples need to be compatible with the ``Dataset``
+            class in ``metatrain``.
+        :param loss_fn: A loss function that takes the model outputs and the
+            targets and returns a scalar loss.
+        :param parameters: A list of model parameters for which the pseudo-Hessian
+            should be computed. This is often necessary as models can have very
+            large numbers of parameters, and the pseudo-Hessian's number of
+            elements grows quadratically with the number of parameters. For this
+            reason, only a subset of the parameters of the model is usually used
+            in the calculation. This list allows the user to feed the parameters
+            of interest directly to the function. In order to function correctly,
+            the model's parameters should be those corresponding to the last
+            layer(s) of the model, such that their concatenation corresponds to the
+            last-layer features, in the same order as those are returned by the
+            base model.
+        """
+        self.model = self.model.train()  # we need gradients w.r.t. parameters
+        # disable gradients for all parameters that are not in the list
+        for parameter in self.model.parameters():
+            parameter.requires_grad = False
+        for parameter in parameters:
+            parameter.requires_grad = True
+
+        dataset = train_loader.dataset
+        dataset_info = DatasetInfo(
+            length_unit=self.capabilities.length_unit,  # TODO: check
+            atomic_types=get_atomic_types(dataset),
+            targets=target_infos,
+        )
+        train_targets = get_targets_dict([train_loader.dataset], dataset_info)
+        device = self.covariance.device
+        dtype = self.covariance.dtype
+        for batch in train_loader:
+            systems, targets = batch
+            systems = [system.to(device=device, dtype=dtype) for system in systems]
+            targets = {
+                name: tmap.to(device=device, dtype=dtype)
+                for name, tmap in targets.items()
+            }
+            predictions = evaluate_model(
+                self.model,
+                systems,
+                TargetInfoDict(**{key: train_targets[key] for key in targets.keys()}),
+                is_training=True,  # keep the computational graph
+            )
+
+            # average by the number of atoms
+            predictions = average_by_num_atoms(predictions, systems, [])
+            targets = average_by_num_atoms(targets, systems, [])
+
+            loss = loss_fn(predictions, targets)
+
+            grads = torch.autograd.grad(
+                loss,
+                parameters,
+                create_graph=False,
+                retain_graph=False,
+                allow_unused=True,  # if there are multiple last-layers
+                materialize_grads=True,  # avoid Nones
+            )
+
+            grads = torch.cat(grads, dim=1)
+            self.covariance += grads.T @ grads
+            for parameter in parameters:
+                parameter.grad = None  # reset the gradients
+
+        self.covariance_computed = True
+
+        for parameter in self.model.parameters():
+            parameter.requires_grad = True
+        self.model = self.model.eval()  # restore the model to evaluation mode
 
     def compute_inverse_covariance(self, regularizer: Optional[float] = None):
         """A function to compute the inverse covariance matrix.
@@ -307,14 +403,16 @@ class LLPRUncertaintyModel(torch.nn.Module):
         """
         # calibrate the LLPR
         device = self.covariance.device
+        dtype = self.covariance.dtype
         all_predictions = {}  # type: ignore
         all_targets = {}  # type: ignore
         all_uncertainties = {}  # type: ignore
         for batch in valid_loader:
             systems, targets = batch
-            systems = [system.to(device=device) for system in systems]
+            systems = [system.to(device=device, dtype=dtype) for system in systems]
             targets = {
-                name: target.to(device=device) for name, target in targets.items()
+                name: target.to(device=device, dtype=dtype)
+                for name, target in targets.items()
             }
             # evaluate the targets and their uncertainties, not per atom
             requested_outputs = {}
@@ -337,10 +435,10 @@ class LLPRUncertaintyModel(torch.nn.Module):
                     all_predictions[name] = []
                     all_targets[name] = []
                     all_uncertainties[uncertainty_name] = []
-                all_predictions[name].append(outputs[name].block().values)
+                all_predictions[name].append(outputs[name].block().values.detach())
                 all_targets[name].append(target.block().values)
                 all_uncertainties[uncertainty_name].append(
-                    outputs[uncertainty_name].block().values
+                    outputs[uncertainty_name].block().values.detach()
                 )
 
         for name in all_predictions:
