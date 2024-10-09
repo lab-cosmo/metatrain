@@ -1,0 +1,742 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="SOAP-BPNN" href="soap-bpnn.html" /><link rel="prev" title="GAP" href="gap.html" />
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
+        <title>PET - metatrain 2023.11.29 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">metatrain 2023.11.29 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">metatrain 2023.11.29 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting-started/index.html">Getting started</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Getting started</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/usage.html">Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/custom_dataset_conf.html">Customize a Dataset Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/advanced_base_config.html">Advanced Base Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/override.html">Override Architecture’s Default Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/checkpoints.html">Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/units.html">Units</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Tutorials</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ase/run_ase.html">Running molecular dynamics with ASE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/programmatic/llpr/llpr.html">Computing LLPR uncertainties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/zbl/dimers.html">Training a model with ZBL corrections</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Available Architectures</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Available Architectures</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="alchemical-model.html">Alchemical Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gap.html">GAP</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">PET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="soap-bpnn.html">SOAP-BPNN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../advanced-concepts/index.html">Advanced concepts</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Advanced concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-concepts/output-naming.html">Output naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-concepts/auxiliary-outputs.html">Auxiliary outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-concepts/multi-gpu.html">Multi-GPU training</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-docs/index.html">Developer documentation</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Developer documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/getting-started.html">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/architecture-life-cycle.html">Life Cycle of an Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/new-architecture.html">Adding a new architecture</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../dev-docs/cli/index.html">CLI API</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of CLI API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/cli/train.html">Train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/cli/eval.html">Eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/cli/export.html">Export</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/cli/formatter.html">Formatter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../dev-docs/utils/index.html">Utility API</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Utility API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../dev-docs/utils/additive/index.html">Additive models</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Additive models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/additive/remove_additive.html">Removing additive contributions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/additive/composition.html">Composition model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/additive/zbl.html">ZBL short-range potential</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../dev-docs/utils/data/index.html">Data</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Data</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/combine_dataloaders.html">Combining dataloaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/dataset.html">Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/get_dataset.html">Reading a dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/readers.html">Readers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/writers.html">Target data Writers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/systems_to_ase.html">Converting Systems to ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/architectures.html">Architectures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/devices.html">Device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/dtype.html">Dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/errors.html">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/evaluate_model.html">Evaluating a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/external_naming.html">External Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/export.html">Export</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/io.html">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/jsonschema.html">Jsonschema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/loss.html">Loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/neighbor_lists.html">Neighbor lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/omegaconf.html">Custom omegaconf functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/output_gradient.html">Output gradient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/per_atom.html">Averaging predictions per atom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/units.html">Unit handling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/architectures/pet.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="pet">
+<span id="architecture-pet"></span><h1>PET<a class="headerlink" href="#pet" title="Link to this heading">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The metatrain interface to PET is <strong>experimental</strong>. You should not use it for
+anything important. You can also fit PET using native scripts (not experimental)
+from <a class="reference external" href="https://spozdn.github.io/pet/train_model.html">here</a>.</p>
+</div>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install the package, you can run the following command in the root directory of the
+repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>.<span class="o">[</span>pet<span class="o">]</span>
+</pre></div>
+</div>
+<p>This will install the package with the PET dependencies.</p>
+</section>
+<section id="default-hyperparameters">
+<h2>Default Hyperparameters<a class="headerlink" href="#default-hyperparameters" title="Link to this heading">¶</a></h2>
+<p>The default hyperparameters for the PET model are:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">experimental.pet</span>
+
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">CUTOFF_DELTA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+<span class="w">  </span><span class="nt">AVERAGE_POOLING</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">TRANSFORMERS_CENTRAL_SPECIFIC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">HEADS_CENTRAL_SPECIFIC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">ADD_TOKEN_FIRST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">ADD_TOKEN_SECOND</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">N_GNN_LAYERS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">TRANSFORMER_D_MODEL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
+<span class="w">  </span><span class="nt">TRANSFORMER_N_HEAD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">TRANSFORMER_DIM_FEEDFORWARD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512</span>
+<span class="w">  </span><span class="nt">HEAD_N_NEURONS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
+<span class="w">  </span><span class="nt">N_TRANS_LAYERS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">ACTIVATION</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">silu</span>
+<span class="w">  </span><span class="nt">USE_LENGTH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">USE_ONLY_LENGTH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">R_CUT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span>
+<span class="w">  </span><span class="nt">R_EMBEDDING_ACTIVATION</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">COMPRESS_MODE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlp</span>
+<span class="w">  </span><span class="nt">BLEND_NEIGHBOR_SPECIES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">AVERAGE_BOND_ENERGIES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">USE_BOND_ENERGIES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">USE_ADDITIONAL_SCALAR_ATTRIBUTES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">SCALAR_ATTRIBUTES_SIZE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">  </span><span class="nt">TRANSFORMER_TYPE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PostLN</span><span class="w"> </span><span class="c1"># PostLN or PreLN</span>
+<span class="w">  </span><span class="nt">USE_LONG_RANGE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">K_CUT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w"> </span><span class="c1"># should be float; only used when USE_LONG_RANGE is True</span>
+<span class="w">  </span><span class="nt">K_CUT_DELTA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">  </span><span class="nt">DTYPE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">float32</span><span class="w"> </span><span class="c1"># float32 or float16 or bfloat16</span>
+<span class="w">  </span><span class="nt">N_TARGETS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">TARGET_INDEX_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">target_index</span>
+<span class="w">  </span><span class="nt">RESIDUAL_FACTOR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
+<span class="w">  </span><span class="nt">USE_ZBL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">INITIAL_LR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e-4</span>
+<span class="w">  </span><span class="nt">EPOCH_NUM</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">EPOCHS_WARMUP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+<span class="w">  </span><span class="nt">SCHEDULER_STEP_SIZE_ATOMIC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500000000</span><span class="w"> </span><span class="c1"># structural version is called &quot;SCHEDULER_STEP_SIZE&quot;</span>
+<span class="w">  </span><span class="nt">GLOBAL_AUG</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">SLIDING_FACTOR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.7</span>
+<span class="w">  </span><span class="nt">ATOMIC_BATCH_SIZE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">850</span><span class="w"> </span><span class="c1"># structural version is called &quot;STRUCTURAL_BATCH_SIZE&quot;</span>
+<span class="w">  </span><span class="nt">BALANCED_DATA_LOADER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"> </span><span class="c1"># if True, use DynamicBatchSampler from torch_geometric</span>
+<span class="w">  </span><span class="nt">MAX_TIME</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">234000</span>
+<span class="w">  </span><span class="nt">ENERGY_WEIGHT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w"> </span><span class="c1"># only used when fitting MLIP</span>
+<span class="w">  </span><span class="nt">MULTI_GPU</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">RANDOM_SEED</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">CUDA_DETERMINISTIC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">MODEL_TO_START_WITH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">  </span><span class="nt">SUPPORT_MISSING_VALUES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">USE_WEIGHT_DECAY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">WEIGHT_DECAY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">DO_GRADIENT_CLIPPING</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">GRADIENT_CLIPPING_MAX_NORM</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w"> </span><span class="c1"># must be overwritten if DO_GRADIENT_CLIPPING is True</span>
+<span class="w">  </span><span class="nt">USE_SHIFT_AGNOSTIC_LOSS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"> </span><span class="c1"># only used when fitting general target. Primary use case: EDOS</span>
+<span class="w">  </span><span class="nt">ENERGIES_LOSS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">per_structure</span><span class="w"> </span><span class="c1"># per_structure or per_atom</span>
+<span class="w">  </span><span class="nt">CHECKPOINT_INTERVAL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+</pre></div>
+</div>
+</section>
+<section id="tuning-hyperparameters">
+<h2>Tuning Hyperparameters<a class="headerlink" href="#tuning-hyperparameters" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">R_CUT</span></code> so that there are about 20-30 neighbors on average for your dataset.</p></li>
+<li><p>Fit the model with the default values for all the other hyperparameters.</p></li>
+<li><p>Ensure that you fit the model long enough for the error to converge. (If not, you can
+always continue fitting the model from the last checkpoint.)</p></li>
+<li><p>[Optional, recommended for large datasets] Increase the scheduler step size, and
+refit the model from scratch until convergence. Do this for several progressively
+increased values for the scheduler step size until convergence.</p></li>
+<li><p>[Optional, this step aims to create a lighter and faster model, not to increase
+accuracy.] Set <code class="docutils literal notranslate"><span class="pre">N_TRANS_LAYERS</span></code> to 2 instead of 3, and repeat steps 3) and 4). If
+step 4) was already done for the default <code class="docutils literal notranslate"><span class="pre">N_TRANS_LAYERS</span></code> value of 3, you can
+probably reuse the converged scheduler step size. The resulting model would be about
+1.5 times faster than the default one, hopefully with very little deterioration of
+the accuracy or without any at all.</p></li>
+<li><p>[Optional, quite laborious, 99% you don’t need this] Read sections 6 and 7 of the
+<a class="reference external" href="https://arxiv.org/abs/2305.19302">PET paper</a>, which discuss the architecture, main
+hyperparameters, and an ablation study illustrating their impact on the model’s
+accuracy. Design your own experiments.</p></li>
+</ol>
+<section id="more-details">
+<h3>More details:<a class="headerlink" href="#more-details" title="Link to this heading">¶</a></h3>
+<p>There are two significant groups of hyperparameters controlling PET fits. The first
+group consists of the hyperparameters related to the model architecture itself, such as
+the number of layers, type of activation function, etc. The second group consists of
+settings that control how the fitting is done, such as batch size, the total number of
+epochs, learning rate, parameters of the learning rate scheduler, and so on.</p>
+<p>Within conventional wisdom originating from <em>traditional</em> models, such as linear and
+kernel regression, the second group of hyperparameters that controls the optimizer’s
+behavior might seem unimportant. Indeed, when fitting linear or kernel models, the exact
+value of the optimum is usually achieved by linear algebra methods, and thus, the
+particular choice of optimizer has little importance.</p>
+<p>However, with deep neural networks, the situation is drastically different. The exact
+minimum of the loss is typically never achieved; instead, the model asymptotically
+converges to it during fitting. It is essential to ensure that the total number of
+epochs is sufficient for the model to approach the optimum closely, thus achieving good
+accuracy.</p>
+<p><strong>In the case of PET, there is only one hyperparameter that MUST be manually adjusted
+for each new dataset: the cutoff radius.</strong> The selected cutoff significantly impacts the
+model’s accuracy and fitting/inference times, making it very sensitive to this
+hyperparameter. All other hyperparameters can be safely set to their default values. The
+next reasonable step (after fitting with default settings), especially for large
+datasets is to try to increase the duration of fitting and see if it improves the
+accuracy of the obtained model.</p>
+<section id="selection-of-r-cut">
+<h4>Selection of <code class="docutils literal notranslate"><span class="pre">R_CUT</span></code><a class="headerlink" href="#selection-of-r-cut" title="Link to this heading">¶</a></h4>
+<p>A good starting point is to select a cutoff radius that ensures about 20-30 neighbors on
+average. This can be done by analyzing the neighbor lists for different cutoffs before
+launching the training script. <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/neighborlist.html">This</a> is an example of a neighbor list
+constructor in Python.</p>
+<p>For finite configurations, such as small molecules in COLL/QM9/rmd17 datasets, it makes
+sense to select <code class="docutils literal notranslate"><span class="pre">R_CUT</span></code> large enough to encompass the whole molecule. For instance, it
+can be set to 100 Å, as there are no numerical instabilities for arbitrarily large
+cutoffs.</p>
+<p>The hyperparameter for the cutoff radius is called <code class="docutils literal notranslate"><span class="pre">R_CUT.</span></code></p>
+</section>
+<section id="selection-of-fitting-duration">
+<h4>Selection of fitting duration<a class="headerlink" href="#selection-of-fitting-duration" title="Link to this heading">¶</a></h4>
+<p>The second most important group of settings is the one that adjusts the fitting duration
+of the model. Unlike specifying a dataset-specific cutoff radius, this step is optional
+since reasonable results can be obtained with the default fitting duration. The time
+required to fit the model is a complex function of the model’s size, the dataset’s size,
+and the complexity of the studied interatomic interactions. The default value might be
+insufficient for large datasets. If the model is still underfit after the predefined
+number of epochs, the fitting procedure can be continued by relaunching the fitting
+script.</p>
+<p>However, the total number of epochs is only part of the equation. Another key aspect is
+the rate at which the learning rate decays. We use <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.StepLR.html">StepLR</a> as a
+learning rate scheduler. This scheduler reduces the learning rate by a factor of
+<code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<code class="docutils literal notranslate"><span class="pre">new_learning_rate</span> <span class="pre">=</span> <span class="pre">old_learning_rate</span> <span class="pre">*</span> <span class="pre">gamma</span></code>) every <code class="docutils literal notranslate"><span class="pre">step_size</span></code>
+epochs. In the current implementation of PET, <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is fixed at 0.5, meaning that
+the learning rate is halved every <code class="docutils literal notranslate"><span class="pre">step_size</span></code> epochs.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">step_size</span></code> is set too small, the learning rate will decrease to very low values
+too quickly, hindering the convergence of PET. Prolonged fitting under these conditions
+will be ineffective due to the nearly zero learning rate. Therefore, achieving complete
+convergence requires not only a sufficient number of epochs but also an appropriately
+large <code class="docutils literal notranslate"><span class="pre">step_size</span></code>. For typical moderately sized datasets, the default value should
+suffice. However, for particularly large datasets, increasing <code class="docutils literal notranslate"><span class="pre">step_size</span></code> may be
+necessary to ensure complete convergence. The hyperparameter controlling the
+<code class="docutils literal notranslate"><span class="pre">step_size</span></code> of the StepLR learning rate scheduler is called <code class="docutils literal notranslate"><span class="pre">SCHEDULER_STEP_SIZE</span></code>.</p>
+<p>It is worth noting that the default <code class="docutils literal notranslate"><span class="pre">step_size</span></code> is quite large. Thus, it is normal
+if, when fitting on V100, which is quite slow, there is no event of lr rate decrease
+during the first day or even during a couple of days. In addition, for some datasets,
+the fitting might take longer than for others (related to inhomogeneous densities),
+which can further postpone the first event of lr decrease.</p>
+<p>The discussed convergence above, especially in terms of the total duration of fitting,
+should preferably be checked on log-log plots showing how the validation error depends
+on the epoch number. The raw log values are typically hard to extract useful insights
+from.</p>
+<p>For hyperparameters like <code class="docutils literal notranslate"><span class="pre">SCHEDULER_STEP_SIZE</span></code>, <code class="docutils literal notranslate"><span class="pre">EPOCH_NUM</span></code>, <code class="docutils literal notranslate"><span class="pre">BATCH_SIZE</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">EPOCHS_WARMUP</span></code>, either normal or atomic versions can be specified.
+<code class="docutils literal notranslate"><span class="pre">SCHEDULER_STEP_SIZE</span></code> was discussed above; <code class="docutils literal notranslate"><span class="pre">EPOCH_NUM</span></code> represents the total number
+of epochs, and <code class="docutils literal notranslate"><span class="pre">BATCH_SIZE</span></code> is the number of structures sampled in each minibatch for
+a single step of stochastic gradient descent. The atomic versions are termed
+<code class="docutils literal notranslate"><span class="pre">SCHEDULER_STEP_SIZE_ATOMIC</span></code>, <code class="docutils literal notranslate"><span class="pre">EPOCH_NUM_ATOMIC</span></code>, <code class="docutils literal notranslate"><span class="pre">BATCH_SIZE_ATOMIC</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">EPOCHS_WARMUP_ATOMIC</span></code>. The motivation for the atomic versions is to improve the
+transferability of default hyperparameters across heterogeneous datasets. For instance,
+using the same batch size for datasets with structures of very different sizes makes
+little sense. If one dataset contains molecules with 10 atoms on average and another
+contains nanoparticles with 1000 atoms, it makes sense to use a 100 times larger batch
+size in the first case. If <code class="docutils literal notranslate"><span class="pre">BATCH_SIZE_ATOMIC</span></code> is specified, the normal batch size is
+computed as <code class="docutils literal notranslate"><span class="pre">BATCH_SIZE</span> <span class="pre">=</span> <span class="pre">BATCH_SIZE_ATOMIC</span> <span class="pre">/</span>
+<span class="pre">(average_number_of_atoms_in_the_training_dataset)</span></code>. Similar logic applies to
+<code class="docutils literal notranslate"><span class="pre">SCHEDULER_STEP_SIZE,</span></code> <code class="docutils literal notranslate"><span class="pre">EPOCH_NUM,</span></code> and <code class="docutils literal notranslate"><span class="pre">EPOCHS_WARMUP.</span></code> In these cases, normal
+versions are obtained by division by the total number of atoms of structures in the
+training dataset. All default values are given by atomic versions for better
+transferability across various datasets.</p>
+<p>To increase the step size of the learning rate scheduler by, for example, 2 times, take
+the default value for <code class="docutils literal notranslate"><span class="pre">SCHEDULER_STEP_SIZE_ATOMIC</span></code> from the default hypers and
+specify a value that’s twice as large.</p>
+<p>It is worth noting that the stopping criterion of PET is either exceeding the maximum
+number of epochs (specified by <code class="docutils literal notranslate"><span class="pre">EPOCH_NUM</span></code> or <code class="docutils literal notranslate"><span class="pre">EPOCH_NUM_ATOMIC</span></code>) or exceeding the
+specified maximum fitting time (controlled by the hyperparameter <code class="docutils literal notranslate"><span class="pre">MAX_TIME</span></code>). By
+default, the second criterion is used, with the default number of epochs set nearly to
+infinity, while the default maximum time is set to be 65 hours.</p>
+</section>
+<section id="lightweight-model">
+<h4>Lightweight Model<a class="headerlink" href="#lightweight-model" title="Link to this heading">¶</a></h4>
+<p>The default hyperparameters were selected with one goal in mind: to maximize the
+probability of achieving the best accuracy on a typical moderate-sized dataset. As a
+result, some default hyperparameters might be excessive, meaning they could be adjusted
+to significantly increase the model’s speed with minimal impact on accuracy. For
+practical use, especially when conducting massive calculations where model speed is
+crucial, it may be beneficial to set <code class="docutils literal notranslate"><span class="pre">N_TRANS_LAYERS</span></code> to <code class="docutils literal notranslate"><span class="pre">2</span></code> instead of the default
+value of <code class="docutils literal notranslate"><span class="pre">3</span></code>. The <code class="docutils literal notranslate"><span class="pre">N_TRANS_LAYERS</span></code> hyperparameter controls the number of transformer
+layers in each message-passing block (see more details in the <a class="reference external" href="https://arxiv.org/abs/2305.19302">PET paper</a>). This adjustment would result in a model that is
+about <em>1.5 times</em> more lightweight and faster, with an expected minimal deterioration in
+accuracy.</p>
+</section>
+</section>
+</section>
+<section id="description-of-the-architecture">
+<h2>Description of the Architecture<a class="headerlink" href="#description-of-the-architecture" title="Link to this heading">¶</a></h2>
+<p>This section contains a simplified description of the architecture covering
+most important macro-organization without all the details and nuances.</p>
+<p>PET is a graph neural network (GNN) architecture featuring
+<code class="docutils literal notranslate"><span class="pre">N_GNN_LAYERS</span></code> message-passing layers. At each layer, messages are exchanged
+between all atoms within a distance <code class="docutils literal notranslate"><span class="pre">R_CUT</span></code> from each other. The functional
+form of each layer is an arbitrarily deep transformer applied individually to
+each atom. Atomic environments are constructed around each atom, defined by all
+neighbors within <code class="docutils literal notranslate"><span class="pre">R_CUT</span></code>. Each neighbor sends a message to the central atom,
+with each message being a token of fixed size <code class="docutils literal notranslate"><span class="pre">TRANSFORMER_D_MODEL</span></code>.</p>
+<p>These tokens are processed by a transformer, which performs a permutationally
+equivariant sequence-to-sequence transformation. The output sequence is then
+treated as outbound messages from the central atom to all neighbors. Consequently,
+for a model with <code class="docutils literal notranslate"><span class="pre">N_GNN_LAYERS</span></code> layers and a system with <code class="docutils literal notranslate"><span class="pre">N</span></code> atoms, there are
+<code class="docutils literal notranslate"><span class="pre">N_GNN_LAYERS</span></code> individual transformers with distinct weights, each independently
+invoked <code class="docutils literal notranslate"><span class="pre">N</span></code> times, resulting in <code class="docutils literal notranslate"><span class="pre">N_GNN_LAYERS</span> <span class="pre">*</span> <span class="pre">N</span></code> transformer runs. The
+number of input tokens for each transformer run is determined by the number of
+neighbors of the central atom.</p>
+<p>In addition to an input message from a neighboring atom, geometric information
+about the displacement vector <code class="docutils literal notranslate"><span class="pre">r_ij</span></code> from the central atom to the corresponding
+neighbor is incorporated into the token. After each message-passing layer, all
+output messages are fed into a head (individual for each message-passing layer),
+implemented as a shallow MLP, to produce a contribution to the total prediction.
+The total prediction is computed
+as the sum of all head outputs over all message-passing layers and all messages.</p>
+<p>This architecture is rigorously invariant with respect to translations because it
+uses displacement vectors that do not change if both the central atom and a neighbor
+are rigidly shifted. It is invariant with respect to permutations of identical atoms
+because the transformer defines a permutationally covariant sequence-to-sequence
+transformation, and the sum over the contributions from all edges yields an overall
+invariant energy prediction. However, it is not rotationally invariant since it
+operates with the raw Cartesian components of displacement vectors.</p>
+</section>
+<section id="architecture-hyperparameters">
+<h2>Architecture Hyperparameters<a class="headerlink" href="#architecture-hyperparameters" title="Link to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>While PET supports CPU training, it is highly recommended to use a CUDA GPU for
+significantly faster training. CPU training can be very slow.</p>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RANDOM_SEED</span></code>: random seed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CUDA_DETERMINISTIC</span></code>: if applying PyTorch reproducibility settings</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MULTI_GPU</span></code>: use multi-GPU training (on one node) using DataParallel from
+PyTorch-Geometric</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">R_CUT</span></code>: cutoff radius</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CUTOFF_DELTA</span></code>: width of the transition region for a cutoff function used
+by PET to ensure smoothness with respect to the (dis)appearance of atoms at
+the cutoff sphere</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GLOBAL_AUG</span></code>: whether to use global augmentation or a local one, rotating
+atomic environments independently</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">USE_ENERGIES</span></code>: whether to use energies for training</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">USE_FORCES</span></code>: whether to use forces for training</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SLIDING_FACTOR</span></code>: sliding factor for exponential sliding averages of MSE in
+energies and forces in our combined loss definition</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ENERGY_WEIGHT</span></code>: $w_{E}$, dimensionless energy weight in our combined loss
+definition</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">N_GNN_LAYERS</span></code>: number of message-passing blocks</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TRANSFORMER_D_MODEL</span></code>: was denoted as d_{pet} in the main text of
+the paper</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TRANSFORMER_N_HEAD</span></code>: number of heads of each transformer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TRANSFORMER_DIM_FEEDFORWARD</span></code>: feedforward dimensionality of each
+transformer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HEAD_N_NEURONS</span></code>: number of neurons in the intermediate layers of HEAD MLPs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">N_TRANS_LAYERS</span></code>: number of layers of each transformer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ACTIVATION</span></code>: activation function used everywhere</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">INITIAL_LR</span></code>: initial learning rate</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MAX_TIME</span></code>: maximal time to train the model in seconds</p></li>
+</ul>
+<hr class="docutils" />
+<p>For parameters such as <code class="docutils literal notranslate"><span class="pre">EPOCH_NUM</span></code> the user can specify either normal
+<code class="docutils literal notranslate"><span class="pre">EPOCH_NUM</span></code> or <code class="docutils literal notranslate"><span class="pre">EPOCH_NUM_ATOMIC</span></code>. If the second is specified, normal
+<code class="docutils literal notranslate"><span class="pre">EPOCH_NUM</span></code> is computed as <code class="docutils literal notranslate"><span class="pre">EPOCH_NUM_ATOMIC</span> <span class="pre">/</span> <span class="pre">(total</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">atoms</span> <span class="pre">in</span> <span class="pre">the</span>
+<span class="pre">training</span> <span class="pre">dataset)</span></code>. Similarly defined are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SCHEDULER_STEP_SIZE_ATOMIC</span></code>: step size of StepLR learning rate schedule</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EPOCHS_WARMUP_ATOMIC</span></code>: linear warmup time</p></li>
+</ul>
+<p>For the batch size, the normal version of batch size is computed as
+<code class="docutils literal notranslate"><span class="pre">BATCH_SIZE_ATOMIC</span> <span class="pre">/</span> <span class="pre">(average</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">atoms</span> <span class="pre">in</span> <span class="pre">structures</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">training</span>
+<span class="pre">dataset)</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ATOMIC_BATCH_SIZE</span></code>: batch size</p></li>
+</ul>
+<hr class="docutils" />
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">USE_LENGTH</span></code>: explicitly use length in r embedding or not</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">USE_ONLY_LENGTH</span></code>: use only length in r embedding (used to get auxiliary
+intrinsically invariant models)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">USE_BOND_ENERGIES</span></code>: use bond contributions to energies or not</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AVERAGE_BOND_ENERGIES</span></code>: average bond contributions or sum</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BLEND_NEIGHBOR_SPECIES</span></code>: if True, explicitly encode embeddings of neighbor
+species to the overall embeddings in each message-passing block; if False,
+specify the very first input messages as embeddings of neighbor species
+instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">R_EMBEDDING_ACTIVATION</span></code>: apply or not activation after computing r
+embedding by a linear layer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">COMPRESS_MODE</span></code>: if “mlp,” get overall embedding either by MLP; if “linear,”
+use simple linear compression instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ADD_TOKEN_FIRST</span></code>: add or not token associated with central atom for the
+very first message-passing block</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ADD_TOKEN_SECOND</span></code>: add or not token associated with central atom for all
+the others (to be renamed in future)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AVERAGE_POOLING</span></code>: if not using a central token, controls if summation or
+average pooling is used</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">USE_ADDITIONAL_SCALAR_ATTRIBUTES</span></code>: if using additional scalar attributes
+such as collinear spins</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCALAR_ATTRIBUTES_SIZE</span></code>: dimensionality of additional scalar attributes</p></li>
+</ul>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="soap-bpnn.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SOAP-BPNN</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="gap.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">GAP</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, metatrain developers
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link fa-brands fa-github fa-2x" href="https://github.com/lab-cosmo/metatrain" aria-label="GitHub"></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">PET</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#default-hyperparameters">Default Hyperparameters</a></li>
+<li><a class="reference internal" href="#tuning-hyperparameters">Tuning Hyperparameters</a><ul>
+<li><a class="reference internal" href="#more-details">More details:</a><ul>
+<li><a class="reference internal" href="#selection-of-r-cut">Selection of <code class="docutils literal notranslate"><span class="pre">R_CUT</span></code></a></li>
+<li><a class="reference internal" href="#selection-of-fitting-duration">Selection of fitting duration</a></li>
+<li><a class="reference internal" href="#lightweight-model">Lightweight Model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#description-of-the-architecture">Description of the Architecture</a></li>
+<li><a class="reference internal" href="#architecture-hyperparameters">Architecture Hyperparameters</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=5c732492"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../_static/toggleprompt.js?v=5801b3bb"></script>
+    </body>
+</html>
