@@ -25,20 +25,30 @@ or
     mtt train options.yaml -c model.ckpt
 
 Checkpoints can also be turned into exported models using the ``export`` sub-command.
+The command requires the *architecture name* and the saved checkpoint *path* as
+positional arguments
 
 .. code-block:: bash
 
-    mtt export model.ckpt -o model.pt
+    mtt export experimental.soap_bpnn model.ckpt -o model.pt
 
 or
 
 .. code-block:: bash
 
-    mtt export model.ckpt --output model.pt
+    mtt export experimental.soap_bpnn model.ckpt --output model.pt
+
+For a export of distribution of models the ``export`` command also supports parsing
+models from remote locations. To export a remote model you can provide a URL instead of
+a file path.
+
+.. code-block:: bash
+
+    mtt export experimental.soap_bpnn https://my.url.com/model.ckpt --output model.pt
 
 Keep in mind that a checkpoint (``.ckpt``) is only a temporary file, which can have
 several dependencies and may become unusable if the corresponding architecture is
-updated. In constrast, exported models (``.pt``) act as standalone files.
-For long-term usage, you should export your model! Exporting a model is also necessary
-if you want to use it in other frameworks, especially in molecular simulations
-(see the :ref:`tutorials`).
+updated. In constrast, exported models (``.pt``) act as standalone files. For long-term
+usage, you should export your model! Exporting a model is also necessary if you want to
+use it in other frameworks, especially in molecular simulations (see the
+:ref:`tutorials`).

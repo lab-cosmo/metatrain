@@ -54,6 +54,10 @@ def is_exported(model: Any) -> bool:
     :param model: The model to check
     :return: :py:obj:`True` if the ``model`` has been exported, :py:obj:`False`
         otherwise.
+
+    .. seealso::
+        :py:func:`utils.io.is_exported_file <metatrain.utils.io.is_exported_file>`
+        to verify if a saved model on disk is already exported.
     """
     # If the model is saved and loaded again, its type is RecursiveScriptModule
     if type(model) in [
