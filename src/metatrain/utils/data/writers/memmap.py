@@ -13,18 +13,19 @@ class MemmapWriter(Writer):
     """
     Write systems and predictions to the on-disk layout consumed by
     :py:class:`metatrain.utils.data.dataset.MemmapDataset`: a directory containing
-    ``ns.npy``, ``na.npy``, ``x.bin``, ``a.bin``, ``c.bin``, and one ``<target>.bin``
-    file per target (plus ``<target>_forces.bin``/``<target>_stress.bin`` for
-    position/strain gradients). The resulting directory can be passed straight back to
-    ``metatrain`` as a ``systems: read_from:`` dataset, which makes this format well
-    suited for very large evaluation runs (e.g. >1M structures) that should not be
-    re-read as a single in-memory XYZ file.
+    ``ns.npy``, ``na.npy``, ``pbc.npy``, ``x.bin``, ``a.bin``, ``c.bin``, and one
+    ``<target>.bin`` file per target (plus
+    ``<target>_forces.bin``/``<target>_stress.bin`` for position/strain gradients). The
+    resulting directory can be passed straight back to ``metatrain`` as a ``systems:
+    read_from:`` dataset, which makes this format well suited for very large evaluation
+    runs (e.g. >1M structures) that should not be re-read as a single in-memory XYZ
+    file.
 
     The final number of structures/atoms is only known once evaluation has finished,
     so every array is streamed to its ``.bin`` file (append-only, on every ``write()``
     call) rather than buffered in memory or in a temporary directory. This keeps
     memory use and disk I/O to a single pass, at the cost of not knowing final shapes
-    until ``finish()``, where the small ``ns.npy``/``na.npy`` index files (which
+    until ``finish()``, where the small ``ns.npy``/``na.npy``/``pbc.npy`` files (which
     require the final structure/atom counts) are written and all files are closed.
 
     :param path: Directory path to write into (e.g. ``predictions/``), used as-is
@@ -59,6 +60,7 @@ class MemmapWriter(Writer):
         self.directory.mkdir(parents=True, exist_ok=True)
 
         self._atom_counts: List[int] = []
+        self._pbc: List[np.ndarray] = []
         self._files: Dict[str, BinaryIO] = {}
 
     def _file(self, name: str) -> BinaryIO:
@@ -80,6 +82,7 @@ class MemmapWriter(Writer):
             cpu_systems, per_system_preds, strict=True
         ):
             self._atom_counts.append(len(system))
+            self._pbc.append(system.pbc.numpy())
             system.types.to(torch.int32).numpy().tofile(self._file("a.bin"))
             system.positions.to(torch.float32).numpy().tofile(self._file("x.bin"))
             system.cell.to(torch.float32).numpy().tofile(self._file("c.bin"))
@@ -117,11 +120,15 @@ class MemmapWriter(Writer):
                     gvalues.numpy().tofile(self._file(f"{key}.bin"))
 
     def finish(self) -> None:
-        """Write ``ns.npy``/``na.npy`` and close all open binary files."""
+        """Write ``ns.npy``/``na.npy``/``pbc.npy`` and close all open binary files."""
         ns = len(self._atom_counts)
         na: np.ndarray = np.cumsum(np.array([0] + self._atom_counts, dtype=np.int64))
         np.save(self.directory / "ns.npy", ns)
         np.save(self.directory / "na.npy", na)
+        np.save(
+            self.directory / "pbc.npy",
+            np.array(self._pbc, dtype=bool).reshape(ns, 3),
+        )
 
         for f in self._files.values():
             f.close()

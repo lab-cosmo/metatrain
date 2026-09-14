@@ -509,6 +509,49 @@ def test_memmap_writer_streams_to_disk(monkeypatch, tmp_path):
     np.testing.assert_allclose(energy, expected_energy, atol=1e-6)
 
 
+def test_memmap_writer_saves_pbc(monkeypatch, tmp_path):
+    """The periodicity of each system is saved to pbc.npy"""
+
+    monkeypatch.chdir(tmp_path)
+
+    _, capabilities, predictions = systems_capabilities_predictions()
+
+    slab_cell = torch.tensor([[3.0, 0.0, 0.0], [0.0, 3.0, 0.0], [0.0, 0.0, 0.0]])
+    systems = 2 * [
+        System(
+            types=torch.tensor([1, 1]),
+            positions=torch.tensor([[0, 0, 0], [0, 0, 0.74]]),
+            cell=slab_cell,
+            pbc=torch.tensor([True, True, False]),
+        )
+    ]
+
+    filename = "test_pbc/"
+    writer = MemmapWriter(filename, capabilities=capabilities)
+    writer.write(systems, predictions)
+    writer.finish()
+
+    pbc = np.load(Path(filename) / "pbc.npy")
+    assert pbc.dtype == bool
+    assert pbc.tolist() == [[True, True, False], [True, True, False]]
+
+    target_options = {
+        "energy": {
+            "key": "energy",
+            "sample_kind": "system",
+            "num_subtargets": 1,
+            "type": "scalar",
+            "quantity": "energy",
+            "forces": False,
+            "stress": False,
+            "virial": False,
+        }
+    }
+
+    dataset = MemmapDataset(Path(filename), target_options)
+    assert dataset[0].system.pbc.tolist() == [True, True, False]
+
+
 def test_memmap_writer_append_not_supported(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
     with pytest.raises(ValueError, match="Appending is not supported"):

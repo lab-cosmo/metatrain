@@ -1288,6 +1288,9 @@ class MemmapDataset(TorchDataset):
         (na[-1], 3).
     - a.bin: atomic types of all atoms in the dataset, concatenated. Shape: (na[-1],).
     - c.bin: cell matrices of all structures in the dataset. Shape: (ns, 3, 3).
+    - pbc.npy (optional): periodic boundary conditions of each structure. Shape:
+        (ns, 3). If this file is absent, a structure is taken to be periodic along the
+        directions whose cell vector is non-zero
     - <key>.bin: target values for each structure or atom, depending on the
         whether the target is defined per atom or per structure.
         Shape: (ns, ..., num_subtargets) if per-structures or
@@ -1349,6 +1352,9 @@ class MemmapDataset(TorchDataset):
         self.a = MemmapArray(path / "a.bin", (self.na[-1],), "int32", mode="r")
         if os.path.exists(path / "c.bin"):
             self.c = MemmapArray(path / "c.bin", (self.ns, 3, 3), "float32", mode="r")
+        self.pbc = None
+        if os.path.exists(path / "pbc.npy"):
+            self.pbc = np.load(path / "pbc.npy")
         self.momenta = None
         if os.path.exists(path / "momenta.bin"):  # for FlashMD
             self.momenta = MemmapArray(
@@ -1470,12 +1476,14 @@ class MemmapDataset(TorchDataset):
         else:
             c = torch.zeros((3, 3), dtype=torch.float64)
 
-        system = System(
-            positions=x,
-            types=a,
-            cell=c,
-            pbc=torch.logical_not(torch.all(c == 0.0, dim=1)),
-        )
+        if self.pbc is None:
+            pbc = torch.logical_not(torch.all(c == 0.0, dim=1))
+        else:
+            pbc = torch.tensor(self.pbc[i], dtype=torch.bool)
+            # metatomic requires zero cell vectors along non-periodic directions
+            c[torch.logical_not(pbc)] = 0.0
+
+        system = System(positions=x, types=a, cell=c, pbc=pbc)
 
         # attach momenta to the system
         if momenta is not None:

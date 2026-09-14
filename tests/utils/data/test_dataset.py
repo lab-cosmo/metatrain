@@ -837,6 +837,47 @@ def _write_minimal_memmap(tmp_path, ns=3, values_per_system=None):
     return target_options, values_per_system
 
 
+def test_memmap_uses_pbc_file(tmp_path):
+    target_options, _ = _write_minimal_memmap(tmp_path, ns=2)
+
+    # a slab and a structure stored with a cell but no periodicity
+    cells = np.array(
+        [
+            [[3.0, 0.0, 0.0], [0.0, 3.0, 0.0], [0.0, 0.0, 100.0]],
+            [[10.0, 0.0, 0.0], [0.0, 10.0, 0.0], [0.0, 0.0, 10.0]],
+        ],
+        dtype="float32",
+    )
+    cells.tofile(tmp_path / "c.bin")
+    np.save(
+        tmp_path / "pbc.npy",
+        np.array([[True, True, False], [False, False, False]]),
+    )
+
+    dataset = MemmapDataset(tmp_path, target_options)
+
+    slab = dataset[0].system
+    assert slab.pbc.tolist() == [True, True, False]
+    assert slab.cell[2].tolist() == [0.0, 0.0, 0.0]
+    assert slab.cell[0].tolist() == [3.0, 0.0, 0.0]
+
+    isolated = dataset[1].system
+    assert isolated.pbc.tolist() == [False, False, False]
+    assert torch.all(isolated.cell == 0.0)
+
+
+def test_memmap_infers_pbc_without_pbc_file(tmp_path):
+    """without pbc.npy, periodicity is derived from the non-zero cell vectors"""
+    target_options, _ = _write_minimal_memmap(tmp_path, ns=1)
+    np.array(
+        [[[3.0, 0.0, 0.0], [0.0, 3.0, 0.0], [0.0, 0.0, 0.0]]], dtype="float32"
+    ).tofile(tmp_path / "c.bin")
+
+    dataset = MemmapDataset(tmp_path, target_options)
+
+    assert dataset[0].system.pbc.tolist() == [True, True, False]
+
+
 # ============================================================
 # MemmapDataset extra_data tests
 # ============================================================

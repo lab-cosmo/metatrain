@@ -80,6 +80,9 @@ directory of NumPy and raw binary arrays. It uses the following files:
 - ``x.bin``: positions of all atoms, concatenated, shape ``(na[-1], 3)``, ``float32``
 - ``a.bin``: atomic types of all atoms, concatenated, shape ``(na[-1],)``, ``int32``
 - ``c.bin`` (optional): cell matrices, shape ``(ns, 3, 3)``, ``float32``
+- ``pbc.npy`` (optional): periodic boundary conditions, shape ``(ns, 3)``. If this file
+  is missing, structures are assumed to be periodic along the directions whose cell
+  vector is non-zero
 - ``<key>.bin``: one file per target and extra-data entry, named after the corresponding
   ``key`` option. Per-structure quantities have shape ``(ns, ..., num_subtargets)``,
   while per-atom quantities have shape ``(na[-1], ..., num_subtargets)``. These arrays
