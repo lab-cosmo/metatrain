@@ -1280,7 +1280,7 @@ class MemmapDataset(TorchDataset):
     The dataset is stored in a directory, where the dataset is stored in a set of
     memory-mapped numpy arrays. These are:
 
-    - ns.npy: total number of structures in the dataset. Shape: (1,).
+    - ns.npy: total number of structures in the dataset. Shape: (), scalar.
     - na.npy: cumulative number of atoms per structure. na[-1] therefore corresponds to
         the total number of atoms in the dataset. Shape: (ns+1,). Must use ``int64``
         dtype (required for datasets with more than ~2 billion atoms).
@@ -1338,7 +1338,12 @@ class MemmapDataset(TorchDataset):
         )
 
         # Information about the structures
-        self.ns = np.load(path / "ns.npy")
+        ns = np.load(path / "ns.npy")
+        if ns.ndim != 0:
+            raise ValueError(
+                f"ns.npy must contain a scalar, got an array of shape {ns.shape}"
+            )
+        self.ns = int(ns)
         self.na = np.load(path / "na.npy")
         if self.na.dtype != np.int64:
             raise ValueError(

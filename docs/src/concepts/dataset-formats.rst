@@ -75,7 +75,7 @@ Memory-mapped directories
 A memory-mapped dataset (:py:class:`metatrain.utils.data.dataset.MemmapDataset`) is a
 directory of NumPy and raw binary arrays. It uses the following files:
 
-- ``ns.npy``: number of structures, shape ``(1,)``
+- ``ns.npy``: number of structures, stored as a scalar, shape ``()``
 - ``na.npy``: cumulative number of atoms per structure, shape ``(ns + 1,)``, ``int64``
 - ``x.bin``: positions of all atoms, concatenated, shape ``(na[-1], 3)``, ``float32``
 - ``a.bin``: atomic types of all atoms, concatenated, shape ``(na[-1],)``, ``int32``
