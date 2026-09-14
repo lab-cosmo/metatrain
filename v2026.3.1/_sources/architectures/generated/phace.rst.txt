@@ -1,0 +1,196 @@
+.. _arch-phace:
+
+PhACE (Experimental)
+====================
+
+.. image:: https://codecov.io/gh/metatensor/metatrain/branch/main/graph/badge.svg?component=phace
+   :target: https://app.codecov.io/gh/metatensor/metatrain/tree/main/src/metatrain/experimental/phace?components%5B0%5D=phace
+
+*Maintained by* `@frostedoyster <https://github.com/frostedoyster>`_.
+
+PhACE is a physics-inspired equivariant neural network architecture. Compared to, for
+example, MACE and GRACE, it uses a geometrically motivated basis and a fast and
+elegant tensor product implementation. The tensor product used in PhACE leverages a
+equivariant representation that differs from the typical spherical one. You can read
+more about it here: https://pubs.acs.org/doi/10.1021/acs.jpclett.4c02376.
+
+.. _arch-phace_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[phace]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``phace``.
+
+Additional outputs
+------------------
+
+- ``feature``: the internal PhACE features, before the different heads for each
+  target.
+- :ref:`mtt-aux-target-last-layer-features`: The features for a given target, taken
+  before the last linear layer of the corresponding head.
+
+.. _arch-phace_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``phace`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/phace-default-hypers.yaml
+   :language: yaml
+
+Tuning hyperparameters
+----------------------
+
+The default hyperparameters above will work well in most cases, but they
+may not be optimal for your specific use case. There is good number of
+parameters to tune, both for the
+:ref:`model <arch-phace_model_hypers>` and the
+:ref:`trainer <arch-phace_trainer_hypers>`. Here, we provide a
+**list of the parameters that are in general the most important** (in decreasing order
+of importance) for the PhACE architecture:
+
+.. container:: mtt-hypers-remove-classname
+
+  .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.radial_basis
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.num_element_channels
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.num_epochs
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.batch_size
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.num_gnn_layers
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.learning_rate
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.cutoff
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.force_rectangular
+      :no-index:
+
+.. _arch-phace_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.num_tensor_products
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.num_gnn_layers
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.cutoff
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.num_neighbors_adaptive
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.cutoff_width
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.num_element_channels
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.force_rectangular
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.radial_basis
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.initial_scaling
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.message_scaling
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.final_scaling
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.use_sphericart
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.mlp_head_num_layers
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.mlp_head_expansion_ratio
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.tensor_product_expansion_ratio
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.heads
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.ModelHypers.zbl
+
+
+
+.. _arch-phace_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.compile
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.distributed
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.warmup_fraction
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.gradient_clipping
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.ema_decay
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.scale_targets
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.atomic_baseline
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.fixed_scaling_weights
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.num_workers
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.experimental.phace.documentation.TrainerHypers.loss
+
+
+
+.. _arch-phace_references:
+
+References
+----------
+
+.. footbibliography::

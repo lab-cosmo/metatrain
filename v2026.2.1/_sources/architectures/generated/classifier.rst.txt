@@ -1,0 +1,98 @@
+.. _arch-classifier:
+
+Classifier (Experimental)
+=========================
+
+The Classifier architecture is an experimental "wrapper" architecture that enables
+classification tasks on top of pre-trained atomistic models. It takes a pre-trained
+checkpoint, freezes its backbone, and trains a small multi-layer perceptron (MLP) on
+top of the features extracted from the backbone.
+
+The model extracts per-atom features from the frozen backbone, averages them to get
+system-level representations, and then passes them through the MLP for classification.
+The targets should be class probabilities as vectors, supporting both one-hot encodings
+(e.g., [1.0, 0.0, 0.0]) and soft/fractional targets (e.g., [0.7, 0.2, 0.1]). The loss
+function is a standard cross-entropy loss for classification.
+
+The last layer in `hidden_sizes` can be set to a small value if the goal is to use it to
+extract features for low-dimensional visualization and/or collective variables.
+
+.. _arch-classifier_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[classifier]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``classifier``.
+
+.. _arch-classifier_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``classifier`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/classifier-default-hypers.yaml
+   :language: yaml
+
+.. _arch-classifier_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.classifier.documentation.ModelHypers.hidden_sizes
+
+        .. autoattribute:: metatrain.experimental.classifier.documentation.ModelHypers.feature_layer_index
+
+
+
+.. _arch-classifier_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.classifier.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.experimental.classifier.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.experimental.classifier.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.experimental.classifier.documentation.TrainerHypers.warmup_fraction
+
+        .. autoattribute:: metatrain.experimental.classifier.documentation.TrainerHypers.model_checkpoint
+
+        .. autoattribute:: metatrain.experimental.classifier.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.experimental.classifier.documentation.TrainerHypers.checkpoint_interval
+
+
+
+.. _arch-classifier_references:
+
+References
+----------
+
+.. footbibliography::

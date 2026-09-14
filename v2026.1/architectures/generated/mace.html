@@ -1,0 +1,1171 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="NanoPET (deprecated)" href="nanopet.html"><link rel="prev" title="LLPR" href="llpr.html">
+        <link rel="canonical" href="https://docs.metatensor.org/metatrain/latest/architectures/generated/mace.html">
+        <link rel="prefetch" href="../../_static/images/metatrain-horizontal.png" as="image">
+        <link rel="prefetch" href="../../_static/images/metatrain-horizontal-dark.png" as="image">
+
+    <link rel="shortcut icon" href="../../_static/metatrain-64.png"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>MACE - metatrain 2026.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles.css?v=e1ddca15" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">metatrain 2026.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../../_static/images/metatrain-horizontal.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../../_static/images/metatrain-horizontal-dark.png" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation/installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../getting-started/index.html">Getting started</a><input aria-label="Toggle navigation of Getting started" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/train_yaml_config.html">Training YAML Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/override.html">Override Architecture’s Default Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/checkpoints.html">Restarting and Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/units.html">Units</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Available Architectures</a><input aria-label="Toggle navigation of Available Architectures" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="flashmd.html">FlashMD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gap.html">GAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="llpr.html">LLPR</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">MACE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nanopet.html">NanoPET (deprecated)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pet.html">PET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="soap_bpnn.html">SOAP-BPNN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../generated_examples/index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../generated_examples/0-beginner/index.html">Beginner Tutorials</a><input aria-label="Toggle navigation of Beginner Tutorials" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/00-basic-usage.html">Basic Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/01-data_preparation.html">How to prepare data for training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/02-fine-tuning.html">Fine-tuning a pre-trained model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/03-train_from_scratch.html">Training a model from scratch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/04-parity_plot.html">Model validation with parity plots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/05-run_ase.html">Running molecular dynamics with ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../generated_examples/1-advanced/index.html">Advanced Tutorials</a><input aria-label="Toggle navigation of Advanced Tutorials" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/00-transfer-learning.html">Transfer Learning (experimental)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/01-llpr.html">Computing LLPR uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/02-zbl.html">Training a model with ZBL corrections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/03-fitting-generic-targets.html">Fitting generic targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/04-flashmd.html">Training or fine-tuning a FlashMD model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/05-multi-gpu.html">Multi-GPU training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/06-mixed-stress-training.html">Training with Mixed Stress Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/07-dos-training.html">Training a DOS model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/08-llpr-ensemble-training.html">Generating and training an LLPR-derived shallow ensemble model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../concepts/index.html">Concepts and Design</a><input aria-label="Toggle navigation of Concepts and Design" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/output-naming.html">Output naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/fine-tuning.html">Fine-tune a pre-trained model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/loss-functions.html">Loss functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/auxiliary-outputs.html">Auxiliary outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/batch-bounds.html">Training with Batch Bounds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cite.html">Citing Metatrain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../dev-docs/index.html">Developer documentation</a><input aria-label="Toggle navigation of Developer documentation" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/getting-started.html">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/architecture-life-cycle.html">Life Cycle of an Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/new-architecture.html">Adding a new architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/dataset-information.html">Dataset Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/new-loss.html">Adding a new loss function</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../dev-docs/cli/index.html">CLI API</a><input aria-label="Toggle navigation of CLI API" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/train.html">Train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/eval.html">Eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/export.html">Export</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/formatter.html">Formatter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../dev-docs/utils/index.html">Utility API</a><input aria-label="Toggle navigation of Utility API" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../dev-docs/utils/additive/index.html">Additive models</a><input aria-label="Toggle navigation of Additive models" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/additive/remove_additive.html">Removing additive contributions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/additive/composition.html">Composition model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/additive/zbl.html">ZBL short-range potential</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../dev-docs/utils/scaler/index.html">Scaler models</a><input aria-label="Toggle navigation of Scaler models" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/scaler/scaler.html">Scaler model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/scaler/remove_scale.html">Removing the scale from targets</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../dev-docs/utils/data/index.html">Data</a><input aria-label="Toggle navigation of Data" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/combine_dataloaders.html">Combining dataloaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/dataset.html">Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/get_dataset.html">Reading a dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/readers.html">Readers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/writers.html">Target data Writers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/systems_to_ase.html">Converting Systems to ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/abc.html">Abstract base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/architectures.html">Architectures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/augmentation.html">Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/devices.html">Device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/dtype.html">Dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/errors.html">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/evaluate_model.html">Evaluating a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/external_naming.html">External Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/hypers.html">Hyperparameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/io.html">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/long_range.html">Long-range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/loss.html">Loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/neighbor_lists.html">Neighbor lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/omegaconf.html">Custom omegaconf functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/output_gradient.html">Output gradient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/per_atom.html">Averaging predictions per atom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/pydantic.html">Pydantic utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/sum_over_atoms.html">Summing over atoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/testing.html">Testing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/transfer.html">Data type and device transfers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/units.html">Unit handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/base-hypers.html">Base hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/changelog.html">Changelog</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/architectures/generated/mace.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="mace">
+<span id="architecture-mace"></span><h1>MACE<a class="headerlink" href="#mace" title="Link to this heading">¶</a></h1>
+<p>Higher order equivariant message passing graph neural network
+<a class="footnote-reference brackets" href="#footcite-batatia2022mace" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<section id="implementation">
+<span id="architecture-mace-implementation"></span><h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">¶</a></h2>
+<p>The architecture is a very thin wrapper around the official MACE implementation, which
+is <a class="reference external" href="https://github.com/ACEsuit/mace">hosted here</a>. Arbitrary heads are added on top of
+MACE to predict an arbitrary number of targets with arbitrary symmetry properties. These
+heads take as input the output node features of MACE and pass them through a linear
+layer (or MLP for invariant targets) to obtain the final predictions.</p>
+<p>One important feature is that the architecture is ready to take a pretrained MACE model
+file as input. The heads required to predict the targets will be added on top of the
+MACE model, so one can continue training for arbitrary targets. See the
+<code class="docutils literal notranslate"><span class="pre">mace_model</span></code> hyperparameter for more details. For simply exporting a foundation MACE
+model to use as a <code class="docutils literal notranslate"><span class="pre">metatomic</span></code> model (e.g. in ASE or LAMMPS), see <a class="reference internal" href="#architecture-mace-export-foundation-model"><span class="std std-ref">exporting a
+foundation MACE model</span></a>.</p>
+</section>
+<section id="installation">
+<span id="architecture-mace-installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install this architecture along with the <code class="docutils literal notranslate"><span class="pre">metatrain</span></code> package, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>metatrain<span class="o">[</span>mace<span class="o">]</span>
+</pre></div>
+</div>
+<p>where the square brackets indicate that you want to install the optional
+dependencies required for <code class="docutils literal notranslate"><span class="pre">mace</span></code>.</p>
+</section>
+<section id="default-hyperparameters">
+<span id="architecture-mace-default-hypers"></span><h2>Default Hyperparameters<a class="headerlink" href="#default-hyperparameters" title="Link to this heading">¶</a></h2>
+<p>The description of all the hyperparameters used in <code class="docutils literal notranslate"><span class="pre">mace</span></code> is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">architecture</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">experimental.mace</span>
+<span class="w">  </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">mace_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">mace_head_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">    </span><span class="nt">r_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span>
+<span class="w">    </span><span class="nt">num_radial_basis</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">    </span><span class="nt">radial_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bessel</span>
+<span class="w">    </span><span class="nt">num_cutoff_basis</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">    </span><span class="nt">max_ell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">    </span><span class="nt">interaction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RealAgnosticResidualInteractionBlock</span>
+<span class="w">    </span><span class="nt">num_interactions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">hidden_irreps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128x0e + 128x1o + 128x2e</span>
+<span class="w">    </span><span class="nt">edge_irreps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">apply_cutoff</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">avg_num_neighbors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">pair_repulsion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">distance_transform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">correlation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">    </span><span class="nt">gate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">silu</span>
+<span class="w">    </span><span class="nt">interaction_first</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RealAgnosticResidualInteractionBlock</span>
+<span class="w">    </span><span class="nt">MLP_irreps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16x0e</span>
+<span class="w">    </span><span class="nt">radial_MLP</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">    </span><span class="nt">use_embedding_readout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">use_last_readout_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">use_agnostic_product</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">training</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">optimizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">adam</span>
+<span class="w">    </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">    </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0e-07</span>
+<span class="w">    </span><span class="nt">amsgrad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">beta</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
+<span class="w">    </span><span class="nt">lr_scheduler</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReduceLROnPlateau</span>
+<span class="w">    </span><span class="nt">lr_scheduler_gamma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9993</span>
+<span class="w">    </span><span class="nt">lr_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.8</span>
+<span class="w">    </span><span class="nt">lr_scheduler_patience</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+<span class="w">    </span><span class="nt">distributed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">distributed_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">39591</span>
+<span class="w">    </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+<span class="w">    </span><span class="nt">num_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">    </span><span class="nt">log_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">checkpoint_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">    </span><span class="nt">scale_targets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">atomic_baseline</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">    </span><span class="nt">fixed_scaling_weights</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">    </span><span class="nt">per_structure_targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="w">    </span><span class="nt">num_workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">log_mae</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">log_separate_blocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">best_model_metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mae_prod</span>
+<span class="w">    </span><span class="nt">grad_clip_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="w">    </span><span class="nt">loss</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mse</span>
+<span class="w">    </span><span class="nt">batch_atom_bounds</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+</pre></div>
+</div>
+</section>
+<section id="tuning-hyperparameters">
+<h2>Tuning hyperparameters<a class="headerlink" href="#tuning-hyperparameters" title="Link to this heading">¶</a></h2>
+<p>The default hyperparameters above will work well in most cases, but they
+may not be optimal for your specific dataset. There is good number of
+parameters to tune, both for the
+<a class="reference internal" href="#architecture-mace-model-hypers"><span class="std std-ref">model</span></a> and the
+<a class="reference internal" href="#architecture-mace-trainer-hypers"><span class="std std-ref">trainer</span></a>. Since seeing them
+for the first time might be overwhelming, here we provide a <strong>list of the
+parameters that are in general the most important</strong>:</p>
+<div class="mtt-hypers-remove-classname docutils container">
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">mace_model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em></dt>
+<dd><p>Path to a pretrained MACE model file.</p>
+<p>For example, this can be <a class="reference external" href="https://github.com/ACEsuit/mace-foundations">a foundation MACE model</a>. If not provided, a new MACE model
+will be initialized from scratch using the rest of hyperparameters of the
+architecture.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">r_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5.0</span></em></dt>
+<dd><p>Cutoff radius for neighbor search.</p>
+<p>This should be set to a value after which most of the interactions between atoms is
+expected to be negligible. A lower cutoff will lead to faster models.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.01</span></em></dt>
+<dd><p>Learning rate of the optimizer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em></dt>
+<dd><p>The number of samples to use in each batch of training. This
+hyperparameter controls the tradeoff between training speed and memory usage. In
+general, larger batch sizes will lead to faster training, but might require more
+memory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">hidden_irreps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'128x0e</span> <span class="pre">+</span> <span class="pre">128x1o</span> <span class="pre">+</span> <span class="pre">128x2e'</span></em></dt>
+<dd><p>Irreps for hidden node features.</p>
+<p>This defines the shape of the node features at each layer of the MACE model
+(except for the last layer, which only contains scalars). The notation for
+the irreps is <a class="reference external" href="https://docs.e3nn.org/en/stable/api/o3/o3_irreps.html">e3nn’s standard notation</a>. Essentially, the irreps string is a sum of terms of the
+form <code class="docutils literal notranslate"><span class="pre">{multiplicity}x{ell}{parity}</span></code>, where <code class="docutils literal notranslate"><span class="pre">{multiplicity}</span></code> is the number of
+channels with angular momentum <code class="docutils literal notranslate"><span class="pre">{ell}</span></code> and parity <code class="docutils literal notranslate"><span class="pre">{parity}</span></code> (<code class="docutils literal notranslate"><span class="pre">e</span></code> for even,
+<code class="docutils literal notranslate"><span class="pre">o</span></code> for odd). For example, <code class="docutils literal notranslate"><span class="pre">16x0e</span> <span class="pre">+</span> <span class="pre">32x1o</span></code> means that there are 16 scalar
+channels (<span class="math notranslate nohighlight">\(\ell=0\)</span>) and 32 vector channels (<span class="math notranslate nohighlight">\(\ell=1\)</span>) at each layer.</p>
+<p>Increasing the multiplicities makes the network wider, which generally leads to
+better accuracy at the cost of increased training and evaluation time.</p>
+<p>Increasing the maximum <span class="math notranslate nohighlight">\(\ell\)</span> included in the irreps allows the network to
+capture more complex angular dependencies. However, its effect might be heavily
+dependent on your dataset and target. The hidden irreps should include at least
+up to the maximum <span class="math notranslate nohighlight">\(\ell\)</span> of the target you are training on. For example, if
+you are training on dipole moments (<span class="math notranslate nohighlight">\(\ell=1\)</span>), the hidden irreps should
+include at least <span class="math notranslate nohighlight">\(\ell=1\)</span> channels.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At the time of writing, MACE enforces that all channels of <code class="docutils literal notranslate"><span class="pre">hidden_irreps</span></code>
+should have the same multiplicity.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">correlation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em></dt>
+<dd><p>Correlation order at each layer.</p>
+<p>After computing pair-wise (2-body) messages between atoms, MACE applies
+products that construct higher order correlations between messages.
+This hyperparameter controls the amount of products applied. For example,
+<code class="docutils literal notranslate"><span class="pre">correlation=1</span></code> means that the interactions are purely 2-body, while
+<code class="docutils literal notranslate"><span class="pre">correlation=2</span></code> would roughly equate to including 3-body interactions,
+and so on.</p>
+<p>This hyperparameter together with <code class="docutils literal notranslate"><span class="pre">max_ell</span></code> determine the maximum
+angular momentum that will be non-zero in <code class="docutils literal notranslate"><span class="pre">hidden_irreps</span></code>, which is
+<code class="docutils literal notranslate"><span class="pre">max_ell</span> <span class="pre">*</span> <span class="pre">correlation</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">num_interactions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em></dt>
+<dd><p>Number of message passing steps.</p>
+<p>MACE’s last message passing step only outputs scalar features, so if you are
+training on a target that is not scalar (e.g. a vector or some spherical
+tensor with higher order), the effective number of message passing steps for
+that target will be <code class="docutils literal notranslate"><span class="pre">num_interactions</span> <span class="pre">-</span> <span class="pre">1</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../dev-docs/utils/loss.html#metatrain.utils.loss.LossSpecification" title="metatrain.utils.loss.LossSpecification"><span class="pre">LossSpecification</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mse'</span></em></dt>
+<dd><p>This section describes the loss function to be used. See the
+<a class="reference internal" href="../../concepts/loss-functions.html#loss-functions"><span class="std std-ref">Loss functions</span></a> for more details.</p>
+</dd></dl>
+
+</div>
+</section>
+<section id="model-hyperparameters">
+<span id="architecture-mace-model-hypers"></span><h2>Model hyperparameters<a class="headerlink" href="#model-hyperparameters" title="Link to this heading">¶</a></h2>
+<p>The parameters that go under the <code class="docutils literal notranslate"><span class="pre">architecture.model</span></code> section of the config file
+are the following:</p>
+<div class="mtt-hypers-remove-classname docutils container">
+<blockquote>
+<div><dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.mace_model">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">mace_model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.mace_model" title="Link to this definition">¶</a></dt>
+<dd><p>Path to a pretrained MACE model file.</p>
+<p>For example, this can be <a class="reference external" href="https://github.com/ACEsuit/mace-foundations">a foundation MACE model</a>. If not provided, a new MACE model
+will be initialized from scratch using the rest of hyperparameters of the
+architecture.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.mace_head_target">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">mace_head_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'energy'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.mace_head_target" title="Link to this definition">¶</a></dt>
+<dd><p>Target to which the MACE head is related.</p>
+<p><code class="docutils literal notranslate"><span class="pre">metatrain</span></code> adds arbitrary heads on top of MACE to predict arbitrary targets.
+However, MACE models have themselves a head. This hyperparameter specifies which
+metatrain target corresponds to the MACE head. For this target, no new head will be
+added, and the output of MACE’s head will be used directly.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>MACE models with multiple heads also exist, but <code class="docutils literal notranslate"><span class="pre">metatrain</span></code> only supports
+using this hyperparameter to deal with single-head MACE models for now.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.r_max">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">r_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5.0</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.r_max" title="Link to this definition">¶</a></dt>
+<dd><p>Cutoff radius for neighbor search.</p>
+<p>This should be set to a value after which most of the interactions between atoms is
+expected to be negligible. A lower cutoff will lead to faster models.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.num_radial_basis">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">num_radial_basis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.num_radial_basis" title="Link to this definition">¶</a></dt>
+<dd><p>Number of radial basis functions for the radial embedding.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.radial_type">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">radial_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'bessel'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'gaussian'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'chebyshev'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bessel'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.radial_type" title="Link to this definition">¶</a></dt>
+<dd><p>Type of radial basis functions to use in the radial embedding.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.num_cutoff_basis">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">num_cutoff_basis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.num_cutoff_basis" title="Link to this definition">¶</a></dt>
+<dd><p>Number of basis functions for smooth cutoff</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.max_ell">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">max_ell</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.max_ell" title="Link to this definition">¶</a></dt>
+<dd><p>Highest <span class="math notranslate nohighlight">\(\ell\)</span> of spherical harmonics used in the interactions.</p>
+<p>Note that this is not the maximum <span class="math notranslate nohighlight">\(\ell\)</span> in <code class="docutils literal notranslate"><span class="pre">hidden_irreps</span></code>, since
+hidden_irreps can contain <span class="math notranslate nohighlight">\(\ell\)</span> values as high as <code class="docutils literal notranslate"><span class="pre">max_ell*correlation</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.interaction">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">interaction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'RealAgnosticResidualInteractionBlock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'RealAgnosticAttResidualInteractionBlock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'RealAgnosticInteractionBlock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'RealAgnosticDensityInteractionBlock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'RealAgnosticDensityResidualInteractionBlock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'RealAgnosticResidualNonLinearInteractionBlock'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'RealAgnosticResidualInteractionBlock'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.interaction" title="Link to this definition">¶</a></dt>
+<dd><p>Name of interaction block.</p>
+<p>Class that will be used to compute interactions between atoms at each layer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.num_interactions">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">num_interactions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.num_interactions" title="Link to this definition">¶</a></dt>
+<dd><p>Number of message passing steps.</p>
+<p>MACE’s last message passing step only outputs scalar features, so if you are
+training on a target that is not scalar (e.g. a vector or some spherical
+tensor with higher order), the effective number of message passing steps for
+that target will be <code class="docutils literal notranslate"><span class="pre">num_interactions</span> <span class="pre">-</span> <span class="pre">1</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.hidden_irreps">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">hidden_irreps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'128x0e</span> <span class="pre">+</span> <span class="pre">128x1o</span> <span class="pre">+</span> <span class="pre">128x2e'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.hidden_irreps" title="Link to this definition">¶</a></dt>
+<dd><p>Irreps for hidden node features.</p>
+<p>This defines the shape of the node features at each layer of the MACE model
+(except for the last layer, which only contains scalars). The notation for
+the irreps is <a class="reference external" href="https://docs.e3nn.org/en/stable/api/o3/o3_irreps.html">e3nn’s standard notation</a>. Essentially, the irreps string is a sum of terms of the
+form <code class="docutils literal notranslate"><span class="pre">{multiplicity}x{ell}{parity}</span></code>, where <code class="docutils literal notranslate"><span class="pre">{multiplicity}</span></code> is the number of
+channels with angular momentum <code class="docutils literal notranslate"><span class="pre">{ell}</span></code> and parity <code class="docutils literal notranslate"><span class="pre">{parity}</span></code> (<code class="docutils literal notranslate"><span class="pre">e</span></code> for even,
+<code class="docutils literal notranslate"><span class="pre">o</span></code> for odd). For example, <code class="docutils literal notranslate"><span class="pre">16x0e</span> <span class="pre">+</span> <span class="pre">32x1o</span></code> means that there are 16 scalar
+channels (<span class="math notranslate nohighlight">\(\ell=0\)</span>) and 32 vector channels (<span class="math notranslate nohighlight">\(\ell=1\)</span>) at each layer.</p>
+<p>Increasing the multiplicities makes the network wider, which generally leads to
+better accuracy at the cost of increased training and evaluation time.</p>
+<p>Increasing the maximum <span class="math notranslate nohighlight">\(\ell\)</span> included in the irreps allows the network to
+capture more complex angular dependencies. However, its effect might be heavily
+dependent on your dataset and target. The hidden irreps should include at least
+up to the maximum <span class="math notranslate nohighlight">\(\ell\)</span> of the target you are training on. For example, if
+you are training on dipole moments (<span class="math notranslate nohighlight">\(\ell=1\)</span>), the hidden irreps should
+include at least <span class="math notranslate nohighlight">\(\ell=1\)</span> channels.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At the time of writing, MACE enforces that all channels of <code class="docutils literal notranslate"><span class="pre">hidden_irreps</span></code>
+should have the same multiplicity.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.edge_irreps">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">edge_irreps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.edge_irreps" title="Link to this definition">¶</a></dt>
+<dd><p>Irreps for edge features.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.apply_cutoff">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">apply_cutoff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.apply_cutoff" title="Link to this definition">¶</a></dt>
+<dd><p>Apply cutoff to the radial basis functions before MLP</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.avg_num_neighbors">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">avg_num_neighbors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.avg_num_neighbors" title="Link to this definition">¶</a></dt>
+<dd><p>Normalization factor for the messages.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.pair_repulsion">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">pair_repulsion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.pair_repulsion" title="Link to this definition">¶</a></dt>
+<dd><p>Use pair repulsion term with ZBL potential</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.distance_transform">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">distance_transform</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Agnesi'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'Soft'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.distance_transform" title="Link to this definition">¶</a></dt>
+<dd><p>Use distance transform for radial basis functions</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.correlation">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">correlation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.correlation" title="Link to this definition">¶</a></dt>
+<dd><p>Correlation order at each layer.</p>
+<p>After computing pair-wise (2-body) messages between atoms, MACE applies
+products that construct higher order correlations between messages.
+This hyperparameter controls the amount of products applied. For example,
+<code class="docutils literal notranslate"><span class="pre">correlation=1</span></code> means that the interactions are purely 2-body, while
+<code class="docutils literal notranslate"><span class="pre">correlation=2</span></code> would roughly equate to including 3-body interactions,
+and so on.</p>
+<p>This hyperparameter together with <code class="docutils literal notranslate"><span class="pre">max_ell</span></code> determine the maximum
+angular momentum that will be non-zero in <code class="docutils literal notranslate"><span class="pre">hidden_irreps</span></code>, which is
+<code class="docutils literal notranslate"><span class="pre">max_ell</span> <span class="pre">*</span> <span class="pre">correlation</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.gate">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">gate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'silu'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'tanh'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'abs'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'silu'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.gate" title="Link to this definition">¶</a></dt>
+<dd><p>Non linearity used for the non linear readouts.</p>
+<p>This determines which kind of non-linearity is applied in the non linear
+readouts. The non linear readouts are: MACE’s internal MLP readout (applied
+only at the last layer) and arbitrary MLP heads added on top of MACE by
+<code class="docutils literal notranslate"><span class="pre">metatrain</span></code>.</p>
+<p>The non-linearity is applied only to scalar channels, therefore it won’t
+have any effect for non-scalar targets.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.interaction_first">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">interaction_first</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'RealAgnosticResidualInteractionBlock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'RealAgnosticInteractionBlock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'RealAgnosticDensityInteractionBlock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'RealAgnosticDensityResidualInteractionBlock'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'RealAgnosticResidualNonLinearInteractionBlock'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'RealAgnosticResidualInteractionBlock'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.interaction_first" title="Link to this definition">¶</a></dt>
+<dd><p>Name of interaction block for the first interaction layer.</p>
+<p>Class that will be used to compute interactions between atoms at the
+first layer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.MLP_irreps">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">MLP_irreps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'16x0e'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.MLP_irreps" title="Link to this definition">¶</a></dt>
+<dd><p>Hidden irreps of the MLP readouts.</p>
+<p>The MLP readouts are: MACE’s internal MLP readout (applied
+only at the last layer) and arbitrary MLP heads added on top of MACE by
+<code class="docutils literal notranslate"><span class="pre">metatrain</span></code>.</p>
+<p>The non-linearity is applied only to scalar channels, therefore these
+irreps should only contain scalar channels.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.radial_MLP">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">radial_MLP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[64,</span> <span class="pre">64,</span> <span class="pre">64]</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.radial_MLP" title="Link to this definition">¶</a></dt>
+<dd><p>Width of the radial MLP.</p>
+<p>Only used for MACE’s internal MLP.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.use_embedding_readout">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">use_embedding_readout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.use_embedding_readout" title="Link to this definition">¶</a></dt>
+<dd><p>Use embedding readout for the final output</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.use_last_readout_only">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">use_last_readout_only</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.use_last_readout_only" title="Link to this definition">¶</a></dt>
+<dd><p>Use only the last readout for the final output.</p>
+<p>This is only used by the internal MACE readout, arbitrary heads by
+<code class="docutils literal notranslate"><span class="pre">metatrain</span></code> always use as input a concatenation of the node
+features from all layers.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.ModelHypers.use_agnostic_product">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">use_agnostic_product</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.ModelHypers.use_agnostic_product" title="Link to this definition">¶</a></dt>
+<dd><p>Use element agnostic product</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+</section>
+<section id="trainer-hyperparameters">
+<span id="architecture-mace-trainer-hypers"></span><h2>Trainer hyperparameters<a class="headerlink" href="#trainer-hyperparameters" title="Link to this heading">¶</a></h2>
+<p>The parameters that go under the <code class="docutils literal notranslate"><span class="pre">architecture.trainer</span></code> section of the config file
+are the following:</p>
+<div class="mtt-hypers-remove-classname docutils container">
+<blockquote>
+<div><dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.optimizer">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">optimizer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'adam'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'adamw'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'schedulefree'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'adam'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.optimizer" title="Link to this definition">¶</a></dt>
+<dd><p>Optimizer for parameter optimization</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.learning_rate">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.01</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.learning_rate" title="Link to this definition">¶</a></dt>
+<dd><p>Learning rate of the optimizer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.weight_decay">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">weight_decay</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5e-07</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.weight_decay" title="Link to this definition">¶</a></dt>
+<dd><p>Weight decay (L2 penalty).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.amsgrad">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">amsgrad</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.amsgrad" title="Link to this definition">¶</a></dt>
+<dd><p>Use amsgrad variant of optimizer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.beta">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">beta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.9</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.beta" title="Link to this definition">¶</a></dt>
+<dd><p>Beta parameter for the optimizer</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">lr_scheduler</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ReduceLROnPlateau'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler" title="Link to this definition">¶</a></dt>
+<dd><p>Type of learning rate scheduler.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler_gamma">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">lr_scheduler_gamma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.9993</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler_gamma" title="Link to this definition">¶</a></dt>
+<dd><p>Gamma parameter for learning rate scheduler.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.lr_factor">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">lr_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.8</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.lr_factor" title="Link to this definition">¶</a></dt>
+<dd><p>Learning rate factor</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler_patience">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">lr_scheduler_patience</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler_patience" title="Link to this definition">¶</a></dt>
+<dd><p>Scheduler patience.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.distributed">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">distributed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.distributed" title="Link to this definition">¶</a></dt>
+<dd><p>Whether to use distributed training</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.distributed_port">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">distributed_port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">39591</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.distributed_port" title="Link to this definition">¶</a></dt>
+<dd><p>Port for DDP communication</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.batch_size">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.batch_size" title="Link to this definition">¶</a></dt>
+<dd><p>The number of samples to use in each batch of training. This
+hyperparameter controls the tradeoff between training speed and memory usage. In
+general, larger batch sizes will lead to faster training, but might require more
+memory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.num_epochs">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">num_epochs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.num_epochs" title="Link to this definition">¶</a></dt>
+<dd><p>Number of epochs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.log_interval">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">log_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.log_interval" title="Link to this definition">¶</a></dt>
+<dd><p>Interval to log metrics.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.checkpoint_interval">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">checkpoint_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.checkpoint_interval" title="Link to this definition">¶</a></dt>
+<dd><p>Interval to save checkpoints.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.scale_targets">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">scale_targets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.scale_targets" title="Link to this definition">¶</a></dt>
+<dd><p>Normalize targets to unit std during training.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.atomic_baseline">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">atomic_baseline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.atomic_baseline" title="Link to this definition">¶</a></dt>
+<dd><p>The baselines for each target.</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">metatrain</span></code> will fit a linear model (<a class="reference internal" href="../../dev-docs/utils/additive/composition.html#metatrain.utils.additive.composition.CompositionModel" title="metatrain.utils.additive.composition.CompositionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompositionModel</span></code></a>) to compute the
+least squares baseline for each atomic species for each target.</p>
+<p>However, this hyperparameter allows you to provide your own baselines.
+The value of the hyperparameter should be a dictionary where the keys are the
+target names, and the values are either (1) a single baseline to be used for
+all atomic types, or (2) a dictionary mapping atomic types to their baselines.
+For example:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">atomic_baseline:</span> <span class="pre">{&quot;energy&quot;:</span> <span class="pre">{1:</span> <span class="pre">-0.5,</span> <span class="pre">6:</span> <span class="pre">-10.0}}</span></code> will fix the energy
+baseline for hydrogen (Z=1) to -0.5 and for carbon (Z=6) to -10.0, while
+fitting the baselines for the energy of all other atomic types, as well
+as fitting the baselines for all other targets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">atomic_baseline:</span> <span class="pre">{&quot;energy&quot;:</span> <span class="pre">-5.0}</span></code> will fix the energy baseline for
+all atomic types to -5.0.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">atomic_baseline:</span> <span class="pre">{&quot;mtt:dos&quot;:</span> <span class="pre">0.0}</span></code> sets the baseline for the “mtt:dos”
+target to 0.0, effectively disabling the atomic baseline for that target.</p></li>
+</ul>
+<p>This atomic baseline is substracted from the targets during training, which
+avoids the main model needing to learn atomic contributions, and likely makes
+training easier. When the model is used in evaluation mode, the atomic baseline
+is added on top of the model predictions automatically.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This atomic baseline is a per-atom contribution. Therefore, if the property
+you are predicting is a sum over all atoms (e.g., total energy), the
+contribution of the atomic baseline to the total property will be the
+atomic baseline multiplied by the number of atoms of that type in the
+structure.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a MACE model is loaded through the <code class="docutils literal notranslate"><span class="pre">mace_model</span></code> hyperparameter, the
+atomic baselines in the MACE model are used by default for the target
+indicated in <code class="docutils literal notranslate"><span class="pre">mace_head_target</span></code>. If you want to override them, you need
+to set explicitly the baselines for that target in this hyperparameter.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.fixed_scaling_weights">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">fixed_scaling_weights</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.fixed_scaling_weights" title="Link to this definition">¶</a></dt>
+<dd><p>Weights for target scaling.</p>
+<p>This is passed to the <code class="docutils literal notranslate"><span class="pre">fixed_weights</span></code> argument of <a class="reference internal" href="../../dev-docs/utils/scaler/scaler.html#metatrain.utils.scaler.scaler.Scaler.train_model" title="metatrain.utils.scaler.scaler.Scaler.train_model"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Scaler.train_model</span></code></a>, see its documentation to
+understand exactly what to pass here.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a MACE model is loaded through the <code class="docutils literal notranslate"><span class="pre">mace_model</span></code> hyperparameter, the
+scales in the MACE model are used by default for the target
+indicated in <code class="docutils literal notranslate"><span class="pre">mace_head_target</span></code>. If you want to override them, you need
+to set explicitly the baselines for that target in this hyperparameter.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.per_structure_targets">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">per_structure_targets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.per_structure_targets" title="Link to this definition">¶</a></dt>
+<dd><p>Targets to calculate per-structure losses.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.num_workers">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">num_workers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.num_workers" title="Link to this definition">¶</a></dt>
+<dd><p>Number of workers for data loading. If not provided, it is set automatically.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.log_mae">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">log_mae</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.log_mae" title="Link to this definition">¶</a></dt>
+<dd><p>Log MAE alongside RMSE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.log_separate_blocks">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">log_separate_blocks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.log_separate_blocks" title="Link to this definition">¶</a></dt>
+<dd><p>Log per-block error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.best_model_metric">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">best_model_metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'rmse_prod'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'mae_prod'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'loss'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mae_prod'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.best_model_metric" title="Link to this definition">¶</a></dt>
+<dd><p>Metric used to select best checkpoint (e.g., <code class="docutils literal notranslate"><span class="pre">rmse_prod</span></code>)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.grad_clip_norm">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">grad_clip_norm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.grad_clip_norm" title="Link to this definition">¶</a></dt>
+<dd><p>Maximum gradient norm value, by default inf (no clipping)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.loss">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../dev-docs/utils/loss.html#metatrain.utils.loss.LossSpecification" title="metatrain.utils.loss.LossSpecification"><span class="pre">LossSpecification</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mse'</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.loss" title="Link to this definition">¶</a></dt>
+<dd><p>This section describes the loss function to be used. See the
+<a class="reference internal" href="../../concepts/loss-functions.html#loss-functions"><span class="std std-ref">Loss functions</span></a> for more details.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.experimental.mace.documentation.TrainerHypers.batch_atom_bounds">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">batch_atom_bounds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[None,</span> <span class="pre">None]</span></em><a class="headerlink" href="#metatrain.experimental.mace.documentation.TrainerHypers.batch_atom_bounds" title="Link to this definition">¶</a></dt>
+<dd><p>Bounds for the number of atoms per batch as [min, max]. Batches with atom
+counts outside these bounds will be skipped during training. Use <code class="docutils literal notranslate"><span class="pre">None</span></code> for
+either value to disable that bound. This is useful for preventing out-of-memory
+errors and ensuring consistent computational load. Default: <code class="docutils literal notranslate"><span class="pre">[None,</span> <span class="pre">None]</span></code>.</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+</section>
+<section id="exporting-a-foundation-mace-model">
+<span id="architecture-mace-export-foundation-model"></span><h2>Exporting a foundation MACE model<a class="headerlink" href="#exporting-a-foundation-mace-model" title="Link to this heading">¶</a></h2>
+<p>As it is now, exporting a foundation MACE model from one of their <a class="reference external" href="https://github.com/ACEsuit/mace-foundations">provided model
+files</a> involves using <code class="docutils literal notranslate"><span class="pre">mtt</span> <span class="pre">train</span></code>
+with 0 epochs. To do so, use the following <code class="docutils literal notranslate"><span class="pre">options.yaml</span></code> file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">architecture</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">experimental.mace</span>
+<span class="w">    </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># Replace mace_model with the path to your file</span>
+<span class="w">        </span><span class="nt">mace_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/foundation/mace/model.model</span>
+<span class="w">        </span><span class="nt">mace_head_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">    </span><span class="nt">training</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">num_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">        </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">training_set</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dummy_dataset.xyz</span>
+<span class="nt">validation_set</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dummy_dataset.xyz</span>
+</pre></div>
+</div>
+<p>with <code class="docutils literal notranslate"><span class="pre">dummy_dataset.xyz</span></code> being any dataset containing at least one structure
+with just the <code class="docutils literal notranslate"><span class="pre">energy</span></code> property. For example, you can use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span>
+<span class="n">Properties</span><span class="o">=</span><span class="n">species</span><span class="p">:</span><span class="n">S</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="n">pos</span><span class="p">:</span><span class="n">R</span><span class="p">:</span><span class="mi">3</span><span class="p">:</span><span class="n">forces</span><span class="p">:</span><span class="n">R</span><span class="p">:</span><span class="mi">3</span> <span class="n">energy</span><span class="o">=-</span><span class="mf">2.1</span>
+<span class="n">H</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="mf">0.0</span>
+<span class="n">H</span> <span class="mf">1.0</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</section>
+<section id="references">
+<span id="architecture-mace-references"></span><h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<div class="docutils container" id="id4">
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="footcite-batatia2022mace" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Ilyes Batatia, David P Kovacs, Gregor Simm, Christoph Ortner, and Gábor Csányi. Mace: higher order equivariant message passing neural networks for fast and accurate force fields. <em>Advances in neural information processing systems</em>, 35:11423–11436, 2022.</p>
+</aside>
+</aside>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="nanopet.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">NanoPET (deprecated)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="llpr.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">LLPR</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, metatrain developers
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link fa-brands fa-github fa-2x" href="https://github.com/metatensor/metatrain" aria-label="GitHub"></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">MACE</a><ul>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#default-hyperparameters">Default Hyperparameters</a></li>
+<li><a class="reference internal" href="#tuning-hyperparameters">Tuning hyperparameters</a></li>
+<li><a class="reference internal" href="#model-hyperparameters">Model hyperparameters</a><ul>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.mace_model"><code class="docutils literal notranslate"><span class="pre">ModelHypers.mace_model</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.mace_head_target"><code class="docutils literal notranslate"><span class="pre">ModelHypers.mace_head_target</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.r_max"><code class="docutils literal notranslate"><span class="pre">ModelHypers.r_max</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.num_radial_basis"><code class="docutils literal notranslate"><span class="pre">ModelHypers.num_radial_basis</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.radial_type"><code class="docutils literal notranslate"><span class="pre">ModelHypers.radial_type</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.num_cutoff_basis"><code class="docutils literal notranslate"><span class="pre">ModelHypers.num_cutoff_basis</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.max_ell"><code class="docutils literal notranslate"><span class="pre">ModelHypers.max_ell</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.interaction"><code class="docutils literal notranslate"><span class="pre">ModelHypers.interaction</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.num_interactions"><code class="docutils literal notranslate"><span class="pre">ModelHypers.num_interactions</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.hidden_irreps"><code class="docutils literal notranslate"><span class="pre">ModelHypers.hidden_irreps</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.edge_irreps"><code class="docutils literal notranslate"><span class="pre">ModelHypers.edge_irreps</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.apply_cutoff"><code class="docutils literal notranslate"><span class="pre">ModelHypers.apply_cutoff</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.avg_num_neighbors"><code class="docutils literal notranslate"><span class="pre">ModelHypers.avg_num_neighbors</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.pair_repulsion"><code class="docutils literal notranslate"><span class="pre">ModelHypers.pair_repulsion</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.distance_transform"><code class="docutils literal notranslate"><span class="pre">ModelHypers.distance_transform</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.correlation"><code class="docutils literal notranslate"><span class="pre">ModelHypers.correlation</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.gate"><code class="docutils literal notranslate"><span class="pre">ModelHypers.gate</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.interaction_first"><code class="docutils literal notranslate"><span class="pre">ModelHypers.interaction_first</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.MLP_irreps"><code class="docutils literal notranslate"><span class="pre">ModelHypers.MLP_irreps</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.radial_MLP"><code class="docutils literal notranslate"><span class="pre">ModelHypers.radial_MLP</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.use_embedding_readout"><code class="docutils literal notranslate"><span class="pre">ModelHypers.use_embedding_readout</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.use_last_readout_only"><code class="docutils literal notranslate"><span class="pre">ModelHypers.use_last_readout_only</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.ModelHypers.use_agnostic_product"><code class="docutils literal notranslate"><span class="pre">ModelHypers.use_agnostic_product</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#trainer-hyperparameters">Trainer hyperparameters</a><ul>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.optimizer"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.optimizer</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.learning_rate"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.learning_rate</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.weight_decay"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.weight_decay</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.amsgrad"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.amsgrad</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.beta"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.beta</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.lr_scheduler</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler_gamma"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.lr_scheduler_gamma</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.lr_factor"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.lr_factor</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler_patience"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.lr_scheduler_patience</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.distributed"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.distributed</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.distributed_port"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.distributed_port</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.batch_size"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.batch_size</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.num_epochs"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.num_epochs</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.log_interval"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.log_interval</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.checkpoint_interval"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.checkpoint_interval</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.scale_targets"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.scale_targets</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.atomic_baseline"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.atomic_baseline</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.fixed_scaling_weights"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.fixed_scaling_weights</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.per_structure_targets"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.per_structure_targets</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.num_workers"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.num_workers</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.log_mae"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.log_mae</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.log_separate_blocks"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.log_separate_blocks</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.best_model_metric"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.best_model_metric</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.grad_clip_norm"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.grad_clip_norm</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.loss"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.loss</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.experimental.mace.documentation.TrainerHypers.batch_atom_bounds"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.batch_atom_bounds</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exporting-a-foundation-mace-model">Exporting a foundation MACE model</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=3822dbdc"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

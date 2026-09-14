@@ -1,0 +1,124 @@
+.. _architecture-llpr:
+
+LLPR
+====
+
+The LLPR architecture is a "wrapper" architecture that enables cheap uncertainty
+quantification (UQ) via the last-layer prediction rigidity (LLPR) approach proposed
+by Bigi et al. :footcite:p:`bigi_mlst_2024` It is compatible with the following
+``metatrain`` models constructed from NN-based architectures: PET and SOAP-BPNN.
+The implementation of the LLPR as a separate architecture within ``metatrain``
+allows the users to compute the uncertainties without dealing with the fine details
+of the LLPR implementation.
+
+This implementation further allows the user to perform gradient-based tuning of
+the ensemble weights sampled from the LLPR formalism, which can lead to improved
+uncertainty estimates. Gradients (e.g. forces and stresses) are not yet used in this
+implementation of the LLPR.
+
+Note that the uncertainties computed with this implementation are returned as
+standard deviations, and not variances.
+
+.. _architecture-llpr_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[llpr]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``llpr``.
+
+.. _architecture-llpr_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``llpr`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/llpr-default-hypers.yaml
+   :language: yaml
+
+.. _architecture-llpr_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.llpr.documentation.ModelHypers.num_ensemble_members
+
+
+
+.. _architecture-llpr_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.distributed
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.regularizer
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.model_checkpoint
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.loss
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.train_all_parameters
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.warmup_fraction
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.weight_decay
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.num_workers
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.grad_clip_norm
+
+        .. autoattribute:: metatrain.llpr.documentation.TrainerHypers.batch_atom_bounds
+
+
+
+.. _architecture-llpr_references:
+
+References
+----------
+
+.. footbibliography::

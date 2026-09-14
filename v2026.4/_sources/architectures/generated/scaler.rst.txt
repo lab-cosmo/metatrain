@@ -1,0 +1,91 @@
+.. _arch-scaler:
+
+Scaler
+======
+
+.. image:: https://codecov.io/gh/metatensor/metatrain/branch/main/graph/badge.svg?component=scaler
+   :target: https://app.codecov.io/gh/metatensor/metatrain/tree/main/src/metatrain/scaler?components%5B0%5D=scaler
+
+*Maintained by* `@pfebrer <https://github.com/pfebrer>`_.
+
+The scaler is a simple model that computes per-target and per-property scaling factors.
+It is meant to be used as a preprocessing step for other architectures, so that targets
+are standardized before being fed to the main model.
+
+See :ref:`scale-targets` for more details.
+
+.. _arch-scaler_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[scaler]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``scaler``.
+
+.. _arch-scaler_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``scaler`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/scaler-default-hypers.yaml
+   :language: yaml
+
+.. _arch-scaler_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.scaler.documentation.ModelHypers.densify_atomic_basis
+
+
+
+.. _arch-scaler_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.scaler.documentation.TrainerHypers.fixed_weights
+
+        .. autoattribute:: metatrain.scaler.documentation.TrainerHypers.additive_models
+
+        .. autoattribute:: metatrain.scaler.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.scaler.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.scaler.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.scaler.documentation.TrainerHypers.num_workers
+
+
+
+.. _arch-scaler_references:
+
+References
+----------
+
+.. footbibliography::

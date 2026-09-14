@@ -1,0 +1,43 @@
+/* For the most important hyperparameters, we use ".. autoattribute:"
+but this adds automatically the name of the class as a prefix. I.e.
+we want to show "cutoff" but "PETHypers.cutoff" is shown. With this
+we hide "PETHypers" whenever the autoattribute is inside a div with
+the class "mtt-hypers-remove-classname" */
+.mtt-hypers-remove-classname span.sig-prename.descclassname {
+    display: none;
+}
+
+/* Some background colors for the blockquotes of the model and
+trainer hyperparameters, so that they can be easily distinguished */
+section#model-hyperparameters blockquote {
+  background-color: aliceblue;
+  border-color: rgb(209, 234, 255);
+}
+
+section#trainer-hyperparameters blockquote {
+    background-color: #e6ffed;
+    border-color: #b3ffcc;
+}
+
+/* Dark mode adjustments */
+body[data-theme="dark"]   section#model-hyperparameters blockquote {
+    background-color: #0b1a26;
+    border-color: #214a66;
+}
+
+body[data-theme="dark"] section#trainer-hyperparameters blockquote {
+    background-color: #0b2614;
+    border-color: #216633;
+}
+
+@media (prefers-color-scheme: dark) {
+    body[data-theme="auto"] section#model-hyperparameters blockquote {
+        background-color: #0b1a26;
+        border-color: #214a66;
+    }
+
+    body[data-theme="auto"] section#trainer-hyperparameters blockquote {
+        background-color: #0b2614;
+        border-color: #216633;
+    }
+}

@@ -1,0 +1,174 @@
+.. _arch-dpa3:
+
+DPA3 (Experimental)
+======================
+
+.. image:: https://codecov.io/gh/metatensor/metatrain/branch/main/graph/badge.svg?component=dpa3
+   :target: https://app.codecov.io/gh/metatensor/metatrain/tree/main/src/metatrain/experimental/dpa3?components%5B0%5D=dpa3
+
+*Maintained by* `@HaoZeke <https://github.com/HaoZeke>`_.
+
+This is an interface to the DPA3 (Deep Potential Attention 3) architecture
+:footcite:p:`dpa3_2025` implemented in `deepmd-kit
+<https://github.com/deepmodeling/deepmd-kit>`_.
+
+DPA3 extends the DPA series with a Line Graph representation and the RepFlow
+framework, enabling richer many-body interactions through joint edge-angle
+message passing.  See the `paper <https://arxiv.org/abs/2506.01686>`_ and the
+`deepmd-kit documentation <https://docs.deepmodeling.com/projects/deepmd/>`_
+for further details.
+
+.. note::
+
+   The ``type_map`` required by deepmd-kit is derived automatically from the
+   atomic numbers present in the dataset; it is *not* a user-facing
+   hyperparameter.
+
+.. _arch-dpa3_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[dpa3]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``dpa3``.
+
+.. _arch-dpa3_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``dpa3`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/dpa3-default-hypers.yaml
+   :language: yaml
+
+Tuning hyperparameters
+----------------------
+
+The most impactful hyperparameters (roughly in decreasing order of importance):
+
+.. container:: mtt-hypers-remove-classname
+
+  .. autoattribute:: metatrain.experimental.dpa3.documentation.ModelHypers.descriptor
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.learning_rate
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.batch_size
+      :no-index:
+
+Increasing ``descriptor.repflow.nlayers`` typically improves accuracy at the
+cost of training time.  ``descriptor.repflow.e_rcut`` controls the interaction
+range and should be chosen based on the physical system.  Reduce ``e_sel`` and
+``a_sel`` for faster iteration on small systems.
+
+Using a pretrained model
+------------------------
+
+Set ``dpa3_model`` to a deepmd-kit model file to fine-tune from pretrained
+weights instead of training from scratch:
+
+.. code-block:: yaml
+
+    model:
+      dpa3_model: path/to/deepmd-model.pt
+
+Energy biases and standard deviations are extracted from the loaded model and
+handed to metatrain's composition model and scaler automatically.
+
+.. _arch-dpa3_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.ModelHypers.dpa3_model
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.ModelHypers.descriptor
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.ModelHypers.fitting_net
+
+
+
+with the following definitions needed to fully understand some of the parameters:
+
+.. autoclass:: metatrain.experimental.dpa3.documentation.DescriptorHypers
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.experimental.dpa3.documentation.RepflowHypers
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.experimental.dpa3.documentation.FittingNetHypers
+    :members:
+    :undoc-members:
+
+.. _arch-dpa3_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.distributed
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.scheduler_patience
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.scheduler_factor
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.scale_targets
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.fixed_composition_weights
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.experimental.dpa3.documentation.TrainerHypers.loss
+
+
+
+.. _arch-dpa3_references:
+
+References
+----------
+
+.. footbibliography::

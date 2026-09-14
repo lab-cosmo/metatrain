@@ -1,0 +1,292 @@
+.. _arch-pet:
+
+PET
+===
+
+.. image:: https://codecov.io/gh/metatensor/metatrain/branch/main/graph/badge.svg?component=pet
+   :target: https://app.codecov.io/gh/metatensor/metatrain/tree/main/src/metatrain/pet?components%5B0%5D=pet
+
+*Maintained by* `@abmazitov <https://github.com/abmazitov>`_, `@sofiia-chorna <https://github.com/sofiia-chorna>`_.
+
+PET is a cleaner, more user-friendly reimplementation of the original
+PET model :footcite:p:`pozdnyakov_smooth_2023`. It is designed for better
+modularity and maintainability, while preseving compatibility with the original
+PET implementation in ``metatrain``. It also adds new features like long-range
+features, better fine-tuning implementation, a possibility to train on
+arbitrarty targets, and a faster inference due to the ``fast attention``.
+
+.. _arch-pet_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[pet]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``pet``.
+
+Additional outputs
+------------------
+
+In addition to the targets defined in the dataset, the PET architecture can also output
+the following additional quantity:
+
+- ``feature``: the internal PET features, before the different heads for each target.
+- :ref:`mtt-aux-target-last-layer-features`: The features for a given target, taken
+  before the last linear layer of the corresponding head.
+
+Charge and spin conditioning
+----------------------------
+
+PET can condition its predictions on the total charge and spin multiplicity of
+each system, so that the same structure can yield different predictions for
+different electronic states (e.g. a neutral singlet vs. a charged doublet).
+Enable it with the ``system_conditioning`` model hyperparameter and provide the
+per-system values as ``extra_data`` in the training options file:
+
+.. code-block:: yaml
+
+    architecture:
+      name: pet
+      model:
+        system_conditioning: true
+        # optional, these are the defaults:
+        max_charge: 10              # supports charges in [-10, 10]
+        max_spin_multiplicity: 10   # supports 2S+1 values in [1, 10]
+
+    training_set:
+      systems:
+        read_from: dataset.xyz
+        length_unit: angstrom
+      targets:
+        energy:
+          key: energy
+          unit: eV
+      extra_data:
+        charge:
+          key: charge                # from atoms.info["charge"]
+        spin_multiplicity:
+          key: spin_multiplicity     # from atoms.info["spin_multiplicity"]
+
+The same ``extra_data`` section is used for evaluation with ``mtt eval``:
+
+.. code-block:: yaml
+
+    systems:
+      read_from: test.xyz
+    targets:
+      energy:
+        key: energy
+        unit: eV
+    extra_data:
+      charge:
+        key: charge
+      spin_multiplicity:
+        key: spin_multiplicity
+
+The examples above read the values from ``atoms.info`` of an ASE-readable file.
+The same ``extra_data`` section can also be used with zip and memory-mapped
+datasets. In zip datasets, charge and spin conditioning are read from
+``charge.mts`` and ``spin_multiplicity.mts``. In memory-mapped datasets, they
+are read from ``charge.bin`` and ``spin_multiplicity.bin``. See
+:ref:`dataset-formats` for details.
+
+Systems without a value fall back to ``charge=0`` and ``spin_multiplicity=1``,
+so a conditioned model can still be used on data without this information.
+Values must be integers within ``[-max_charge, max_charge]`` and
+``[1, max_spin_multiplicity]``; out-of-range or non-integer values raise an
+error.
+
+When running an exported model through the ASE calculator, the values are read
+from ``atoms.info``:
+
+.. code-block:: python
+
+    from metatomic_ase import MetatomicCalculator
+
+    atoms.info["charge"] = 1
+    atoms.info["spin"] = 2  # spin multiplicity (2S + 1)
+    atoms.calc = MetatomicCalculator("model.pt")
+    energy = atoms.get_potential_energy()
+
+.. _arch-pet_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``pet`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/pet-default-hypers.yaml
+   :language: yaml
+
+Tuning hyperparameters
+----------------------
+
+The default hyperparameters above will work well in most cases, but they may not be
+optimal for your specific dataset. There is good number of parameters to tune, both for
+the :ref:`model <arch-pet_model_hypers>` and the :ref:`trainer
+<arch-pet_trainer_hypers>`. Since seeing them for the first time might be
+overwhelming, here we provide a **list of the parameters that are in general the most
+important** (in decreasing order of importance):
+
+.. container:: mtt-hypers-remove-classname
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.cutoff
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_neighbors_adaptive
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.TrainerHypers.learning_rate
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.TrainerHypers.batch_size
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_pet
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_node
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_gnn_layers
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_attention_layers
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.TrainerHypers.loss
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.long_range
+      :no-index:
+
+.. _arch-pet_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.cutoff
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_neighbors_adaptive
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.adaptive_cutoff_method
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.cutoff_function
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.cutoff_width
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.cutoff_width_adaptive
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_pet
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_head
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_node
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_feedforward
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_heads
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_attention_layers
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_gnn_layers
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.normalization
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.activation
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.attention_temperature
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.transformer_type
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.featurizer_type
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.zbl
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.long_range
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.system_conditioning
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.max_charge
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.max_spin_multiplicity
+
+
+
+.. _arch-pet_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.warmup_fraction
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.weight_decay
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.atomic_baseline
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.scale_targets
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.fixed_scaling_weights
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.num_workers
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.grad_clip_norm
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.loss
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.max_atoms_per_batch
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.min_atoms_per_batch
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.finetune
+
+
+
+.. _arch-pet_references:
+
+References
+----------
+
+.. footbibliography::

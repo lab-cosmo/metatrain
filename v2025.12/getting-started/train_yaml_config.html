@@ -1,0 +1,1018 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Override Architecture’s Default Parameters" href="override.html"><link rel="prev" title="Quickstart" href="quickstart.html">
+        <link rel="canonical" href="https://docs.metatensor.org/metatrain/latest/getting-started/train_yaml_config.html">
+        <link rel="prefetch" href="../_static/images/metatrain-horizontal.png" as="image">
+        <link rel="prefetch" href="../_static/images/metatrain-horizontal-dark.png" as="image">
+
+    <link rel="shortcut icon" href="../_static/metatrain-64.png"><!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>Training YAML Reference - metatrain 2025.12 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles.css?v=e1ddca15" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">metatrain 2025.12 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../_static/images/metatrain-horizontal.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../_static/images/metatrain-horizontal-dark.png" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/installation.html">Installation</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Getting started</a><input aria-label="Toggle navigation of Getting started" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Training YAML Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="override.html">Override Architecture’s Default Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html">Restarting and Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finetuning-example.html">Finetuning example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../architectures/index.html">Available Architectures</a><input aria-label="Toggle navigation of Available Architectures" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/flashmd.html">FlashMD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/gap.html">GAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/llpr.html">LLPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/nanopet.html">NanoPET (deprecated)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/pet.html">PET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/soap_bpnn.html">SOAP-BPNN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../generated_examples/index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../generated_examples/0-beginner/index.html">Beginner Tutorials</a><input aria-label="Toggle navigation of Beginner Tutorials" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/00-basic-usage.html">Basic Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/01-data_preparation.html">How to prepare data for training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/02-fine-tuning.html">Fine-tune a pre-trained model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/03-train_from_scratch.html">Training a model from scratch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/04-parity_plot.html">Model validation with parity plots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/05-run_ase.html">Running molecular dynamics with ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../generated_examples/1-advanced/index.html">Advanced Tutorials</a><input aria-label="Toggle navigation of Advanced Tutorials" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/00-transfer-learning.html">Transfer Learning (experimental)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/01-llpr.html">Computing LLPR uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/02-zbl.html">Training a model with ZBL corrections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/03-fitting-generic-targets.html">Fitting generic targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/04-flashmd.html">Training a FlashMD model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/05-multi-gpu.html">Multi-GPU training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/06-mixed-stress-training.html">Training with Mixed Stress Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/07-dos-training.html">Training a DOS model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/08-llpr-ensemble-training.html">Generating and training an LLPR-derived shallow ensemble model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../concepts/index.html">Concepts and Design</a><input aria-label="Toggle navigation of Concepts and Design" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/output-naming.html">Output naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/loss-functions.html">Loss functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/auxiliary-outputs.html">Auxiliary outputs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">Citing Metatrain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dev-docs/index.html">Developer documentation</a><input aria-label="Toggle navigation of Developer documentation" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/getting-started.html">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/architecture-life-cycle.html">Life Cycle of an Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/new-architecture.html">Adding a new architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/dataset-information.html">Dataset Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/new-loss.html">Adding a new loss function</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../dev-docs/cli/index.html">CLI API</a><input aria-label="Toggle navigation of CLI API" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/cli/train.html">Train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/cli/eval.html">Eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/cli/export.html">Export</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/cli/formatter.html">Formatter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../dev-docs/utils/index.html">Utility API</a><input aria-label="Toggle navigation of Utility API" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../dev-docs/utils/additive/index.html">Additive models</a><input aria-label="Toggle navigation of Additive models" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/additive/remove_additive.html">Removing additive contributions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/additive/composition.html">Composition model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/additive/zbl.html">ZBL short-range potential</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../dev-docs/utils/scaler/index.html">Scaler models</a><input aria-label="Toggle navigation of Scaler models" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/scaler/scaler.html">Scaler model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/scaler/remove_scale.html">Removing the scale from targets</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../dev-docs/utils/data/index.html">Data</a><input aria-label="Toggle navigation of Data" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/combine_dataloaders.html">Combining dataloaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/dataset.html">Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/get_dataset.html">Reading a dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/readers.html">Readers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/writers.html">Target data Writers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../dev-docs/utils/data/systems_to_ase.html">Converting Systems to ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/abc.html">Abstract base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/architectures.html">Architectures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/augmentation.html">Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/devices.html">Device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/dtype.html">Dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/errors.html">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/evaluate_model.html">Evaluating a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/external_naming.html">External Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/hypers.html">Hyperparameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/io.html">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/long_range.html">Long-range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/loss.html">Loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/neighbor_lists.html">Neighbor lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/omegaconf.html">Custom omegaconf functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/output_gradient.html">Output gradient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/per_atom.html">Averaging predictions per atom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/pydantic.html">Pydantic utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/sum_over_atoms.html">Summing over atoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/transfer.html">Data type and device transfers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dev-docs/utils/units.html">Unit handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/base-hypers.html">Base hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev-docs/changelog.html">Changelog</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/getting-started/train_yaml_config.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="training-yaml-reference">
+<span id="train-yaml-config"></span><h1>Training YAML Reference<a class="headerlink" href="#training-yaml-reference" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">metatrain</span></code> uses a YAML file to specify the parameters for model training, accessed
+via <code class="docutils literal notranslate"><span class="pre">mtt</span> <span class="pre">train</span> <span class="pre">options.yaml</span></code>. In this section, we provide a complete reference for the
+parameters provided by the training YAML input. For a minimal example of a YAML input
+file, suitable to start a first training, we refer the viewer to the sample YAML file in
+the <a class="reference internal" href="quickstart.html#label-quickstart"><span class="std std-ref">Quickstart</span></a> section.</p>
+<p>The YAML input file can be divided into five sections:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#computational-parameters-section"><span class="std std-ref">Computational Parameters</span></a></p></li>
+<li><p><a class="reference internal" href="#architecture-section"><span class="std std-ref">Architecture</span></a></p></li>
+<li><p><a class="reference internal" href="#loss-section"><span class="std std-ref">Loss</span></a></p></li>
+<li><p><a class="reference internal" href="#data-section"><span class="std std-ref">Data</span></a></p></li>
+<li><p><a class="reference internal" href="#wandb-integration-section"><span class="std std-ref">WandB Integration</span></a></p></li>
+</ul>
+</section>
+<section id="computational-parameters">
+<span id="computational-parameters-section"></span><h2>Computational Parameters<a class="headerlink" href="#computational-parameters" title="Link to this heading">¶</a></h2>
+<p>The computational parameters define the computational <code class="docutils literal notranslate"><span class="pre">device</span></code>, <code class="docutils literal notranslate"><span class="pre">base_precision</span></code> and
+<code class="docutils literal notranslate"><span class="pre">seed</span></code>. These parameters are optional.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">device</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cuda</span>
+<span class="nt">base_precision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</pre></div>
+</div>
+<div class="mtt-hypers-remove-classname docutils container">
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">BaseHypers.</span></span><span class="sig-name descname"><span class="pre">device</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The computational device used for model training. If not provided, <code class="docutils literal notranslate"><span class="pre">metatrain</span></code>
+automatically chooses the best option by default. The available devices and the
+best device option depend on the model architecture. The easiest way to use this
+parameter is to use either either <code class="docutils literal notranslate"><span class="pre">&quot;cpu&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;gpu&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;multi-gpu&quot;</span></code>. Internally,
+under the choice <code class="docutils literal notranslate"><span class="pre">&quot;gpu&quot;</span></code>, the script will automatically choose between <code class="docutils literal notranslate"><span class="pre">&quot;cuda&quot;</span></code>
+or <code class="docutils literal notranslate"><span class="pre">&quot;mps&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">BaseHypers.</span></span><span class="sig-name descname"><span class="pre">base_precision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">16</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">32</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">64</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The base precision for float values. For example, a value of <code class="docutils literal notranslate"><span class="pre">16</span></code> corresponds
+to the data type <code class="docutils literal notranslate"><span class="pre">float16</span></code>. The datatypes that are supported as well as the
+default datatype depend on the model architecture used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">BaseHypers.</span></span><span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The seed used for non-deterministic operations. It sets the seed of
+<code class="docutils literal notranslate"><span class="pre">numpy.random</span></code>, <code class="docutils literal notranslate"><span class="pre">random</span></code>, <code class="docutils literal notranslate"><span class="pre">torch</span></code> and <code class="docutils literal notranslate"><span class="pre">torch.cuda</span></code>. This parameter is
+important for ensuring reproducibility. If not specified, the seed is generated
+randomly and reported in the log.</p>
+</dd></dl>
+
+</div>
+</section>
+<section id="architecture">
+<span id="architecture-section"></span><h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h2>
+<p>The next section of the YAML file would focus on options pertaining to the architecture.
+The main skeleton is as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">architecture</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture_name</span>
+<span class="w">    </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">training</span><span class="p">:</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>The options for the <code class="docutils literal notranslate"><span class="pre">architecture.model</span></code> and <code class="docutils literal notranslate"><span class="pre">architecture.training</span></code> sections are
+highly specific to the architecture used. You can refer to the <a class="reference internal" href="../architectures/index.html#available-architectures"><span class="std std-ref">architecture
+documentation</span></a> page to find the options for your desired
+architecture.</p>
+</section>
+<section id="loss">
+<span id="loss-section"></span><h2>Loss<a class="headerlink" href="#loss" title="Link to this heading">¶</a></h2>
+<p>A special parameter that you will find in the <code class="docutils literal notranslate"><span class="pre">architecture.training</span></code> section is
+the one dedicated to the loss. There is a plethora of loss functions used in different
+ML workflows, and you can refer to <a class="reference internal" href="../concepts/loss-functions.html#loss-functions"><span class="std std-ref">the loss functions documentation</span></a>
+to understand the support of <code class="docutils literal notranslate"><span class="pre">metatrain</span></code> for all these different cases.</p>
+</section>
+<section id="data">
+<span id="data-section"></span><h2>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h2>
+<p>The final section of the YAML file focuses on options regarding the data used in model
+training. This secion can be broken down into three subsections:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">training_set</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">validation_set</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_set</span></code> (optional)</p></li>
+</ul>
+<p>The training set is the data that will be used for model training, the validation set is
+the data that will be used to track the generalizability of the model during training
+and is usually used to decide on the best model. The test set is only used after training
+and it is used to evaluate the model’s performance on an unseen dataset after training.
+If not specified, no test set will be created.
+Each subsection has the same parameter configuration. As an example, the configuration
+of the training set is usually divided into three main sections:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training_set</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">systems</span><span class="p">:</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">extra_data</span><span class="p">:</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>with the three sections being:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">systems</span></code>: defines the molecular/crystal structures, which are the inputs to the model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">targets</span></code>: defines the outputs to be predicted by the model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">extra_data</span></code>: defines any additional data required by the loss function during
+training.</p></li>
+</ul>
+<p>The validation and test set sections can also be fully specified in the same way as the
+training set section, but they can also be simply a fraction of the training set. For
+example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training_set</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"> </span><span class="c1"># Training set specification</span>
+<span class="nt">validation_set</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="nt">test_set</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+</pre></div>
+</div>
+<p>will randomly select 10% of the training set for validation and 20% for testing.
+The selected indices for the training, validation and test subset will be
+available in the <code class="docutils literal notranslate"><span class="pre">outputs</span></code> directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you don’t need a test set, you can simply omit the <code class="docutils literal notranslate"><span class="pre">test_set</span></code> parameter entirely.</p>
+</div>
+<section id="systems">
+<h3>Systems<a class="headerlink" href="#systems" title="Link to this heading">¶</a></h3>
+<p>The systems section can be defined as simply as:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training_set</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">systems</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"> </span><span class="c1"># Rest of training set specification</span>
+</pre></div>
+</div>
+<p>which would instruct <code class="docutils literal notranslate"><span class="pre">metatrain</span></code> to read the systems from the file
+<code class="docutils literal notranslate"><span class="pre">dataset.xyz</span></code> using the default reader inferred from the file extension. If one
+requires more control over the way the systems are read, one can provide a
+specification that is defined by the following parameters:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">SystemsHypers</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#SystemsHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Hyperparameters for the systems in the dataset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">read_from</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>Path to the file containing the systems.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">reader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ase'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'metatensor'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The reader library to use for parsing.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">null</span></code> or not provided, the reader will be guessed
+from the file extension. For example, <code class="docutils literal notranslate"><span class="pre">.xyz</span></code> and <code class="docutils literal notranslate"><span class="pre">.extxyz</span></code>
+will be read by <code class="docutils literal notranslate"><span class="pre">ase</span></code> and <code class="docutils literal notranslate"><span class="pre">.mts</span></code> will be read by
+<code class="docutils literal notranslate"><span class="pre">metatensor</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">length_unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>Unit of lengths in the system file, optional but <strong>highly recommended for
+running simulations</strong>. If not given, no unit conversion will be performed when
+running simulations which may lead to severe errors.</p>
+<p>The list of possible length units is available <a class="reference external" href="https://docs.metatensor.org/metatomic/latest/torch/reference/misc.html#known-quantities-units">here</a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>As an example, the simple configuration that we saw previously is equivalent to:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training_set</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">systems</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">        </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">        </span><span class="nt">length_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"> </span><span class="c1"># Rest of training set specification</span>
+</pre></div>
+</div>
+</section>
+<section id="targets">
+<h3>Targets<a class="headerlink" href="#targets" title="Link to this heading">¶</a></h3>
+<p>In the <code class="docutils literal notranslate"><span class="pre">targets</span></code> category, one can define any number of target sections, each with a
+unique name, i.e. something like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training_set</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">energy</span><span class="p">:</span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"> </span><span class="c1"># Energy target specification</span>
+<span class="w">        </span><span class="nt">mtt:dipole</span><span class="p">:</span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"> </span><span class="c1"># Dipole target specification</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"> </span><span class="c1"># Rest of training set specification</span>
+</pre></div>
+</div>
+<p>The name of the target should either be a standard output of <code class="docutils literal notranslate"><span class="pre">metatomic</span></code>
+(see <a class="reference external" href="https://docs.metatensor.org/metatomic/latest/outputs/index.html">metatomic outputs documentation</a>)
+or begin with <code class="docutils literal notranslate"><span class="pre">mtt::</span></code>, see <a class="reference internal" href="#datayaml-full-example"><span class="std std-ref">example below</span></a> for a fully fledged
+version of a training set specification.</p>
+<p>Each target can be specified with the following parameters:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">TargetHypers</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#TargetHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Hyperparameters for the targets in the dataset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">quantity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em></dt>
+<dd><p>The quantity that the target represents (e.g., <code class="docutils literal notranslate"><span class="pre">energy</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dipole</span></code>). Currently only <code class="docutils literal notranslate"><span class="pre">energy</span></code> gets a special treatment from
+<code class="docutils literal notranslate"><span class="pre">metatrain</span></code>, for any other quantity there is no need to specify
+it.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">read_from</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The path to the file containing the target data, defaults
+to <code class="docutils literal notranslate"><span class="pre">systems.read_from</span></code> path if not provided.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">reader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ase'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'metatensor'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The reader library to use for parsing.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">null</span></code> or not provided, the reader will be guessed
+from the file extension. For example, <code class="docutils literal notranslate"><span class="pre">.xyz</span></code> and <code class="docutils literal notranslate"><span class="pre">.extxyz</span></code>
+will be read by <code class="docutils literal notranslate"><span class="pre">ase</span></code> and <code class="docutils literal notranslate"><span class="pre">.mts</span></code> will be read by
+<code class="docutils literal notranslate"><span class="pre">metatensor</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The key under which the target is stored in the file.</p>
+<p>If not provided, it defaults to the key of the target in the
+yaml dataset specification.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em></dt>
+<dd><p>Unit of the target, optional but <strong>highly recommended for running simulations</strong>.
+If not given, no unit conversion will be performed when running simulations which
+may lead to severe errors.</p>
+<p>The list of possible units is available <a class="reference external" href="https://docs.metatensor.org/metatomic/latest/torch/reference/misc.html#known-quantities-units">here</a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">per_atom</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em></dt>
+<dd><p>Whether the target is a per-atom quantity, as opposed to a global
+(per-structure) quantity.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'scalar'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../dev-docs/base-hypers.html#metatrain.share.base_hypers.CartesianTargetTypeHypers" title="metatrain.share.base_hypers.CartesianTargetTypeHypers"><span class="pre">CartesianTargetTypeHypers</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../dev-docs/base-hypers.html#metatrain.share.base_hypers.SphericalTargetTypeHypers" title="metatrain.share.base_hypers.SphericalTargetTypeHypers"><span class="pre">SphericalTargetTypeHypers</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>Specifies the type of the target.</p>
+<p>See <a class="reference internal" href="../generated_examples/1-advanced/03-fitting-generic-targets.html#fitting-generic-targets"><span class="std std-ref">Fitting Generic Targets</span></a> to understand
+in detail how to specify each target type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">num_subtargets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em></dt>
+<dd><p>Specifies the number of sub-targets that need to be learned as part of
+this target.</p>
+<p>Each subtarget is treated as entirely equivalent by models in metatrain
+and they will often be represented as outputs of the same neural
+network layer. A common use case for this field is when you are learning a
+discretization of a continuous target, such as the grid points of a function. In the
+example above, there are 4000 sub-targets for the density of states (DOS). In
+metatensor, these correspond to the number of properties of the target.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em></dt>
+<dd><p>A description of this target. A description is highly recommended if there is
+more than one target with the same <a class="reference internal" href="../dev-docs/base-hypers.html#metatrain.share.base_hypers.TargetHypers.quantity" title="metatrain.share.base_hypers.TargetHypers.quantity"><code class="xref py py-attr docutils literal notranslate"><span class="pre">quantity</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">forces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../dev-docs/base-hypers.html#metatrain.share.base_hypers.GradientDict" title="metatrain.share.base_hypers.GradientDict"><span class="pre">GradientDict</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>Specification for the forces associated with the target.</p>
+<p>See <a class="reference internal" href="#gradient-subsection"><span class="std std-ref">Gradient Subsection</span></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">stress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../dev-docs/base-hypers.html#metatrain.share.base_hypers.GradientDict" title="metatrain.share.base_hypers.GradientDict"><span class="pre">GradientDict</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>Specification for the stress associated with the target.</p>
+<p>See <a class="reference internal" href="#gradient-subsection"><span class="std std-ref">Gradient Subsection</span></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">virial</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../dev-docs/base-hypers.html#metatrain.share.base_hypers.GradientDict" title="metatrain.share.base_hypers.GradientDict"><span class="pre">GradientDict</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>Specification for the virial associated with the target.</p>
+<p>See <a class="reference internal" href="#gradient-subsection"><span class="std std-ref">Gradient Subsection</span></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>A single string in a target section automatically expands, using the string as the
+<code class="docutils literal notranslate"><span class="pre">read_from</span></code> parameter.</p>
+<section id="gradient-subsection">
+<span id="id2"></span><h4>Gradient Subsection<a class="headerlink" href="#gradient-subsection" title="Link to this heading">¶</a></h4>
+<p>Each gradient subsection (like <code class="docutils literal notranslate"><span class="pre">forces</span></code> or <code class="docutils literal notranslate"><span class="pre">stress</span></code>) has similar parameters:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">GradientDict</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#GradientDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">read_from</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The path to the file for gradient data.</p>
+<p>If not provided, the path from its associated target is used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">reader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ase'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'metatensor'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The reader library to use for parsing.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">null</span></code> or not provided, the reader will be guessed
+from the file extension. For example, <code class="docutils literal notranslate"><span class="pre">.xyz</span></code> and <code class="docutils literal notranslate"><span class="pre">.extxyz</span></code>
+will be read by <code class="docutils literal notranslate"><span class="pre">ase</span></code> and <code class="docutils literal notranslate"><span class="pre">.mts</span></code> will be read by
+<code class="docutils literal notranslate"><span class="pre">metatensor</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em></dt>
+<dd><p>The key under which the target is stored in the file.</p>
+<p>If not provided, it defaults to the key of the gradient in the
+yaml dataset specification.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>A single string in a gradient section automatically expands, using the string as the
+<code class="docutils literal notranslate"><span class="pre">read_from</span></code> parameter.</p>
+<p>Sections set to <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">on</span></code> automatically expand with default parameters. A
+warning is raised if requisite data for a gradient is missing, but training proceeds
+without them. For instance,</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">energy</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">        </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">        </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ase</span>
+<span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">        </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">        </span><span class="nt">forces</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">            </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ase</span>
+<span class="w">            </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">forces</span>
+<span class="w">        </span><span class="nt">stress</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">            </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ase</span>
+<span class="w">            </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stress</span>
+</pre></div>
+</div>
+<p>can be condensed into</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">energy</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">        </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">        </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ase</span>
+<span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">        </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">        </span><span class="nt">forces</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">on</span>
+<span class="w">        </span><span class="nt">stress</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">on</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unknown keys are ignored and not deleted in all sections during dataset parsing.</p>
+</div>
+</section>
+</section>
+<section id="datasets-requiring-additional-data">
+<h3>Datasets requiring additional data<a class="headerlink" href="#datasets-requiring-additional-data" title="Link to this heading">¶</a></h3>
+<p>Some targets require additional data to be passed to the loss function for training. In
+the example above, we included the mask for the density of states, which defines the
+regions of the DOS that are well-defined based on the eigenvalues of the underlying
+electronic structure calculation. This is important when the DOS is computed over a
+finite energy range, as the DOS near the edges of this range may be inaccurate due to
+the lack of states computed beyond this range. <code class="docutils literal notranslate"><span class="pre">metatrain</span></code> supports passing additional
+data in the <code class="docutils literal notranslate"><span class="pre">options.yaml</span></code> file. This can be seen in the <code class="docutils literal notranslate"><span class="pre">extra_data</span></code> section of the
+full example above.</p>
+<p>As another example, training a model to predict the polarization for extended systems
+under periodic boundary conditions might require the quantum of polarization to be
+provided for each system in the dataset. For this, you can add the following section to
+your <code class="docutils literal notranslate"><span class="pre">options.yaml</span></code> file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training_set</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">systems</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset_0.xyz</span>
+<span class="w">        </span><span class="nt">length_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">angstrom</span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">mtt::polarization</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">polarization.mts</span>
+<span class="w">    </span><span class="nt">extra_data</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">polarization_quantum</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">polarization_quantum.mts</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>While the <code class="docutils literal notranslate"><span class="pre">extra_data</span></code> section can always be present, it will typically be ignored
+unless using specific loss functions. If the loss function you picked does not
+support the extra data, it will be ignored.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">extra_data</span></code> section supports the same parameters as the target sections. In this
+case, we have also read the targets and extra data from files other than the systems
+file.</p>
+</section>
+<section id="full-data-example">
+<span id="datayaml-full-example"></span><h3>Full data example<a class="headerlink" href="#full-data-example" title="Link to this heading">¶</a></h3>
+<p>Here is a full fledged example of a training set specification, in this case for
+learning the electronic density of states (DOS) along with forces and stresses:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training_set</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">systems</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">        </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ase</span>
+<span class="w">        </span><span class="nt">length_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">energy</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">            </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">            </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ase</span>
+<span class="w">            </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">            </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">            </span><span class="nt">per_atom</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scalar</span>
+<span class="w">            </span><span class="nt">num_subtargets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">            </span><span class="nt">forces</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">                </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ase</span>
+<span class="w">                </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">forces</span>
+<span class="w">            </span><span class="nt">stress</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">                </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ase</span>
+<span class="w">                </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stress</span>
+<span class="w">        </span><span class="nt">non_conservative_forces</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">            </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nonconservative_force.mts</span>
+<span class="w">            </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metatensor</span>
+<span class="w">            </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">forces</span>
+<span class="w">            </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">            </span><span class="nt">per_atom</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">cartesian</span><span class="p">:</span>
+<span class="w">                    </span><span class="nt">rank</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">            </span><span class="nt">num_subtargets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">        </span><span class="nt">mtt::dos</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">            </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOS.mts</span>
+<span class="w">            </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metatensor</span>
+<span class="w">            </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dos</span>
+<span class="w">            </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">            </span><span class="nt">per_atom</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scalar</span>
+<span class="w">            </span><span class="nt">num_subtargets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4000</span>
+<span class="w">    </span><span class="nt">extra_data</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">mtt::dos_mask</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">            </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.xyz</span>
+<span class="w">            </span><span class="nt">reader</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ase</span>
+<span class="w">            </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dos_mask</span>
+<span class="w">            </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">            </span><span class="nt">per_atom</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scalar</span>
+<span class="w">            </span><span class="nt">num_subtargets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4000</span>
+</pre></div>
+</div>
+</section>
+<section id="using-multiple-files-for-training">
+<h3>Using Multiple Files for Training<a class="headerlink" href="#using-multiple-files-for-training" title="Link to this heading">¶</a></h3>
+<p>For some applications, it is simpler to provide more than one dataset for model
+training. <code class="docutils literal notranslate"><span class="pre">metatrain</span></code> supports stacking several datasets together using the <code class="docutils literal notranslate"><span class="pre">YAML</span></code>
+list syntax, which consists of lines beginning at the same indentation level starting
+with a <code class="docutils literal notranslate"><span class="pre">&quot;-</span> <span class="pre">&quot;</span></code> (a dash and a space)</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training_set</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">systems</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset_0.xyz</span>
+<span class="w">          </span><span class="nt">length_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">angstrom</span>
+<span class="w">      </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">energy</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">              </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_energy_label0</span>
+<span class="w">              </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eV</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">systems</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">read_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset_1.xyz</span>
+<span class="w">          </span><span class="nt">length_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">angstrom</span>
+<span class="w">      </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">energy</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">              </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_energy_label1</span>
+<span class="w">              </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eV</span>
+<span class="w">          </span><span class="nt">free-energy</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">quantity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">energy</span>
+<span class="w">              </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_free_energy</span>
+<span class="w">              </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hartree</span>
+<span class="nt">test_set</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="nt">validation_set</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+</pre></div>
+</div>
+<p>The required test and validation splits are performed consistently for each element
+element in <code class="docutils literal notranslate"><span class="pre">training_set</span></code> .</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">length_unit</span></code> has to be the same for each element of the list. If target section
+names are the same for different elements of the list, their unit also has to be the
+same. In the the example above the target section <code class="docutils literal notranslate"><span class="pre">energy</span></code> exists in both list
+elements and therefore has the the same unit <code class="docutils literal notranslate"><span class="pre">eV</span></code>. The target section <code class="docutils literal notranslate"><span class="pre">free-energy</span></code>
+only exists in the second element and its unit does not have to be the same as in the
+first element of the list.</p>
+<p>Typically the global atomic types the the model is defined for are inferred from the
+training and validation datasets. Sometimes, due to shuffling of datasets with low
+representation of some types, these datasets may not contain all atomic types that you
+want to use in your model. To explicitly control the atomic types the model is defined
+for, specify the <code class="docutils literal notranslate"><span class="pre">atomic_types</span></code> key in the <code class="docutils literal notranslate"><span class="pre">architecture</span></code> section of the options
+file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">architecture</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pet</span>
+<span class="w">    </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cutoff</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span>
+<span class="w">    </span><span class="nt">training</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="w">        </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">    </span><span class="nt">atomic_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">7</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">16</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># i.e. for H, C, N, O, S</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Even though parsing several datasets is supported by the library, it may not work
+with every architecture. Check your <a class="reference internal" href="../architectures/index.html#available-architectures"><span class="std std-ref">desired architecture</span></a> if they <strong>support multiple datasets</strong>.</p>
+</div>
+</section>
+</section>
+<section id="wandb-integration">
+<span id="wandb-integration-section"></span><h2>WandB Integration<a class="headerlink" href="#wandb-integration" title="Link to this heading">¶</a></h2>
+<p>Optional section dealing with integration with <a class="reference external" href="https://wandb.ai">Weights and Biases (wandb)</a> logging. Leaving this section blank will simply disable wandb
+integration. The parameters for this section is the same as that in <a class="reference external" href="https://docs.wandb.ai/models/ref/python/functions/init">wandb.init</a>. Here we provide a minimal example for the
+YAML input</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">wandb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_project</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_run_name</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tag1</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tag2</span>
+<span class="w">    </span><span class="nt">notes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">This is a test run</span>
+</pre></div>
+</div>
+<p>All parameters of your <code class="docutils literal notranslate"><span class="pre">options.yaml</span></code> file will be automatically added to the wandb
+run so you don’t have to set the <code class="docutils literal notranslate"><span class="pre">config</span></code> parameter.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>You need to install wandb with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">wandb</span></code> if you want to use this logger.
+<strong>Before</strong> running also set up your credentials with <code class="docutils literal notranslate"><span class="pre">wandb</span> <span class="pre">login</span></code> from the
+command line. See <a class="reference external" href="https://docs.wandb.ai/ref/cli/wandb-login">wandb login documentation</a> for details on the setup.</p>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="override.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Override Architecture’s Default Parameters</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="quickstart.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Quickstart</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, metatrain developers
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link fa-brands fa-github fa-2x" href="https://github.com/metatensor/metatrain" aria-label="GitHub"></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Training YAML Reference</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#computational-parameters">Computational Parameters</a></li>
+<li><a class="reference internal" href="#architecture">Architecture</a></li>
+<li><a class="reference internal" href="#loss">Loss</a></li>
+<li><a class="reference internal" href="#data">Data</a><ul>
+<li><a class="reference internal" href="#systems">Systems</a></li>
+<li><a class="reference internal" href="#targets">Targets</a><ul>
+<li><a class="reference internal" href="#gradient-subsection">Gradient Subsection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datasets-requiring-additional-data">Datasets requiring additional data</a></li>
+<li><a class="reference internal" href="#full-data-example">Full data example</a></li>
+<li><a class="reference internal" href="#using-multiple-files-for-training">Using Multiple Files for Training</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wandb-integration">WandB Integration</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=50a9be24"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/toggleprompt.js?v=5801b3bb"></script>
+    </body>
+</html>

@@ -1,0 +1,147 @@
+.. _arch-flashmd_symplectic:
+
+Symplectic FlashMD (Experimental)
+=================================
+
+.. image:: https://codecov.io/gh/metatensor/metatrain/branch/main/graph/badge.svg?component=flashmd_symplectic
+   :target: https://app.codecov.io/gh/metatensor/metatrain/tree/main/src/metatrain/experimental/flashmd_symplectic?components%5B0%5D=flashmd_symplectic
+
+*Maintained by* `@frostedoyster <https://github.com/frostedoyster>`_, `@johannes-spies <https://github.com/johannes-spies>`_.
+
+The symplectic variant of :ref:`FlashMD <arch-flashmd>`.
+
+.. _arch-flashmd_symplectic_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[flashmd_symplectic]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``flashmd_symplectic``.
+
+.. _arch-flashmd_symplectic_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``flashmd_symplectic`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/flashmd_symplectic-default-hypers.yaml
+   :language: yaml
+
+.. _arch-flashmd_symplectic_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.cutoff
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.cutoff_width
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.d_pet
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.d_head
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.d_node
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.d_feedforward
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.num_heads
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.num_attention_layers
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.num_gnn_layers
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.normalization
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.activation
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.attention_temperature
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.transformer_type
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.featurizer_type
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.ModelHypers.long_range
+
+
+
+.. _arch-flashmd_symplectic_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.timestep
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.masses
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.distributed
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.warmup_fraction
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.weight_decay
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.scale_targets
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.fixed_scaling_weights
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.num_workers
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.grad_clip_norm
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.loss
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.batch_atom_bounds
+
+        .. autoattribute:: metatrain.experimental.flashmd_symplectic.documentation.TrainerHypers.finetune
+
+
+
+.. _arch-flashmd_symplectic_references:
+
+References
+----------
+
+.. footbibliography::

@@ -1,0 +1,125 @@
+.. _arch-composition:
+
+Composition
+===========
+
+.. image:: https://codecov.io/gh/metatensor/metatrain/branch/main/graph/badge.svg?component=composition
+   :target: https://app.codecov.io/gh/metatensor/metatrain/tree/main/src/metatrain/composition?components%5B0%5D=composition
+
+*Maintained by* `@ppegolo <https://github.com/ppegolo>`_.
+
+The composition model computes per-species contributions to invariant targets by solving
+a deterministic least-squares problem. It is typically used as an additive baseline
+within other architectures (e.g. PET, SOAP-BPNN, SPACE) to capture compositional offsets
+before training the main model, but it can also be trained on its own. The main use case
+for standalone training is to produce a checkpoint that initializes the composition
+baseline of another architecture, avoiding a re-fit of the weights.
+
+How the model works
+-------------------
+
+The composition model predicts a target as a sum of per-species weights :math:`w_t`, one
+for each atomic type :math:`t`, fitted by least squares on the training data. Only
+invariant quantities are fitted (energy being the typical example). For spherical
+targets, these are blocks with :math:`\lambda = 0, \sigma = 1`. The fit can be bypassed
+for chosen targets and atomic types with the ``atomic_baseline`` trainer hyperparameter,
+which sets the corresponding weights to fixed, user-supplied values.
+
+The exact form of the fit depends on the sample kind of the target.
+
+For **per-structure** targets like energy (or anything with ``sample_kind`` set to
+``"system"``), the prediction for a structure :math:`A` is
+
+.. math::
+
+    \hat{y}_A = \sum_{i \in A} w_{t_i} = \sum_t n^A_t \, w_t,
+
+where :math:`t_i` is the type of atom :math:`i` and :math:`n^A_t` is the number of atoms
+of type :math:`t` in :math:`A`. The weights minimize :math:`\sum_A \lVert y_A - \sum_t
+n^A_t w_t \rVert^2`, i.e. they solve the normal equations :math:`X^\top X \, W = X^\top
+Y`, where :math:`X_{At} = n^A_t`, :math:`Y` stacks the target values :math:`y_A`, and
+:math:`W` stacks the weights :math:`w_t` (a small ridge term is added to the diagonal
+for numerical stability).
+
+For **per-atom** targets (i.e. anything with ``sample_kind`` set to ``"atom"``), the
+prediction for atom :math:`i` is simply :math:`\hat{y}_i = w_{t_i}`. In this case
+:math:`X` is a one-hot encoding of the atomic types, so :math:`X^\top X` is diagonal
+(the per-type atom counts :math:`N_t`) and the fit reduces to
+
+.. math::
+
+    w_t = \frac{1}{N_t} \sum_{i \,:\, t_i = t} y_i,
+
+that is, **the mean of the target over all atoms of type** :math:`t`. Types that never
+appear in the training data are assigned a zero weight.
+
+As a simple example, take a per-atom target where the hydrogen atoms carry the values
+1.0 and 1.5 and a single oxygen atom carries 2.0: the fit gives :math:`w_\mathrm{H} =
+1.25` and :math:`w_\mathrm{O} = 2.0`, so every hydrogen is predicted as 1.25 and every
+oxygen as 2.0. For a per-structure energy, a water molecule would instead be predicted
+as :math:`2 w_\mathrm{H} + w_\mathrm{O}`.
+
+.. _arch-composition_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[composition]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``composition``.
+
+.. _arch-composition_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``composition`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/composition-default-hypers.yaml
+   :language: yaml
+
+.. _arch-composition_model_hypers:
+
+Model hyperparameters
+------------------------
+
+This architecture has no model hyperparameters: there is nothing to set under
+the ``architecture.model`` section of the config file.
+
+
+.. _arch-composition_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.composition.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.composition.documentation.TrainerHypers.atomic_baseline
+
+        .. autoattribute:: metatrain.composition.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.composition.documentation.TrainerHypers.num_workers
+
+
+
+.. _arch-composition_references:
+
+References
+----------
+
+.. footbibliography::

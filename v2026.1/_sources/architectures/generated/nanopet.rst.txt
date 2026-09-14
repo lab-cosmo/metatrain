@@ -1,0 +1,128 @@
+.. _architecture-nanopet:
+
+NanoPET (deprecated)
+======================
+
+.. warning::
+
+  This is a **deprecated model**. You should not use it for anything important, and
+  support for it will be removed in future versions of metatrain. Please use the
+  :ref:`PET model <architecture-pet>` instead.
+
+.. _architecture-nanopet_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[nanopet]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``nanopet``.
+
+.. _architecture-nanopet_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``nanopet`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/nanopet-default-hypers.yaml
+   :language: yaml
+
+.. _architecture-nanopet_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.ModelHypers.cutoff
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.ModelHypers.cutoff_width
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.ModelHypers.d_pet
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.ModelHypers.num_heads
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.ModelHypers.num_attention_layers
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.ModelHypers.num_gnn_layers
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.ModelHypers.heads
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.ModelHypers.zbl
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.ModelHypers.long_range
+
+
+
+.. _architecture-nanopet_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.distributed
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.scheduler_patience
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.scheduler_factor
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.atomic_baseline
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.scale_targets
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.fixed_scaling_weights
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.num_workers
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.loss
+
+        .. autoattribute:: metatrain.deprecated.nanopet.documentation.TrainerHypers.batch_atom_bounds
+
+
+
+.. _architecture-nanopet_references:
+
+References
+----------
+
+.. footbibliography::

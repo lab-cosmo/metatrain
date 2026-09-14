@@ -1,0 +1,167 @@
+.. _architecture-flashmd:
+
+FlashMD
+=======
+
+FlashMD is a method for the direct prediction of positions and momenta in a molecular
+dynamics simulation, presented in :footcite:p:`bigi_flashmd_2025`. When compared to
+traditional molecular dynamics methods, it predicts the positions and momenta of atoms
+after a long time interval, allowing the use of much larger time steps. Therefore, it
+achieves a significant speedup (10-30x) compared to molecular dynamics using MLIPs.
+The FlashMD architecture implemented in metatrain is based on the
+:ref:`PET architecture <architecture-pet>`.
+
+.. _architecture-flashmd_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[flashmd]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``flashmd``.
+
+.. _architecture-flashmd_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``flashmd`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/flashmd-default-hypers.yaml
+   :language: yaml
+
+Tuning hyperparameters
+----------------------
+
+Most of the parameters of FlashMD are inherited from the PET architecure, although
+they might have different default values.
+
+.. container:: mtt-hypers-remove-classname
+
+    - FlashMD-specific parameters for the model:
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.predict_momenta_as_difference
+            :no-index:
+
+    - FlashMD-specific parameters for the trainer:
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.timestep
+            :no-index:
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.masses
+            :no-index:
+
+.. _architecture-flashmd_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.predict_momenta_as_difference
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.cutoff
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.cutoff_width
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.d_pet
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.d_head
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.d_node
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.d_feedforward
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.num_heads
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.num_attention_layers
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.num_gnn_layers
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.normalization
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.activation
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.transformer_type
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.featurizer_type
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.ModelHypers.long_range
+
+
+
+.. _architecture-flashmd_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.timestep
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.masses
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.distributed
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.warmup_fraction
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.weight_decay
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.scale_targets
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.fixed_composition_weights
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.fixed_scaling_weights
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.num_workers
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.grad_clip_norm
+
+        .. autoattribute:: metatrain.experimental.flashmd.documentation.TrainerHypers.loss
+
+
+
+.. _architecture-flashmd_references:
+
+References
+----------
+
+.. footbibliography::

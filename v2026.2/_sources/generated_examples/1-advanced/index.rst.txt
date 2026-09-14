@@ -1,0 +1,212 @@
+
+
+.. _sphx_glr_generated_examples_1-advanced:
+
+.. _advanced_tutorials:
+
+Advanced Tutorials
+------------------
+
+This sections includes the advanced tutorials on the usage of the ``metatrain`` package.
+If you are new to ``metatrain``, we recommend to start with the :ref:`label_quickstart`
+and the :ref:`beginner_tutorials`.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="  This section of the documentation is only relevant for PET model so far.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_00-transfer-learning_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/00-transfer-learning`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Transfer Learning (experimental)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a model with uncertainties using metatrain. It involves the computation of the uncertainties on ethanol molecules, using the last-layer prediction rigidity (LLPR) approximation. Both total and local (LPR) uncertainties are computed">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_01-llpr_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/01-llpr`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Computing LLPR uncertainties</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a model with ZBL corrections.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_02-zbl_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/02-zbl`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training a model with ZBL corrections</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Besides energy-like targets, the library also supports reading (and training on) more generic targets.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_03-fitting-generic-targets_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/03-fitting-generic-targets`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fitting generic targets</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train or fine-tune a FlashMD model for the direct prediction of molecular dynamics. This type of model affords faster MD simulations compared to MLIPs by one or two orders of magnitude (https://arxiv.org/abs/2505.19350).">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_04-flashmd_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/04-flashmd`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training or fine-tuning a FlashMD model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="metatrain supports training a model with several GPUs, which can accelerate the training, especially when the training dataset is large / there are many training epochs. This feature is enabled by the :pytorch.distributed module, and thus can do multiprocess parallelism across several nodes.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_05-multi-gpu_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/05-multi-gpu`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Multi-GPU training</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a model on datasets containing structures with and without stress information in the same training set. This is useful when working with:">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_06-mixed-stress-training_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/06-mixed-stress-training`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training with Mixed Stress Structures</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a model for the prediction of the electronic density of states (DOS), while accounting for the unique properties of the DOS using the masked dos loss function &lt;dos-loss&gt;. This procedure can be used to train PET-MAD-DOS, a universal model for the electronic density of states. (https://arxiv.org/abs/2508.17418)">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_07-dos-training_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/07-dos-training`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training a DOS model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to generate and, optionally, further train an LLPR-derived shallow ensemble model using metatrain. Building on the LLPR approach, this more advanced technique allows for 1) generation of a last-layer ensemble model from an LLPR model and 2) gradient-based tuning of ensemble weights using a negative log-likelihood (NLL) loss, often leading to improved uncertainty estimates at the cost of further training.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_08-llpr-ensemble-training_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/08-llpr-ensemble-training`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Generating and training an LLPR-derived shallow ensemble model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a classifier model using metatrain. The classifier model is a transfer learning architecture that takes a pre-trained model, freezes its backbone, and trains a small multi-layer perceptron (MLP) on top of the extracted features for classification tasks.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_09-classifier_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/09-classifier`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training a Classifier Model</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /generated_examples/1-advanced/00-transfer-learning
+   /generated_examples/1-advanced/01-llpr
+   /generated_examples/1-advanced/02-zbl
+   /generated_examples/1-advanced/03-fitting-generic-targets
+   /generated_examples/1-advanced/04-flashmd
+   /generated_examples/1-advanced/05-multi-gpu
+   /generated_examples/1-advanced/06-mixed-stress-training
+   /generated_examples/1-advanced/07-dos-training
+   /generated_examples/1-advanced/08-llpr-ensemble-training
+   /generated_examples/1-advanced/09-classifier
+

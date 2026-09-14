@@ -1,0 +1,877 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Changelog" href="changelog.html"><link rel="prev" title="Unit handling" href="utils/units.html">
+        <link rel="canonical" href="https://docs.metatensor.org/metatrain/latest/dev-docs/base-hypers.html">
+        <link rel="prefetch" href="../_static/images/metatrain-horizontal.png" as="image">
+        <link rel="prefetch" href="../_static/images/metatrain-horizontal-dark.png" as="image">
+
+    <link rel="shortcut icon" href="../_static/metatrain-64.png"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>Base hyperparameters - metatrain 2026.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles.css?v=e1ddca15" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">metatrain 2026.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../_static/images/metatrain-horizontal.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../_static/images/metatrain-horizontal-dark.png" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting-started/index.html">Getting started</a><input aria-label="Toggle navigation of Getting started" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/train_yaml_config.html">Training YAML Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/override.html">Override Architecture’s Default Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/checkpoints.html">Restarting and Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/units.html">Units</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../architectures/index.html">Available Architectures</a><input aria-label="Toggle navigation of Available Architectures" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/flashmd.html">FlashMD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/gap.html">GAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/llpr.html">LLPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/mace.html">MACE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/nanopet.html">NanoPET (deprecated)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/pet.html">PET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architectures/generated/soap_bpnn.html">SOAP-BPNN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../generated_examples/index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../generated_examples/0-beginner/index.html">Beginner Tutorials</a><input aria-label="Toggle navigation of Beginner Tutorials" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/00-basic-usage.html">Basic Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/01-data_preparation.html">How to prepare data for training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/02-fine-tuning.html">Fine-tuning a pre-trained model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/03-train_from_scratch.html">Training a model from scratch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/04-parity_plot.html">Model validation with parity plots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/0-beginner/05-run_ase.html">Running molecular dynamics with ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../generated_examples/1-advanced/index.html">Advanced Tutorials</a><input aria-label="Toggle navigation of Advanced Tutorials" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/00-transfer-learning.html">Transfer Learning (experimental)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/01-llpr.html">Computing LLPR uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/02-zbl.html">Training a model with ZBL corrections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/03-fitting-generic-targets.html">Fitting generic targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/04-flashmd.html">Training or fine-tuning a FlashMD model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/05-multi-gpu.html">Multi-GPU training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/06-mixed-stress-training.html">Training with Mixed Stress Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/07-dos-training.html">Training a DOS model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generated_examples/1-advanced/08-llpr-ensemble-training.html">Generating and training an LLPR-derived shallow ensemble model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../concepts/index.html">Concepts and Design</a><input aria-label="Toggle navigation of Concepts and Design" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/output-naming.html">Output naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/fine-tuning.html">Fine-tune a pre-trained model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/loss-functions.html">Loss functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/auxiliary-outputs.html">Auxiliary outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/batch-bounds.html">Training with Batch Bounds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">Citing Metatrain</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Developer documentation</a><input aria-label="Toggle navigation of Developer documentation" checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture-life-cycle.html">Life Cycle of an Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="new-architecture.html">Adding a new architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset-information.html">Dataset Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="new-loss.html">Adding a new loss function</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="cli/index.html">CLI API</a><input aria-label="Toggle navigation of CLI API" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="cli/train.html">Train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli/eval.html">Eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli/export.html">Export</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cli/formatter.html">Formatter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="utils/index.html">Utility API</a><input aria-label="Toggle navigation of Utility API" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="utils/additive/index.html">Additive models</a><input aria-label="Toggle navigation of Additive models" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="utils/additive/remove_additive.html">Removing additive contributions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/additive/composition.html">Composition model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/additive/zbl.html">ZBL short-range potential</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="utils/scaler/index.html">Scaler models</a><input aria-label="Toggle navigation of Scaler models" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="utils/scaler/scaler.html">Scaler model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/scaler/remove_scale.html">Removing the scale from targets</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="utils/data/index.html">Data</a><input aria-label="Toggle navigation of Data" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="utils/data/combine_dataloaders.html">Combining dataloaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/data/dataset.html">Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/data/get_dataset.html">Reading a dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/data/readers.html">Readers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/data/writers.html">Target data Writers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/data/systems_to_ase.html">Converting Systems to ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="utils/abc.html">Abstract base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/architectures.html">Architectures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/augmentation.html">Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/devices.html">Device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/dtype.html">Dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/errors.html">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/evaluate_model.html">Evaluating a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/external_naming.html">External Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/hypers.html">Hyperparameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/io.html">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/long_range.html">Long-range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/loss.html">Loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/neighbor_lists.html">Neighbor lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/omegaconf.html">Custom omegaconf functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/output_gradient.html">Output gradient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/per_atom.html">Averaging predictions per atom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/pydantic.html">Pydantic utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/sum_over_atoms.html">Summing over atoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/testing.html">Testing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/transfer.html">Data type and device transfers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils/units.html">Unit handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Base hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/dev-docs/base-hypers.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="base-hyperparameters">
+<h1>Base hyperparameters<a class="headerlink" href="#base-hyperparameters" title="Link to this heading">¶</a></h1>
+<p>Definitions for the validation of base hyperparameters, i.e. those
+that are common to all architectures. For a narrative documentation
+see <a class="reference internal" href="../getting-started/train_yaml_config.html#train-yaml-config"><span class="std std-ref">Training YAML Reference</span></a>.</p>
+<dl class="py class" id="module-metatrain.share.base_hypers">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.ArchitectureBaseHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">ArchitectureBaseHypers</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#ArchitectureBaseHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.ArchitectureBaseHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.ArchitectureBaseHypers.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#metatrain.share.base_hypers.ArchitectureBaseHypers.name" title="Link to this definition">¶</a></dt>
+<dd><p>The name of the architecture.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.ArchitectureBaseHypers.atomic_types">
+<span class="sig-name descname"><span class="pre">atomic_types</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.ArchitectureBaseHypers.atomic_types" title="Link to this definition">¶</a></dt>
+<dd><p>List of atomic types present in the dataset.</p>
+<p>If not provided, it will be inferred from the training dataset.
+This hyperparameter is useful if you envision that in the future
+your model will need to be trained/finetuned on datasets with
+additional atomic types.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.ArchitectureBaseHypers.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.ArchitectureBaseHypers.model" title="Link to this definition">¶</a></dt>
+<dd><p>Model-specific hyperparameters.
+These depend on the architecture used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.ArchitectureBaseHypers.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.ArchitectureBaseHypers.training" title="Link to this definition">¶</a></dt>
+<dd><p>Training-specific hyperparameters.</p>
+<p>These depend on the architecture used.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SystemsHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">SystemsHypers</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#SystemsHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.SystemsHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Hyperparameters for the systems in the dataset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SystemsHypers.read_from">
+<span class="sig-name descname"><span class="pre">read_from</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.SystemsHypers.read_from" title="Link to this definition">¶</a></dt>
+<dd><p>Path to the file containing the systems.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SystemsHypers.reader">
+<span class="sig-name descname"><span class="pre">reader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ase'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'metatensor'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.SystemsHypers.reader" title="Link to this definition">¶</a></dt>
+<dd><p>The reader library to use for parsing.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">null</span></code> or not provided, the reader will be guessed
+from the file extension. For example, <code class="docutils literal notranslate"><span class="pre">.xyz</span></code> and <code class="docutils literal notranslate"><span class="pre">.extxyz</span></code>
+will be read by <code class="docutils literal notranslate"><span class="pre">ase</span></code> and <code class="docutils literal notranslate"><span class="pre">.mts</span></code> will be read by
+<code class="docutils literal notranslate"><span class="pre">metatensor</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SystemsHypers.length_unit">
+<span class="sig-name descname"><span class="pre">length_unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.SystemsHypers.length_unit" title="Link to this definition">¶</a></dt>
+<dd><p>Unit of lengths in the system file, optional but <strong>highly recommended for
+running simulations</strong>. If not given, no unit conversion will be performed when
+running simulations which may lead to severe errors.</p>
+<p>The list of possible length units is available <a class="reference external" href="https://docs.metatensor.org/metatomic/latest/torch/reference/misc.html#known-quantities-units">here</a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.GradientDict">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">GradientDict</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#GradientDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.GradientDict" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.GradientDict.read_from">
+<span class="sig-name descname"><span class="pre">read_from</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.GradientDict.read_from" title="Link to this definition">¶</a></dt>
+<dd><p>The path to the file for gradient data.</p>
+<p>If not provided, the path from its associated target is used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.GradientDict.reader">
+<span class="sig-name descname"><span class="pre">reader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ase'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'metatensor'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.GradientDict.reader" title="Link to this definition">¶</a></dt>
+<dd><p>The reader library to use for parsing.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">null</span></code> or not provided, the reader will be guessed
+from the file extension. For example, <code class="docutils literal notranslate"><span class="pre">.xyz</span></code> and <code class="docutils literal notranslate"><span class="pre">.extxyz</span></code>
+will be read by <code class="docutils literal notranslate"><span class="pre">ase</span></code> and <code class="docutils literal notranslate"><span class="pre">.mts</span></code> will be read by
+<code class="docutils literal notranslate"><span class="pre">metatensor</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.GradientDict.key">
+<span class="sig-name descname"><span class="pre">key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.GradientDict.key" title="Link to this definition">¶</a></dt>
+<dd><p>The key under which the target is stored in the file.</p>
+<p>If not provided, it defaults to the key of the gradient in the
+yaml dataset specification.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.CartesianTargetConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">CartesianTargetConfig</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#CartesianTargetConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.CartesianTargetConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.CartesianTargetConfig.rank">
+<span class="sig-name descname"><span class="pre">rank</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#metatrain.share.base_hypers.CartesianTargetConfig.rank" title="Link to this definition">¶</a></dt>
+<dd><p>The rank of the cartesian target (e.g. 1 for vectors).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.CartesianTargetTypeHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">CartesianTargetTypeHypers</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#CartesianTargetTypeHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.CartesianTargetTypeHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Hyperparameters to specify cartesian target types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.CartesianTargetTypeHypers.cartesian">
+<span class="sig-name descname"><span class="pre">cartesian</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.CartesianTargetConfig" title="metatrain.share.base_hypers.CartesianTargetConfig"><span class="pre">CartesianTargetConfig</span></a></em><a class="headerlink" href="#metatrain.share.base_hypers.CartesianTargetTypeHypers.cartesian" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SphericalTargetIrrepsConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">SphericalTargetIrrepsConfig</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#SphericalTargetIrrepsConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.SphericalTargetIrrepsConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SphericalTargetIrrepsConfig.o3_lambda">
+<span class="sig-name descname"><span class="pre">o3_lambda</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#metatrain.share.base_hypers.SphericalTargetIrrepsConfig.o3_lambda" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SphericalTargetIrrepsConfig.o3_sigma">
+<span class="sig-name descname"><span class="pre">o3_sigma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><a class="headerlink" href="#metatrain.share.base_hypers.SphericalTargetIrrepsConfig.o3_sigma" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SphericalTargetConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">SphericalTargetConfig</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#SphericalTargetConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.SphericalTargetConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SphericalTargetConfig.irreps">
+<span class="sig-name descname"><span class="pre">irreps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetIrrepsConfig" title="metatrain.share.base_hypers.SphericalTargetIrrepsConfig"><span class="pre">SphericalTargetIrrepsConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.SphericalTargetConfig.irreps" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SphericalTargetTypeHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">SphericalTargetTypeHypers</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#SphericalTargetTypeHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.SphericalTargetTypeHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Hyperparameters to specify spherical target types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.SphericalTargetTypeHypers.spherical">
+<span class="sig-name descname"><span class="pre">spherical</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetConfig" title="metatrain.share.base_hypers.SphericalTargetConfig"><span class="pre">SphericalTargetConfig</span></a></em><a class="headerlink" href="#metatrain.share.base_hypers.SphericalTargetTypeHypers.spherical" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">TargetHypers</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#TargetHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Hyperparameters for the targets in the dataset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.quantity">
+<span class="sig-name descname"><span class="pre">quantity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.quantity" title="Link to this definition">¶</a></dt>
+<dd><p>The quantity that the target represents (e.g., <code class="docutils literal notranslate"><span class="pre">energy</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dipole</span></code>). Currently only <code class="docutils literal notranslate"><span class="pre">energy</span></code> gets a special treatment from
+<code class="docutils literal notranslate"><span class="pre">metatrain</span></code>, for any other quantity there is no need to specify
+it.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.read_from">
+<span class="sig-name descname"><span class="pre">read_from</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.read_from" title="Link to this definition">¶</a></dt>
+<dd><p>The path to the file containing the target data, defaults
+to <code class="docutils literal notranslate"><span class="pre">systems.read_from</span></code> path if not provided.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.reader">
+<span class="sig-name descname"><span class="pre">reader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ase'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'metatensor'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.reader" title="Link to this definition">¶</a></dt>
+<dd><p>The reader library to use for parsing.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">null</span></code> or not provided, the reader will be guessed
+from the file extension. For example, <code class="docutils literal notranslate"><span class="pre">.xyz</span></code> and <code class="docutils literal notranslate"><span class="pre">.extxyz</span></code>
+will be read by <code class="docutils literal notranslate"><span class="pre">ase</span></code> and <code class="docutils literal notranslate"><span class="pre">.mts</span></code> will be read by
+<code class="docutils literal notranslate"><span class="pre">metatensor</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.key">
+<span class="sig-name descname"><span class="pre">key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.key" title="Link to this definition">¶</a></dt>
+<dd><p>The key under which the target is stored in the file.</p>
+<p>If not provided, it defaults to the key of the target in the
+yaml dataset specification.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.unit">
+<span class="sig-name descname"><span class="pre">unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.unit" title="Link to this definition">¶</a></dt>
+<dd><p>Unit of the target, optional but <strong>highly recommended for running simulations</strong>.
+If not given, no unit conversion will be performed when running simulations which
+may lead to severe errors.</p>
+<p>The list of possible units is available <a class="reference external" href="https://docs.metatensor.org/metatomic/latest/torch/reference/misc.html#known-quantities-units">here</a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.per_atom">
+<span class="sig-name descname"><span class="pre">per_atom</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.per_atom" title="Link to this definition">¶</a></dt>
+<dd><p>Whether the target is a per-atom quantity, as opposed to a global
+(per-structure) quantity.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'scalar'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.CartesianTargetTypeHypers" title="metatrain.share.base_hypers.CartesianTargetTypeHypers"><span class="pre">CartesianTargetTypeHypers</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetTypeHypers" title="metatrain.share.base_hypers.SphericalTargetTypeHypers"><span class="pre">SphericalTargetTypeHypers</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.type" title="Link to this definition">¶</a></dt>
+<dd><p>Specifies the type of the target.</p>
+<p>See <a class="reference internal" href="../generated_examples/1-advanced/03-fitting-generic-targets.html#fitting-generic-targets"><span class="std std-ref">Fitting Generic Targets</span></a> to understand
+in detail how to specify each target type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.num_subtargets">
+<span class="sig-name descname"><span class="pre">num_subtargets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.num_subtargets" title="Link to this definition">¶</a></dt>
+<dd><p>Specifies the number of sub-targets that need to be learned as part of
+this target.</p>
+<p>Each subtarget is treated as entirely equivalent by models in metatrain
+and they will often be represented as outputs of the same neural
+network layer. A common use case for this field is when you are learning a
+discretization of a continuous target, such as the grid points of a function. In the
+example above, there are 4000 sub-targets for the density of states (DOS). In
+metatensor, these correspond to the number of properties of the target.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.description" title="Link to this definition">¶</a></dt>
+<dd><p>A description of this target. A description is highly recommended if there is
+more than one target with the same <a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.quantity" title="metatrain.share.base_hypers.TargetHypers.quantity"><code class="xref py py-attr docutils literal notranslate"><span class="pre">quantity</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.forces">
+<span class="sig-name descname"><span class="pre">forces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.GradientDict" title="metatrain.share.base_hypers.GradientDict"><span class="pre">GradientDict</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.forces" title="Link to this definition">¶</a></dt>
+<dd><p>Specification for the forces associated with the target.</p>
+<p>See <a class="reference internal" href="../getting-started/train_yaml_config.html#gradient-subsection"><span class="std std-ref">Gradient Subsection</span></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.stress">
+<span class="sig-name descname"><span class="pre">stress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.GradientDict" title="metatrain.share.base_hypers.GradientDict"><span class="pre">GradientDict</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.stress" title="Link to this definition">¶</a></dt>
+<dd><p>Specification for the stress associated with the target.</p>
+<p>See <a class="reference internal" href="../getting-started/train_yaml_config.html#gradient-subsection"><span class="std std-ref">Gradient Subsection</span></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.TargetHypers.virial">
+<span class="sig-name descname"><span class="pre">virial</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.GradientDict" title="metatrain.share.base_hypers.GradientDict"><span class="pre">GradientDict</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.TargetHypers.virial" title="Link to this definition">¶</a></dt>
+<dd><p>Specification for the virial associated with the target.</p>
+<p>See <a class="reference internal" href="../getting-started/train_yaml_config.html#gradient-subsection"><span class="std std-ref">Gradient Subsection</span></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.DatasetDictHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">DatasetDictHypers</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#DatasetDictHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.DatasetDictHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.DatasetDictHypers.systems">
+<span class="sig-name descname"><span class="pre">systems</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.SystemsHypers" title="metatrain.share.base_hypers.SystemsHypers"><span class="pre">SystemsHypers</span></a></em><a class="headerlink" href="#metatrain.share.base_hypers.DatasetDictHypers.systems" title="Link to this definition">¶</a></dt>
+<dd><p>Path to the dataset file or a dictionary specifying the dataset.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.DatasetDictHypers.targets">
+<span class="sig-name descname"><span class="pre">targets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers" title="metatrain.share.base_hypers.TargetHypers"><span class="pre">TargetHypers</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.DatasetDictHypers.targets" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.DatasetDictHypers.extra_data">
+<span class="sig-name descname"><span class="pre">extra_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.DatasetDictHypers.extra_data" title="Link to this definition">¶</a></dt>
+<dd><p>Additional data to include from the dataset.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.BaseHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.share.base_hypers.</span></span><span class="sig-name descname"><span class="pre">BaseHypers</span></span><a class="reference internal" href="../_modules/metatrain/share/base_hypers.html#BaseHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.share.base_hypers.BaseHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Base hyperparameters for all models.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.BaseHypers.architecture">
+<span class="sig-name descname"><span class="pre">architecture</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.ArchitectureBaseHypers" title="metatrain.share.base_hypers.ArchitectureBaseHypers"><span class="pre">ArchitectureBaseHypers</span></a></em><a class="headerlink" href="#metatrain.share.base_hypers.BaseHypers.architecture" title="Link to this definition">¶</a></dt>
+<dd><p>Architecture-specific hyperparameters.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.BaseHypers.device">
+<span class="sig-name descname"><span class="pre">device</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.BaseHypers.device" title="Link to this definition">¶</a></dt>
+<dd><p>The computational device used for model training. If not provided, <code class="docutils literal notranslate"><span class="pre">metatrain</span></code>
+automatically chooses the best option by default. The available devices and the
+best device option depend on the model architecture. The easiest way to use this
+parameter is to use either either <code class="docutils literal notranslate"><span class="pre">&quot;cpu&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;gpu&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;multi-gpu&quot;</span></code>. Internally,
+under the choice <code class="docutils literal notranslate"><span class="pre">&quot;gpu&quot;</span></code>, the script will automatically choose between <code class="docutils literal notranslate"><span class="pre">&quot;cuda&quot;</span></code>
+or <code class="docutils literal notranslate"><span class="pre">&quot;mps&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.BaseHypers.base_precision">
+<span class="sig-name descname"><span class="pre">base_precision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">16</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">32</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">64</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.BaseHypers.base_precision" title="Link to this definition">¶</a></dt>
+<dd><p>The base precision for float values. For example, a value of <code class="docutils literal notranslate"><span class="pre">16</span></code> corresponds
+to the data type <code class="docutils literal notranslate"><span class="pre">float16</span></code>. The datatypes that are supported as well as the
+default datatype depend on the model architecture used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.BaseHypers.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.BaseHypers.seed" title="Link to this definition">¶</a></dt>
+<dd><p>The seed used for non-deterministic operations. It sets the seed of
+<code class="docutils literal notranslate"><span class="pre">numpy.random</span></code>, <code class="docutils literal notranslate"><span class="pre">random</span></code>, <code class="docutils literal notranslate"><span class="pre">torch</span></code> and <code class="docutils literal notranslate"><span class="pre">torch.cuda</span></code>. This parameter is
+important for ensuring reproducibility. If not specified, the seed is generated
+randomly and reported in the log.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.BaseHypers.wandb">
+<span class="sig-name descname"><span class="pre">wandb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.BaseHypers.wandb" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for Weights &amp; Biases logging.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">None</span></code>, W&amp;B logging is disabled.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.BaseHypers.training_set">
+<span class="sig-name descname"><span class="pre">training_set</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers" title="metatrain.share.base_hypers.DatasetDictHypers"><span class="pre">DatasetDictHypers</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers" title="metatrain.share.base_hypers.DatasetDictHypers"><span class="pre">DatasetDictHypers</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#metatrain.share.base_hypers.BaseHypers.training_set" title="Link to this definition">¶</a></dt>
+<dd><p>Specification of the training dataset.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.BaseHypers.validation_set">
+<span class="sig-name descname"><span class="pre">validation_set</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers" title="metatrain.share.base_hypers.DatasetDictHypers"><span class="pre">DatasetDictHypers</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers" title="metatrain.share.base_hypers.DatasetDictHypers"><span class="pre">DatasetDictHypers</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Interval</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">gt</span></span><span class="o"><span class="pre">=</span></span><span class="pre">0.0</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">lt</span></span><span class="o"><span class="pre">=</span></span><span class="pre">1.0</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.BaseHypers.validation_set" title="Link to this definition">¶</a></dt>
+<dd><p>Specification of the validation dataset.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.share.base_hypers.BaseHypers.test_set">
+<span class="sig-name descname"><span class="pre">test_set</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.14)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers" title="metatrain.share.base_hypers.DatasetDictHypers"><span class="pre">DatasetDictHypers</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers" title="metatrain.share.base_hypers.DatasetDictHypers"><span class="pre">DatasetDictHypers</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Interval</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">gt</span></span><span class="o"><span class="pre">=</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="pre">0.0</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">lt</span></span><span class="o"><span class="pre">=</span></span><span class="pre">1.0</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#metatrain.share.base_hypers.BaseHypers.test_set" title="Link to this definition">¶</a></dt>
+<dd><p>Specification of the test dataset.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="changelog.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Changelog</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="utils/units.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Unit handling</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, metatrain developers
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link fa-brands fa-github fa-2x" href="https://github.com/metatensor/metatrain" aria-label="GitHub"></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Base hyperparameters</a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.ArchitectureBaseHypers"><code class="docutils literal notranslate"><span class="pre">ArchitectureBaseHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.ArchitectureBaseHypers.name"><code class="docutils literal notranslate"><span class="pre">ArchitectureBaseHypers.name</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.ArchitectureBaseHypers.atomic_types"><code class="docutils literal notranslate"><span class="pre">ArchitectureBaseHypers.atomic_types</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.ArchitectureBaseHypers.model"><code class="docutils literal notranslate"><span class="pre">ArchitectureBaseHypers.model</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.ArchitectureBaseHypers.training"><code class="docutils literal notranslate"><span class="pre">ArchitectureBaseHypers.training</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SystemsHypers"><code class="docutils literal notranslate"><span class="pre">SystemsHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SystemsHypers.read_from"><code class="docutils literal notranslate"><span class="pre">SystemsHypers.read_from</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SystemsHypers.reader"><code class="docutils literal notranslate"><span class="pre">SystemsHypers.reader</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SystemsHypers.length_unit"><code class="docutils literal notranslate"><span class="pre">SystemsHypers.length_unit</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.GradientDict"><code class="docutils literal notranslate"><span class="pre">GradientDict</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.GradientDict.read_from"><code class="docutils literal notranslate"><span class="pre">GradientDict.read_from</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.GradientDict.reader"><code class="docutils literal notranslate"><span class="pre">GradientDict.reader</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.GradientDict.key"><code class="docutils literal notranslate"><span class="pre">GradientDict.key</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.CartesianTargetConfig"><code class="docutils literal notranslate"><span class="pre">CartesianTargetConfig</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.CartesianTargetConfig.rank"><code class="docutils literal notranslate"><span class="pre">CartesianTargetConfig.rank</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.CartesianTargetTypeHypers"><code class="docutils literal notranslate"><span class="pre">CartesianTargetTypeHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.CartesianTargetTypeHypers.cartesian"><code class="docutils literal notranslate"><span class="pre">CartesianTargetTypeHypers.cartesian</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetIrrepsConfig"><code class="docutils literal notranslate"><span class="pre">SphericalTargetIrrepsConfig</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetIrrepsConfig.o3_lambda"><code class="docutils literal notranslate"><span class="pre">SphericalTargetIrrepsConfig.o3_lambda</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetIrrepsConfig.o3_sigma"><code class="docutils literal notranslate"><span class="pre">SphericalTargetIrrepsConfig.o3_sigma</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetConfig"><code class="docutils literal notranslate"><span class="pre">SphericalTargetConfig</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetConfig.irreps"><code class="docutils literal notranslate"><span class="pre">SphericalTargetConfig.irreps</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetTypeHypers"><code class="docutils literal notranslate"><span class="pre">SphericalTargetTypeHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.SphericalTargetTypeHypers.spherical"><code class="docutils literal notranslate"><span class="pre">SphericalTargetTypeHypers.spherical</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers"><code class="docutils literal notranslate"><span class="pre">TargetHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.quantity"><code class="docutils literal notranslate"><span class="pre">TargetHypers.quantity</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.read_from"><code class="docutils literal notranslate"><span class="pre">TargetHypers.read_from</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.reader"><code class="docutils literal notranslate"><span class="pre">TargetHypers.reader</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.key"><code class="docutils literal notranslate"><span class="pre">TargetHypers.key</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.unit"><code class="docutils literal notranslate"><span class="pre">TargetHypers.unit</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.per_atom"><code class="docutils literal notranslate"><span class="pre">TargetHypers.per_atom</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.type"><code class="docutils literal notranslate"><span class="pre">TargetHypers.type</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.num_subtargets"><code class="docutils literal notranslate"><span class="pre">TargetHypers.num_subtargets</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.description"><code class="docutils literal notranslate"><span class="pre">TargetHypers.description</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.forces"><code class="docutils literal notranslate"><span class="pre">TargetHypers.forces</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.stress"><code class="docutils literal notranslate"><span class="pre">TargetHypers.stress</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.TargetHypers.virial"><code class="docutils literal notranslate"><span class="pre">TargetHypers.virial</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers"><code class="docutils literal notranslate"><span class="pre">DatasetDictHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers.systems"><code class="docutils literal notranslate"><span class="pre">DatasetDictHypers.systems</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers.targets"><code class="docutils literal notranslate"><span class="pre">DatasetDictHypers.targets</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.DatasetDictHypers.extra_data"><code class="docutils literal notranslate"><span class="pre">DatasetDictHypers.extra_data</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.BaseHypers"><code class="docutils literal notranslate"><span class="pre">BaseHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.BaseHypers.architecture"><code class="docutils literal notranslate"><span class="pre">BaseHypers.architecture</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.BaseHypers.device"><code class="docutils literal notranslate"><span class="pre">BaseHypers.device</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.BaseHypers.base_precision"><code class="docutils literal notranslate"><span class="pre">BaseHypers.base_precision</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.BaseHypers.seed"><code class="docutils literal notranslate"><span class="pre">BaseHypers.seed</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.BaseHypers.wandb"><code class="docutils literal notranslate"><span class="pre">BaseHypers.wandb</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.BaseHypers.training_set"><code class="docutils literal notranslate"><span class="pre">BaseHypers.training_set</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.BaseHypers.validation_set"><code class="docutils literal notranslate"><span class="pre">BaseHypers.validation_set</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.share.base_hypers.BaseHypers.test_set"><code class="docutils literal notranslate"><span class="pre">BaseHypers.test_set</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=3822dbdc"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/toggleprompt.js?v=5801b3bb"></script>
+    </body>
+</html>

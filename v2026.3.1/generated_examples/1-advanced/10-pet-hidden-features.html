@@ -1,0 +1,957 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Concepts and Design" href="../../concepts/index.html"><link rel="prev" title="Training a Symplectic FlashMD Model" href="09-symplectic-flashmd.html">
+        <link rel="canonical" href="https://docs.metatensor.org/metatrain/latest/generated_examples/1-advanced/10-pet-hidden-features.html">
+        <link rel="prefetch" href="../../_static/images/metatrain-horizontal.png" as="image">
+        <link rel="prefetch" href="../../_static/images/metatrain-horizontal-dark.png" as="image">
+
+    <link rel="shortcut icon" href="../../_static/metatrain-64.png"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>Extracting Hidden Layer Features from PET - Metatrain</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles.css?v=db449cb1" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Metatrain</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../../_static/images/metatrain-horizontal.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../../_static/images/metatrain-horizontal-dark.png" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><a href="https://github.com/metatensor/metatrain" class="sidebar-github-link" title="GitHub repository">
+  <i class="fa-brands fa-github"></i> Metatrain on GitHub
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../getting-started/index.html">Getting started</a><input aria-label="Toggle navigation of Getting started" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/train_yaml_config.html">Training YAML Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/override.html">Override Architecture’s Default Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/checkpoints.html">Restarting and Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/units.html">Units</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../architectures/index.html">Available Architectures</a><input aria-label="Toggle navigation of Available Architectures" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/classifier.html">Classifier (Experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/dpa3.html">DPA3 (Experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/flashmd.html">FlashMD (Experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/flashmd_symplectic.html">Symplectic FlashMD (Experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/gap.html">GAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/llpr.html">LLPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/mace.html">MACE (Experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/pet.html">PET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/phace.html">PhACE (Experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architectures/generated/soap_bpnn.html">SOAP-BPNN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../0-beginner/index.html">Beginner Tutorials</a><input aria-label="Toggle navigation of Beginner Tutorials" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../0-beginner/00-basic-usage.html">Basic Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-beginner/01-data_preparation.html">How to prepare data for training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-beginner/02-fine-tuning.html">Fine-tuning a pre-trained model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-beginner/03-train_from_scratch.html">Training a model from scratch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-beginner/04-parity_plot.html">Model validation with parity plots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-beginner/05-run_ase.html">Running molecular dynamics with ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Advanced Tutorials</a><input aria-label="Toggle navigation of Advanced Tutorials" checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="00-transfer-learning.html">Transfer Learning (experimental)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01-llpr.html">Computing LLPR uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02-zbl.html">Training a model with ZBL corrections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03-fitting-generic-targets.html">Fitting generic targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04-flashmd.html">Training or fine-tuning a FlashMD model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05-multi-gpu.html">Multi-GPU training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06-mixed-stress-training.html">Training with Mixed Stress Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="07-dos-training.html">Training a DOS model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08-llpr-ensemble-training.html">Generating and training an LLPR-derived shallow ensemble model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09-classifier.html">Training a Classifier Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09-symplectic-flashmd.html">Training a Symplectic FlashMD Model</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Extracting Hidden Layer Features from PET</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../concepts/index.html">Concepts and Design</a><input aria-label="Toggle navigation of Concepts and Design" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/output-naming.html">Output naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/fine-tuning.html">Fine-tune a pre-trained model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/loss-functions.html">Loss functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/scale-targets.html">Target scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/auxiliary-outputs.html">Auxiliary outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/batch-bounds.html">Training with Batch Bounds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cite.html">Citing metatrain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../dev-docs/index.html">Developer documentation</a><input aria-label="Toggle navigation of Developer documentation" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/getting-started.html">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/architecture-life-cycle.html">Life Cycle of an Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/new-architecture.html">Adding a new architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/dataset-information.html">Dataset Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/new-loss.html">Adding a new loss function</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../dev-docs/cli/index.html">CLI API</a><input aria-label="Toggle navigation of CLI API" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/train.html">Train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/eval.html">Eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/export.html">Export</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/formatter.html">Formatter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../dev-docs/utils/index.html">Utility API</a><input aria-label="Toggle navigation of Utility API" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../dev-docs/utils/additive/index.html">Additive models</a><input aria-label="Toggle navigation of Additive models" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/additive/remove_additive.html">Removing additive contributions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/additive/composition.html">Composition model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/additive/zbl.html">ZBL short-range potential</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../dev-docs/utils/scaler/index.html">Scaler models</a><input aria-label="Toggle navigation of Scaler models" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/scaler/scaler.html">Scaler model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/scaler/remove_scale.html">Removing the scale from targets</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../dev-docs/utils/data/index.html">Data</a><input aria-label="Toggle navigation of Data" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/combine_dataloaders.html">Combining dataloaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/dataset.html">Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/get_dataset.html">Reading a dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/readers.html">Readers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/writers.html">Target data Writers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/systems_to_ase.html">Converting Systems to ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/abc.html">Abstract base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/architectures.html">Architectures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/augmentation.html">Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/devices.html">Device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/dtype.html">Dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/errors.html">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/evaluate_model.html">Evaluating a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/external_naming.html">External Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/hypers.html">Hyperparameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/io.html">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/long_range.html">Long-range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/loss.html">Loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/neighbor_lists.html">Neighbor lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/omegaconf.html">Custom omegaconf functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/output_gradient.html">Output gradient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/per_atom.html">Averaging predictions per atom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/pydantic.html">Pydantic utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/sum_over_atoms.html">Summing over atoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/testing.html">Testing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/transfer.html">Data type and device transfers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/units.html">Unit handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/base-hypers.html">Base hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/changelog.html">Changelog</a></li>
+</ul>
+</li>
+</ul>
+
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/metatensor/metatrain/blob/main/docs/src/generated_examples/1-advanced/10-pet-hidden-features.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/metatensor/metatrain/edit/main/docs/src/generated_examples/1-advanced/10-pet-hidden-features.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-generated-examples-1-advanced-10-pet-hidden-features-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="extracting-hidden-layer-features-from-pet">
+<span id="pet-hidden-features"></span><span id="sphx-glr-generated-examples-1-advanced-10-pet-hidden-features-py"></span><h1>Extracting Hidden Layer Features from PET<a class="headerlink" href="#extracting-hidden-layer-features-from-pet" title="Link to this heading">¶</a></h1>
+<p>PET computes rich intermediate representations at every stage of its forward pass —
+atom-type embeddings, embeddings of the neighborhood geometries, transformer outputs,
+and more. This tutorial shows how to retrieve any of those tensors using the
+<code class="docutils literal notranslate"><span class="pre">mtt::feature::</span></code> prefix in the <code class="docutils literal notranslate"><span class="pre">outputs</span></code> dictionary passed to <code class="docutils literal notranslate"><span class="pre">PET.forward()</span></code>.
+Note that this only applies to non-exported models, i.e. checkpoints.</p>
+<p>All outputs are returned as <a class="reference external" href="https://docs.metatensor.org/latest/torch/reference/tensor.html#metatensor.torch.TensorMap" title="(in metatensor)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorMap</span></code></a> objects, so they carry
+full sample metadata (atom or pair indices, cell-shift vectors) and are immediately
+compatible with the rest of the metatensor/metatomic ecosystem.</p>
+<p>The tutorial is structured as follows:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#standard-outputs"><span class="std std-ref">Standard outputs</span></a> — backbone feature, last-layer features,
+and <code class="docutils literal notranslate"><span class="pre">energy</span></code>.</p></li>
+<li><p><a class="reference internal" href="#backbone-features"><span class="std std-ref">Unprocessed backbone and last layer features</span></a> — per-atom
+and per-pair tensors as used internally by the model.</p></li>
+<li><p><a class="reference internal" href="#featurizer-inputs"><span class="std std-ref">Raw featurizer inputs</span></a> — distances, displacement vectors,
+and element-type indices, tied back to the water geometry.</p></li>
+<li><p><a class="reference internal" href="#discovering-paths"><span class="std std-ref">Discovering available paths</span></a> — how to enumerate every
+capturable module path.</p></li>
+<li><p><a class="reference internal" href="#gnn-deep-dive"><span class="std std-ref">Deep-dive into a GNN layer</span></a> — capturing transformer internals
+and analysing how features evolve.</p></li>
+</ol>
+<section id="setup-model-and-system">
+<h2>Setup: model and system<a class="headerlink" href="#setup-model-and-system" title="Link to this heading">¶</a></h2>
+<p>We initialise an untrained PET model (random weights) and build a single water
+molecule. The absolute values of the features will not be meaningful, but the shapes,
+sample labels, and structure of the returned TensorMaps are identical to those of a
+trained model.</p>
+<p>Here we use the default hypers for the PET model, but make some modifications to
+better illustrate the dimensions of the captured layer outputs.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ase</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metatomic.torch</span><span class="w"> </span><span class="kn">import</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">,</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/systems.html#metatomic.torch.NeighborListOptions" title="metatomic.torch.NeighborListOptions" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">NeighborListOptions</span></a><span class="p">,</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/systems.html#metatomic.torch.systems_to_torch" title="metatomic.torch.systems_to_torch" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-function"><span class="n">systems_to_torch</span></a>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">metatrain.pet</span><span class="w"> </span><span class="kn">import</span> <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="torch.nn.Module" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class"><span class="n">PET</span></a>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metatrain.utils.architectures</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_default_hypers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metatrain.utils.data.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatasetInfo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metatrain.utils.data.target_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_energy_target_info</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metatrain.utils.neighbor_lists</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_system_with_neighbor_lists</span>
+
+
+<a href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dtype</span></a> <span class="o">=</span> <a href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">torch</span><span class="o">.</span><span class="n">float64</span></a>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a> <span class="o">=</span> <span class="n">get_default_hypers</span><span class="p">(</span><span class="s2">&quot;pet&quot;</span><span class="p">)[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
+
+<span class="c1"># Modify some hypers related to the token sizes</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">[</span><span class="s2">&quot;d_pet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">128</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">[</span><span class="s2">&quot;d_node&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">256</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">[</span><span class="s2">&quot;d_head&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">64</span>
+
+<span class="c1"># Print some of the key default model hypers for reference.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Key PET hypers:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  d_pet: </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">[</span><span class="s1">&#39;d_pet&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  d_node: </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">[</span><span class="s1">&#39;d_node&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  d_head: </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">[</span><span class="s1">&#39;d_head&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  num_gnn_layers: </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">[</span><span class="s1">&#39;num_gnn_layers&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  num_attention_layers: </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">[</span><span class="s1">&#39;num_attention_layers&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  featurizer_type: </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">[</span><span class="s1">&#39;featurizer_type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">dataset_info</span> <span class="o">=</span> <span class="n">DatasetInfo</span><span class="p">(</span>
+    <span class="n">length_unit</span><span class="o">=</span><span class="s2">&quot;angstrom&quot;</span><span class="p">,</span>
+    <span class="n">atomic_types</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span>
+    <span class="n">targets</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;energy&quot;</span><span class="p">:</span> <span class="n">get_energy_target_info</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="s2">&quot;eV&quot;</span><span class="p">))},</span>
+<span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="torch.nn.Module" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class"><span class="n">PET</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hypers</span></a><span class="p">,</span> <span class="n">dataset_info</span><span class="o">=</span><span class="n">dataset_info</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><a href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dtype</span></a><span class="p">)</span>
+
+<span class="c1"># A single water molecule: O at the origin, H along x, H along y.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frames</span></a> <span class="o">=</span> <span class="p">[</span>
+    <a href="https://docs.ase-lib.org/ase/atoms.html#ase.Atoms" title="ase.Atoms" class="sphx-glr-backref-module-ase sphx-glr-backref-type-py-class"><span class="n">ase</span><span class="o">.</span><span class="n">Atoms</span></a><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;O&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">],</span>
+        <span class="n">positions</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">systems</span></a> <span class="o">=</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/systems.html#metatomic.torch.systems_to_torch" title="metatomic.torch.systems_to_torch" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-function"><span class="n">systems_to_torch</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frames</span></a><span class="p">)</span>
+
+<span class="n">nl_options</span> <span class="o">=</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/systems.html#metatomic.torch.NeighborListOptions" title="metatomic.torch.NeighborListOptions" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">NeighborListOptions</span></a><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span> <span class="n">full_list</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">systems</span></a> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">get_system_with_neighbor_lists</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="p">[</span><span class="n">nl_options</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><a href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dtype</span></a><span class="p">)</span> <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">systems</span></a>
+<span class="p">]</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Key PET hypers:
+  d_pet: 128
+  d_node: 256
+  d_head: 64
+  num_gnn_layers: 2
+  num_attention_layers: 2
+  featurizer_type: feedforward
+</pre></div>
+</div>
+</section>
+<section id="standard-model-outputs">
+<span id="standard-outputs"></span><h2>1. Standard model outputs<a class="headerlink" href="#standard-model-outputs" title="Link to this heading">¶</a></h2>
+<p>PET exposes three standard outputs: the backbone features (<code class="docutils literal notranslate"><span class="pre">&quot;feature&quot;</span></code>), the
+last-layer features before the readout (<code class="docutils literal notranslate"><span class="pre">&quot;mtt::aux::energy_last_layer_features&quot;</span></code>),
+and the predicted energy. These are the normal production outputs. Setting
+<code class="docutils literal notranslate"><span class="pre">per_atom=False</span></code> aggregates atom features into a single per-structure vector.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">outputs</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;feature&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;mtt::aux::energy_last_layer_features&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;energy&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">}</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">systems</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">outputs</span></a><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">outputs</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">)</span>
+
+<span class="n">backbone_block</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">[</span><span class="s2">&quot;feature&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+<span class="n">head_block</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">[</span><span class="s2">&quot;mtt::aux::energy_last_layer_features&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+<span class="n">energy_block</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;backbone features shape:    &quot;</span><span class="p">,</span> <a href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="torch.Size" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">backbone_block</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;last-layer features shape:  &quot;</span><span class="p">,</span> <a href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="torch.Size" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">head_block</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;energy shape:               &quot;</span><span class="p">,</span> <a href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="torch.Size" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">energy_block</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;backbone samples:           &quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">backbone_block</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">names</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;feature&#39;: &lt;torch.ScriptObject object at 0x35e051e0&gt;, &#39;mtt::aux::energy_last_layer_features&#39;: &lt;torch.ScriptObject object at 0x3e05cf60&gt;, &#39;energy&#39;: &lt;torch.ScriptObject object at 0x40669da0&gt;} {&#39;feature&#39;: TensorMap with 1 blocks
+keys: _
+      0, &#39;mtt::aux::energy_last_layer_features&#39;: TensorMap with 1 blocks
+keys: _
+      0, &#39;energy&#39;: TensorMap with 1 blocks
+keys: _
+      0}
+backbone features shape:     torch.Size([3, 384])
+last-layer features shape:   torch.Size([3, 128])
+energy shape:                torch.Size([1, 1])
+backbone samples:            [&#39;system&#39;, &#39;atom&#39;]
+</pre></div>
+</div>
+<p>The sample labels confirm that the backbone and last layer features are per-atom
+(<code class="docutils literal notranslate"><span class="pre">[&quot;system&quot;,</span> <span class="pre">&quot;atom&quot;]</span></code>), while the energy is per-structure (<code class="docutils literal notranslate"><span class="pre">[&quot;system&quot;]</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These standard outputs go through PET’s full aggregation pipeline: edge
+contributions are summed over neighbors with cutoff weights applied, and the result
+is concatenated to the node stream. They are great for feature analysis but do
+<strong>not</strong> give direct access to the raw intermediate tensors used inside the GNN
+layers.</p>
+</div>
+<p>The backbone features have feature size 384, which due to the concatenated node
+(d_node=256) and edge (d_pet=128) features. The last layer features (128) have a
+dimension resulting from the concatenated node and edge last layer features (d_head =
+64 for both).</p>
+</section>
+<section id="unprocessed-backbone-and-head-features">
+<span id="backbone-features"></span><h2>2. Unprocessed backbone and head features<a class="headerlink" href="#unprocessed-backbone-and-head-features" title="Link to this heading">¶</a></h2>
+<p>To access the raw per-atom and per-pair tensors as they are used <em>inside</em> the
+model — before neighbor-aggregation — use the <code class="docutils literal notranslate"><span class="pre">mtt::feature::</span></code> prefix with
+the module path of the corresponding readout layer.</p>
+<p>The integer index (<code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> below) selects the readout layer. In the default
+<code class="docutils literal notranslate"><span class="pre">&quot;feedforward&quot;</span></code> featurizer mode all GNN outputs are combined into a single
+readout, so only index <code class="docutils literal notranslate"><span class="pre">0</span></code> exists. In <code class="docutils literal notranslate"><span class="pre">&quot;residual&quot;</span></code> mode each GNN layer
+has its own readout and the index selects which one. Here we are uses PET in the
+default feedforward mode.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">outputs</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;mtt::feature::node_backbone.0&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;mtt::feature::edge_backbone.0&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;mtt::feature::node_heads.energy.0&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;mtt::feature::edge_heads.energy.0&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">}</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">systems</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">outputs</span></a><span class="p">)</span>
+
+<span class="n">node_bb</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">[</span><span class="s2">&quot;mtt::feature::node_backbone.0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+<span class="n">edge_bb</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">[</span><span class="s2">&quot;mtt::feature::edge_backbone.0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;node_backbone.0  shape:   &quot;</span><span class="p">,</span> <a href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="torch.Size" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">node_bb</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;node_backbone.0  samples: &quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">node_bb</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">names</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;edge_backbone.0  shape:   &quot;</span><span class="p">,</span> <a href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="torch.Size" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">edge_bb</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;edge_backbone.0  samples: &quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">edge_bb</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">names</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>node_backbone.0  shape:    torch.Size([3, 256])
+node_backbone.0  samples:  [&#39;system&#39;, &#39;atom&#39;]
+
+edge_backbone.0  shape:    torch.Size([6, 128])
+edge_backbone.0  samples:  [&#39;system&#39;, &#39;first_atom&#39;, &#39;second_atom&#39;, &#39;cell_shift_a&#39;, &#39;cell_shift_b&#39;, &#39;cell_shift_c&#39;]
+</pre></div>
+</div>
+<p>This highlights the two kinds of tensors returned by <code class="docutils literal notranslate"><span class="pre">mtt::feature::</span></code>:</p>
+<p><strong>Node-like</strong> tensors have shape <code class="docutils literal notranslate"><span class="pre">(n_atoms,</span> <span class="pre">d)</span></code> and samples
+<code class="docutils literal notranslate"><span class="pre">[&quot;system&quot;,</span> <span class="pre">&quot;atom&quot;]</span></code> — one row per atom.</p>
+<p><strong>Edge-like</strong> tensors have shape <code class="docutils literal notranslate"><span class="pre">(n_edges,</span> <span class="pre">d)</span></code> and samples
+<code class="docutils literal notranslate"><span class="pre">[&quot;system&quot;,</span> <span class="pre">&quot;first_atom&quot;,</span> <span class="pre">&quot;second_atom&quot;,</span> <span class="pre">&quot;cell_shift_a&quot;,</span> <span class="pre">&quot;cell_shift_b&quot;,</span>
+<span class="pre">&quot;cell_shift_c&quot;]</span></code> — one row per directed pair. The cell-shift columns follow
+the standard metatensor neighbor-list convention.</p>
+</section>
+<section id="raw-featurizer-inputs">
+<span id="featurizer-inputs"></span><h2>3. Raw featurizer inputs<a class="headerlink" href="#raw-featurizer-inputs" title="Link to this heading">¶</a></h2>
+<p>The very first quantities computed in a PET forward pass are the raw geometry
+descriptors fed into the featurizer. These can be captured directly:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">edge_distances</span></code> — scalar distance for each directed pair, shape <code class="docutils literal notranslate"><span class="pre">(n_edges,</span> <span class="pre">1)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">edge_vectors</span></code> — displacement vector <strong>r</strong>⁻ⱼ − <strong>r</strong>ᵢ for each pair, shape
+<code class="docutils literal notranslate"><span class="pre">(n_edges,</span> <span class="pre">3)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element_indices_nodes</span></code> — element-type index for each centre atom, shape
+<code class="docutils literal notranslate"><span class="pre">(n_atoms,</span> <span class="pre">1)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">element_indices_neighbors</span></code> — element-type index for each neighbor atom, shape
+<code class="docutils literal notranslate"><span class="pre">(n_edges,</span> <span class="pre">1)</span></code></p></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">outputs</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;mtt::feature::edge_distances&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;mtt::feature::edge_vectors&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;mtt::feature::element_indices_nodes&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;mtt::feature::element_indices_neighbors&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">}</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">systems</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">outputs</span></a><span class="p">)</span>
+
+<span class="n">distances</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">[</span><span class="s2">&quot;mtt::feature::edge_distances&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+<span class="n">vectors</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">[</span><span class="s2">&quot;mtt::feature::edge_vectors&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+<span class="n">node_types</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">[</span><span class="s2">&quot;mtt::feature::element_indices_nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+<span class="n">nbr_types</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="p">[</span><span class="s2">&quot;mtt::feature::element_indices_neighbors&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Let’s print the distances and tie them back to the geometry of the water molecule
+created at the start of this example.  Our molecule has:</p>
+<ul class="simple">
+<li><p>O–H₁: 1.000 Å  (displacement [−1, 0, 0] from H₁ to O)</p></li>
+<li><p>O–H₂: 0.500 Å  (displacement [0, −0.5, 0] from H₂ to O)</p></li>
+<li><p>H₁–H₂: √(1² + 0.5²) ≈ 1.118 Å</p></li>
+</ul>
+<p>With a full neighbor list each pair appears twice (both directions), giving 6
+directed edges in total.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edge distances (Å):&quot;</span><span class="p">)</span>
+<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><a href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="torch.Size" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">distances</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">samples</span><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a><span class="p">]</span>
+    <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d</span></a> <span class="o">=</span> <a href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">distances</span><span class="o">.</span><span class="n">values</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;first_atom&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;second_atom&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d</span></a><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> Å&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Edge distances (Å):
+  0 → 1:  1.0000 Å
+  0 → 2:  0.5000 Å
+  1 → 0:  1.0000 Å
+  1 → 2:  1.1180 Å
+  2 → 0:  0.5000 Å
+  2 → 1:  1.1180 Å
+</pre></div>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Displacement vectors (Å):&quot;</span><span class="p">)</span>
+<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><a href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="torch.Size" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vectors</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">vectors</span><span class="o">.</span><span class="n">samples</span><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a><span class="p">]</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v</span></a> <span class="o">=</span> <a href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vectors</span><span class="o">.</span><span class="n">values</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;first_atom&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;second_atom&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">:  &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v</span></a><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">]&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Displacement vectors (Å):
+  0 → 1:  [+1.000, +0.000, +0.000]
+  0 → 2:  [+0.000, +0.500, +0.000]
+  1 → 0:  [-1.000, +0.000, +0.000]
+  1 → 2:  [-1.000, +0.500, +0.000]
+  2 → 0:  [+0.000, -0.500, +0.000]
+  2 → 1:  [+1.000, -0.500, +0.000]
+</pre></div>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Element indices correspond to the position of each atomic number in the</span>
+<span class="c1"># sorted list of unique elements across the dataset.  Here atomic_types =</span>
+<span class="c1"># [1, 6, 7, 8, 16], so H (Z=1) → index 0 and O (Z=8) → index 3.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Element indices per atom (0=H, 3=O):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">node_types</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">long</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Element indices per atom (0=H, 3=O):
+  [3, 0, 0]
+</pre></div>
+</div>
+</section>
+<section id="discovering-available-paths">
+<span id="discovering-paths"></span><h2>4. Discovering available paths<a class="headerlink" href="#discovering-available-paths" title="Link to this heading">¶</a></h2>
+<p>Every sub-module visible in <code class="docutils literal notranslate"><span class="pre">print(model)</span></code> can be captured. The helper
+below formats the full list of valid <code class="docutils literal notranslate"><span class="pre">mtt::feature::</span></code> keys in one go.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">print_all_module_paths</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="n">_skip</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;additive_models&quot;</span><span class="p">,</span> <span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="s2">&quot;long_range_featurizer&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Module path&#39;</span><span class="si">:</span><span class="s2">&lt;65</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Module type&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">95</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.named_modules" title="torch.nn.Module.named_modules" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method"><span class="n">model</span><span class="o">.</span><span class="n">named_modules</span></a><span class="p">():</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_skip</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  mtt::feature::</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">&lt;50</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">module</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="n">print_all_module_paths</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Module path                                                       Module type
+-----------------------------------------------------------------------------------------------
+  mtt::feature::gnn_layers                                          ModuleList
+  mtt::feature::gnn_layers.0                                        CartesianTransformer
+  mtt::feature::gnn_layers.0.trans                                  Transformer
+  mtt::feature::gnn_layers.0.trans.layers                           ModuleList
+  mtt::feature::gnn_layers.0.trans.layers.0                         TransformerLayer
+  mtt::feature::gnn_layers.0.trans.layers.0.attention               AttentionBlock
+  mtt::feature::gnn_layers.0.trans.layers.0.attention.input_linear  Linear
+  mtt::feature::gnn_layers.0.trans.layers.0.attention.output_linear  Linear
+  mtt::feature::gnn_layers.0.trans.layers.0.norm_attention          RMSNorm
+  mtt::feature::gnn_layers.0.trans.layers.0.norm_mlp                RMSNorm
+  mtt::feature::gnn_layers.0.trans.layers.0.mlp                     FeedForward
+  mtt::feature::gnn_layers.0.trans.layers.0.mlp.w_in                Linear
+  mtt::feature::gnn_layers.0.trans.layers.0.mlp.w_out               Linear
+  mtt::feature::gnn_layers.0.trans.layers.0.mlp.activation          Identity
+  mtt::feature::gnn_layers.0.trans.layers.0.center_contraction      Linear
+  mtt::feature::gnn_layers.0.trans.layers.0.center_expansion        Linear
+  mtt::feature::gnn_layers.0.trans.layers.0.norm_center_features    RMSNorm
+  mtt::feature::gnn_layers.0.trans.layers.0.center_mlp              FeedForward
+  mtt::feature::gnn_layers.0.trans.layers.0.center_mlp.w_in         Linear
+  mtt::feature::gnn_layers.0.trans.layers.0.center_mlp.w_out        Linear
+  mtt::feature::gnn_layers.0.trans.layers.0.center_mlp.activation   Identity
+  mtt::feature::gnn_layers.0.trans.layers.1                         TransformerLayer
+  mtt::feature::gnn_layers.0.trans.layers.1.attention               AttentionBlock
+  mtt::feature::gnn_layers.0.trans.layers.1.attention.input_linear  Linear
+  mtt::feature::gnn_layers.0.trans.layers.1.attention.output_linear  Linear
+  mtt::feature::gnn_layers.0.trans.layers.1.norm_attention          RMSNorm
+  mtt::feature::gnn_layers.0.trans.layers.1.norm_mlp                RMSNorm
+  mtt::feature::gnn_layers.0.trans.layers.1.mlp                     FeedForward
+  mtt::feature::gnn_layers.0.trans.layers.1.mlp.w_in                Linear
+  mtt::feature::gnn_layers.0.trans.layers.1.mlp.w_out               Linear
+  mtt::feature::gnn_layers.0.trans.layers.1.mlp.activation          Identity
+  mtt::feature::gnn_layers.0.trans.layers.1.center_contraction      Linear
+  mtt::feature::gnn_layers.0.trans.layers.1.center_expansion        Linear
+  mtt::feature::gnn_layers.0.trans.layers.1.norm_center_features    RMSNorm
+  mtt::feature::gnn_layers.0.trans.layers.1.center_mlp              FeedForward
+  mtt::feature::gnn_layers.0.trans.layers.1.center_mlp.w_in         Linear
+  mtt::feature::gnn_layers.0.trans.layers.1.center_mlp.w_out        Linear
+  mtt::feature::gnn_layers.0.trans.layers.1.center_mlp.activation   Identity
+  mtt::feature::gnn_layers.0.edge_embedder                          Linear
+  mtt::feature::gnn_layers.0.compress                               Sequential
+  mtt::feature::gnn_layers.0.compress.0                             Linear
+  mtt::feature::gnn_layers.0.compress.1                             SiLU
+  mtt::feature::gnn_layers.0.compress.2                             Linear
+  mtt::feature::gnn_layers.0.neighbor_embedder                      DummyModule
+  mtt::feature::gnn_layers.1                                        CartesianTransformer
+  mtt::feature::gnn_layers.1.trans                                  Transformer
+  mtt::feature::gnn_layers.1.trans.layers                           ModuleList
+  mtt::feature::gnn_layers.1.trans.layers.0                         TransformerLayer
+  mtt::feature::gnn_layers.1.trans.layers.0.attention               AttentionBlock
+  mtt::feature::gnn_layers.1.trans.layers.0.attention.input_linear  Linear
+  mtt::feature::gnn_layers.1.trans.layers.0.attention.output_linear  Linear
+  mtt::feature::gnn_layers.1.trans.layers.0.norm_attention          RMSNorm
+  mtt::feature::gnn_layers.1.trans.layers.0.norm_mlp                RMSNorm
+  mtt::feature::gnn_layers.1.trans.layers.0.mlp                     FeedForward
+  mtt::feature::gnn_layers.1.trans.layers.0.mlp.w_in                Linear
+  mtt::feature::gnn_layers.1.trans.layers.0.mlp.w_out               Linear
+  mtt::feature::gnn_layers.1.trans.layers.0.mlp.activation          Identity
+  mtt::feature::gnn_layers.1.trans.layers.0.center_contraction      Linear
+  mtt::feature::gnn_layers.1.trans.layers.0.center_expansion        Linear
+  mtt::feature::gnn_layers.1.trans.layers.0.norm_center_features    RMSNorm
+  mtt::feature::gnn_layers.1.trans.layers.0.center_mlp              FeedForward
+  mtt::feature::gnn_layers.1.trans.layers.0.center_mlp.w_in         Linear
+  mtt::feature::gnn_layers.1.trans.layers.0.center_mlp.w_out        Linear
+  mtt::feature::gnn_layers.1.trans.layers.0.center_mlp.activation   Identity
+  mtt::feature::gnn_layers.1.trans.layers.1                         TransformerLayer
+  mtt::feature::gnn_layers.1.trans.layers.1.attention               AttentionBlock
+  mtt::feature::gnn_layers.1.trans.layers.1.attention.input_linear  Linear
+  mtt::feature::gnn_layers.1.trans.layers.1.attention.output_linear  Linear
+  mtt::feature::gnn_layers.1.trans.layers.1.norm_attention          RMSNorm
+  mtt::feature::gnn_layers.1.trans.layers.1.norm_mlp                RMSNorm
+  mtt::feature::gnn_layers.1.trans.layers.1.mlp                     FeedForward
+  mtt::feature::gnn_layers.1.trans.layers.1.mlp.w_in                Linear
+  mtt::feature::gnn_layers.1.trans.layers.1.mlp.w_out               Linear
+  mtt::feature::gnn_layers.1.trans.layers.1.mlp.activation          Identity
+  mtt::feature::gnn_layers.1.trans.layers.1.center_contraction      Linear
+  mtt::feature::gnn_layers.1.trans.layers.1.center_expansion        Linear
+  mtt::feature::gnn_layers.1.trans.layers.1.norm_center_features    RMSNorm
+  mtt::feature::gnn_layers.1.trans.layers.1.center_mlp              FeedForward
+  mtt::feature::gnn_layers.1.trans.layers.1.center_mlp.w_in         Linear
+  mtt::feature::gnn_layers.1.trans.layers.1.center_mlp.w_out        Linear
+  mtt::feature::gnn_layers.1.trans.layers.1.center_mlp.activation   Identity
+  mtt::feature::gnn_layers.1.edge_embedder                          Linear
+  mtt::feature::gnn_layers.1.compress                               Sequential
+  mtt::feature::gnn_layers.1.compress.0                             Linear
+  mtt::feature::gnn_layers.1.compress.1                             SiLU
+  mtt::feature::gnn_layers.1.compress.2                             Linear
+  mtt::feature::gnn_layers.1.neighbor_embedder                      Embedding
+  mtt::feature::combination_norms                                   ModuleList
+  mtt::feature::combination_norms.0                                 LayerNorm
+  mtt::feature::combination_norms.1                                 LayerNorm
+  mtt::feature::combination_mlps                                    ModuleList
+  mtt::feature::combination_mlps.0                                  Sequential
+  mtt::feature::combination_mlps.0.0                                Linear
+  mtt::feature::combination_mlps.0.1                                SiLU
+  mtt::feature::combination_mlps.0.2                                Linear
+  mtt::feature::combination_mlps.1                                  Sequential
+  mtt::feature::combination_mlps.1.0                                Linear
+  mtt::feature::combination_mlps.1.1                                SiLU
+  mtt::feature::combination_mlps.1.2                                Linear
+  mtt::feature::node_embedders                                      ModuleList
+  mtt::feature::node_embedders.0                                    Embedding
+  mtt::feature::edge_embedder                                       Embedding
+  mtt::feature::node_heads                                          ModuleDict
+  mtt::feature::node_heads.energy                                   ModuleList
+  mtt::feature::node_heads.energy.0                                 Sequential
+  mtt::feature::node_heads.energy.0.0                               Linear
+  mtt::feature::node_heads.energy.0.1                               SiLU
+  mtt::feature::node_heads.energy.0.2                               Linear
+  mtt::feature::node_heads.energy.0.3                               SiLU
+  mtt::feature::edge_heads                                          ModuleDict
+  mtt::feature::edge_heads.energy                                   ModuleList
+  mtt::feature::edge_heads.energy.0                                 Sequential
+  mtt::feature::edge_heads.energy.0.0                               Linear
+  mtt::feature::edge_heads.energy.0.1                               SiLU
+  mtt::feature::edge_heads.energy.0.2                               Linear
+  mtt::feature::edge_heads.energy.0.3                               SiLU
+  mtt::feature::node_last_layers                                    ModuleDict
+  mtt::feature::node_last_layers.energy                             ModuleList
+  mtt::feature::node_last_layers.energy.0                           ModuleDict
+  mtt::feature::node_last_layers.energy.0.energy___0                Linear
+  mtt::feature::edge_last_layers                                    ModuleDict
+  mtt::feature::edge_last_layers.energy                             ModuleList
+  mtt::feature::edge_last_layers.energy.0                           ModuleDict
+  mtt::feature::edge_last_layers.energy.0.energy___0                Linear
+  mtt::feature::gnn_layers_post_mp_node                             ModuleList
+  mtt::feature::gnn_layers_post_mp_node.0                           Identity
+  mtt::feature::gnn_layers_post_mp_node.1                           Identity
+  mtt::feature::gnn_layers_post_mp_edge                             ModuleList
+  mtt::feature::gnn_layers_post_mp_edge.0                           Identity
+  mtt::feature::gnn_layers_post_mp_edge.1                           Identity
+  mtt::feature::node_backbone                                       ModuleList
+  mtt::feature::node_backbone.0                                     Identity
+  mtt::feature::edge_backbone                                       ModuleList
+  mtt::feature::edge_backbone.0                                     Identity
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Modules that return a <em>tuple</em> of <code class="docutils literal notranslate"><span class="pre">(node_features,</span> <span class="pre">edge_features)</span></code> —
+such as <code class="xref py py-class docutils literal notranslate"><span class="pre">CartesianTransformer</span></code>
+and <code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerLayer</span></code> — require
+a <code class="docutils literal notranslate"><span class="pre">_node</span></code> or <code class="docutils literal notranslate"><span class="pre">_edge</span></code> suffix to select one element of the tuple:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;mtt::feature::gnn_layers.0_node&quot;</span>   <span class="c1"># node output of GNN layer 0</span>
+<span class="s2">&quot;mtt::feature::gnn_layers.0_edge&quot;</span>   <span class="c1"># edge output of GNN layer 0</span>
+</pre></div>
+</div>
+<p>The suffix is only needed when no module with that exact name exists; an
+<a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AttributeError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeError</span></code></a> is raised if neither the exact path nor the
+suffix-stripped variant can be found.</p>
+</div>
+</section>
+<section id="deep-dive-into-a-gnn-layer">
+<span id="gnn-deep-dive"></span><h2>5. Deep-dive into a GNN layer<a class="headerlink" href="#deep-dive-into-a-gnn-layer" title="Link to this heading">¶</a></h2>
+<p>We can hook any intermediate sub-module, including layers <em>inside</em> the first
+<code class="xref py py-class docutils literal notranslate"><span class="pre">CartesianTransformer</span></code>. Below we
+capture six tensors from different depths of the first GNN layer to see how
+the representations evolve from raw embeddings through the transformer stack.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">outputs</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Initial edge-type embedding (before the GNN)</span>
+    <span class="s2">&quot;mtt::feature::edge_embedder&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="c1"># Edge embedding re-computed inside the first CartesianTransformer</span>
+    <span class="s2">&quot;mtt::feature::gnn_layers.0.edge_embedder&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="c1"># Node and edge output of the first TransformerLayer</span>
+    <span class="s2">&quot;mtt::feature::gnn_layers.0.trans.layers.0_node&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;mtt::feature::gnn_layers.0.trans.layers.0_edge&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="c1"># MLP sub-module inside the same TransformerLayer (node-like)</span>
+    <span class="s2">&quot;mtt::feature::gnn_layers.0.trans.layers.0.mlp&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="c1"># Full node output of the first CartesianTransformer</span>
+    <span class="s2">&quot;mtt::feature::gnn_layers.0_node&quot;</span><span class="p">:</span> <a href="https://docs.metatensor.org/metatomic/latest/torch/reference/models/metadata.html#metatomic.torch.ModelOutput" title="metatomic.torch.ModelOutput" class="sphx-glr-backref-module-metatomic-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ModelOutput</span></a><span class="p">(</span><span class="n">per_atom</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">}</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">systems</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">outputs</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<p>Print the shape and nature (node/edge) of each captured tensor.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">key</span></a><span class="p">,</span> <span class="n">tmap</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">predictions</span></a><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">block</span> <span class="o">=</span> <span class="n">tmap</span><span class="o">.</span><span class="n">block</span><span class="p">()</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kind</span></a> <span class="o">=</span> <span class="s2">&quot;node&quot;</span> <span class="k">if</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">block</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">names</span></a> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;atom&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;edge&quot;</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">key</span></a><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;mtt::feature::&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">:]</span><span class="si">:</span><span class="s2">45s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><a href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="torch.Size" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">block</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span><span class="si">:</span><span class="s2">20s</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kind</span></a><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>edge_embedder                                  torch.Size([6, 128])  (edge)
+gnn_layers.0.edge_embedder                     torch.Size([6, 128])  (edge)
+gnn_layers.0.trans.layers.0.mlp                torch.Size([6, 128])  (edge)
+gnn_layers.0.trans.layers.0_node               torch.Size([3, 256])  (node)
+gnn_layers.0.trans.layers.0_edge               torch.Size([6, 128])  (edge)
+gnn_layers.0_node                              torch.Size([3, 256])  (node)
+</pre></div>
+</div>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-generated-examples-1-advanced-10-pet-hidden-features-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/30420af45850a0a36e79a2076d1f634c/10-pet-hidden-features.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">10-pet-hidden-features.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/35e6532d9b1a1ce183e6b0118ea83d54/10-pet-hidden-features.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">10-pet-hidden-features.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/602b1acc976a887245eb23c2b17b793c/10-pet-hidden-features.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">10-pet-hidden-features.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../../concepts/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Concepts and Design</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="09-symplectic-flashmd.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Training a Symplectic FlashMD Model</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, metatrain developers
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Extracting Hidden Layer Features from PET</a><ul>
+<li><a class="reference internal" href="#setup-model-and-system">Setup: model and system</a></li>
+<li><a class="reference internal" href="#standard-model-outputs">1. Standard model outputs</a></li>
+<li><a class="reference internal" href="#unprocessed-backbone-and-head-features">2. Unprocessed backbone and head features</a></li>
+<li><a class="reference internal" href="#raw-featurizer-inputs">3. Raw featurizer inputs</a></li>
+<li><a class="reference internal" href="#discovering-available-paths">4. Discovering available paths</a></li>
+<li><a class="reference internal" href="#deep-dive-into-a-gnn-layer">5. Deep-dive into a GNN layer</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=fec480e4"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    </body>
+</html>

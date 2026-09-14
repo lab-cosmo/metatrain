@@ -1,0 +1,70 @@
+
+:orphan:
+
+.. _sphx_glr_generated_examples_1-advanced_sg_execution_times:
+
+
+Computation times
+=================
+**04:24.364** total execution time for 12 files **from generated_examples/1-advanced**:
+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_generated_examples_1-advanced_04-flashmd.py` (``04-flashmd.py``)
+     - 01:05.500
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_09-classifier.py` (``09-classifier.py``)
+     - 00:46.845
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_02-zbl.py` (``02-zbl.py``)
+     - 00:44.877
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_09-symplectic-flashmd.py` (``09-symplectic-flashmd.py``)
+     - 00:34.698
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_08-llpr-ensemble-training.py` (``08-llpr-ensemble-training.py``)
+     - 00:28.163
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_01-llpr.py` (``01-llpr.py``)
+     - 00:21.096
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_07-dos-training.py` (``07-dos-training.py``)
+     - 00:15.763
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_06-mixed-stress-training.py` (``06-mixed-stress-training.py``)
+     - 00:07.233
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_10-pet-hidden-features.py` (``10-pet-hidden-features.py``)
+     - 00:00.189
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_00-transfer-learning.py` (``00-transfer-learning.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_03-fitting-generic-targets.py` (``03-fitting-generic-targets.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_05-multi-gpu.py` (``05-multi-gpu.py``)
+     - 00:00.000
+     - 0.0

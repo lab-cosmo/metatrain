@@ -1,0 +1,4960 @@
+{
+  "$defs": {
+    "BPNNConfig": {
+      "additionalProperties": false,
+      "description": "Configuration for the BPNN architecture.",
+      "properties": {
+        "num_hidden_layers": {
+          "description": "Controls the depth of the neural network. Increasing this generally leads\nto better accuracy from the increased descriptivity, but comes at the cost\nof increased training and evaluation time.",
+          "title": "Num Hidden Layers",
+          "type": "integer"
+        },
+        "num_neurons_per_layer": {
+          "description": "Controls the width of the neural network. Increasing this generally leads\nto better accuracy from the increased descriptivity, but comes at the cost\nof increased training and evaluation time.",
+          "title": "Num Neurons Per Layer",
+          "type": "integer"
+        },
+        "layernorm": {
+          "description": "Whether to use layer normalization before the neural network. Setting this\nhyperparameter to false will lead to slower convergence of training, but\nmight lead to better generalization outside of the training set distribution.",
+          "title": "Layernorm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "num_hidden_layers",
+        "num_neurons_per_layer",
+        "layernorm"
+      ],
+      "title": "BPNNConfig",
+      "type": "object"
+    },
+    "CartesianTargetConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "rank": {
+          "title": "Rank",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "rank"
+      ],
+      "title": "CartesianTargetConfig",
+      "type": "object"
+    },
+    "CartesianTargetTypeHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters to specify cartesian target types.",
+      "properties": {
+        "cartesian": {
+          "$ref": "#/$defs/CartesianTargetConfig"
+        }
+      },
+      "required": [
+        "cartesian"
+      ],
+      "title": "CartesianTargetTypeHypers",
+      "type": "object"
+    },
+    "DatasetDictHypers": {
+      "additionalProperties": false,
+      "properties": {
+        "systems": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/SystemsHypers"
+            }
+          ],
+          "title": "Systems"
+        },
+        "targets": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/TargetHypers"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "title": "Targets",
+          "type": "object"
+        },
+        "extra_data": {
+          "additionalProperties": true,
+          "title": "Extra Data",
+          "type": "object"
+        },
+        "indices": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Indices"
+        }
+      },
+      "required": [
+        "systems",
+        "targets"
+      ],
+      "title": "DatasetDictHypers",
+      "type": "object"
+    },
+    "DescriptorHypers": {
+      "additionalProperties": false,
+      "description": "Descriptor hyperparameters wrapping the RepFlow block.",
+      "properties": {
+        "type": {
+          "description": "Descriptor type identifier used by deepmd-kit.",
+          "title": "Type",
+          "type": "string"
+        },
+        "repflow": {
+          "$ref": "#/$defs/RepflowHypers",
+          "description": "RepFlow block parameters."
+        },
+        "activation_function": {
+          "description": "Activation function. Format: ``\"name\"`` or ``\"name:param\"``.\nSupported names include ``\"tanh\"``, ``\"gelu\"``, ``\"custom_silu\"``.",
+          "title": "Activation Function",
+          "type": "string"
+        },
+        "use_tebd_bias": {
+          "description": "Add bias to the type embedding.",
+          "title": "Use Tebd Bias",
+          "type": "boolean"
+        },
+        "precision": {
+          "description": "Floating-point precision for the descriptor (``32`` or ``64``).\nThis controls the internal precision of deepmd-kit's descriptor\ncomputation.  For mixed-precision training, set this independently\nof ``fitting_net.precision``; for uniform precision, set both to the\nsame value and match ``base_precision`` accordingly.",
+          "title": "Precision",
+          "type": "integer"
+        },
+        "concat_output_tebd": {
+          "description": "Concatenate type embedding to descriptor output.",
+          "title": "Concat Output Tebd",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type",
+        "repflow",
+        "activation_function",
+        "use_tebd_bias",
+        "precision",
+        "concat_output_tebd"
+      ],
+      "title": "DescriptorHypers",
+      "type": "object"
+    },
+    "FittingNetHypers": {
+      "additionalProperties": false,
+      "description": "Fitting network hyperparameters.",
+      "properties": {
+        "neuron": {
+          "description": "Hidden layer sizes for the fitting network.",
+          "items": {
+            "type": "integer"
+          },
+          "title": "Neuron",
+          "type": "array"
+        },
+        "resnet_dt": {
+          "description": "Use a ResNet-style time step in each hidden layer.",
+          "title": "Resnet Dt",
+          "type": "boolean"
+        },
+        "seed": {
+          "description": "Random seed for weight initialisation.",
+          "title": "Seed",
+          "type": "integer"
+        },
+        "precision": {
+          "description": "Floating-point precision for the fitting network (``32`` or ``64``).\nCan differ from ``descriptor.precision`` for mixed-precision training.",
+          "title": "Precision",
+          "type": "integer"
+        },
+        "activation_function": {
+          "description": "Activation function (same format as the descriptor).",
+          "title": "Activation Function",
+          "type": "string"
+        },
+        "type": {
+          "description": "Fitting type. ``\"ener\"`` for energy fitting.",
+          "title": "Type",
+          "type": "string"
+        },
+        "numb_fparam": {
+          "description": "Number of frame-level parameters.",
+          "title": "Numb Fparam",
+          "type": "integer"
+        },
+        "numb_aparam": {
+          "description": "Number of atom-level parameters.",
+          "title": "Numb Aparam",
+          "type": "integer"
+        },
+        "dim_case_embd": {
+          "description": "Dimension of the case embedding (multi-task).",
+          "title": "Dim Case Embd",
+          "type": "integer"
+        },
+        "trainable": {
+          "description": "Whether fitting network weights are trainable.",
+          "title": "Trainable",
+          "type": "boolean"
+        },
+        "rcond": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Cutoff for pseudo-inverse in linear fitting.",
+          "title": "Rcond"
+        },
+        "atom_ener": {
+          "description": "Per-type atomic energy offsets.",
+          "items": {
+            "type": "number"
+          },
+          "title": "Atom Ener",
+          "type": "array"
+        },
+        "use_aparam_as_mask": {
+          "description": "Treat atom-level parameters as a mask.",
+          "title": "Use Aparam As Mask",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "neuron",
+        "resnet_dt",
+        "seed",
+        "precision",
+        "activation_function",
+        "type",
+        "numb_fparam",
+        "numb_aparam",
+        "dim_case_embd",
+        "trainable",
+        "rcond",
+        "atom_ener",
+        "use_aparam_as_mask"
+      ],
+      "title": "FittingNetHypers",
+      "type": "object"
+    },
+    "FullFinetuneHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters to use full finetuning of PET models.\n\nThis means all model parameters are trainable.",
+      "properties": {
+        "method": {
+          "const": "full",
+          "description": "Finetuning method to use.",
+          "title": "Method",
+          "type": "string"
+        },
+        "read_from": {
+          "description": "Path to the pretrained model checkpoint.",
+          "title": "Read From",
+          "type": "string"
+        },
+        "config": {
+          "description": "No configuration needed for full finetuning.",
+          "title": "Config"
+        },
+        "inherit_heads": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Mapping from new trainable targets (keys) to the existing targets\nin the model (values).\nThis allows for copying weights from the corresponding\nsource heads to the destination heads instead of random initialization.",
+          "title": "Inherit Heads",
+          "type": "object"
+        }
+      },
+      "required": [
+        "method",
+        "read_from",
+        "inherit_heads"
+      ],
+      "title": "FullFinetuneHypers",
+      "type": "object"
+    },
+    "GradientDict": {
+      "additionalProperties": false,
+      "properties": {
+        "read_from": {
+          "title": "Read From",
+          "type": "string"
+        },
+        "reader": {
+          "anyOf": [
+            {
+              "enum": [
+                "ase",
+                "metatensor"
+              ],
+              "type": "string"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reader"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        }
+      },
+      "title": "GradientDict",
+      "type": "object"
+    },
+    "HeadsFinetuneConfig": {
+      "additionalProperties": false,
+      "description": "Configuration for heads finetuning strategy.",
+      "properties": {
+        "head_modules": {
+          "description": "List of module name prefixes for the prediction heads to finetune.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Head Modules",
+          "type": "array"
+        },
+        "last_layer_modules": {
+          "description": "List of module name prefixes for the last layers to finetune.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Last Layer Modules",
+          "type": "array"
+        }
+      },
+      "required": [
+        "head_modules",
+        "last_layer_modules"
+      ],
+      "title": "HeadsFinetuneConfig",
+      "type": "object"
+    },
+    "HeadsFinetuneHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for heads finetuning of PET models.\n\nFreezes all model parameters except for the prediction heads\nand last layers.",
+      "properties": {
+        "method": {
+          "const": "heads",
+          "description": "Finetuning method to use.",
+          "title": "Method",
+          "type": "string"
+        },
+        "read_from": {
+          "description": "Path to the pretrained model checkpoint.",
+          "title": "Read From",
+          "type": "string"
+        },
+        "config": {
+          "$ref": "#/$defs/HeadsFinetuneConfig",
+          "description": "Configuration for heads finetuning."
+        },
+        "inherit_heads": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Mapping from new trainable targets (keys) to the existing targets\nin the model (values).\nThis allows for copying weights from the corresponding\nsource heads to the destination heads instead of random initialization.",
+          "title": "Inherit Heads",
+          "type": "object"
+        }
+      },
+      "required": [
+        "method",
+        "read_from",
+        "config",
+        "inherit_heads"
+      ],
+      "title": "HeadsFinetuneHypers",
+      "type": "object"
+    },
+    "IndicesOnlyHypers": {
+      "additionalProperties": false,
+      "description": "Config for validation/test sets that reference the training source via indices.",
+      "properties": {
+        "indices": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Indices"
+        }
+      },
+      "required": [
+        "indices"
+      ],
+      "title": "IndicesOnlyHypers",
+      "type": "object"
+    },
+    "KRRHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the KRR model.",
+      "properties": {
+        "degree": {
+          "const": 2,
+          "description": "Degree of the kernel. For now, only 2 is allowed.",
+          "title": "Degree",
+          "type": "integer"
+        },
+        "num_sparse_points": {
+          "description": "Number of sparse points to use during\nthe training, it select the number of actual samples\nto use during the training. The selection is done with\nthe Further Point Sampling (FPS) algorithm.\nThe optimal number of sparse points depends on the system.\nIncreasing it might impreve the accuracy, but it also increase the\nmemory and time required for training.",
+          "title": "Num Sparse Points",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "degree",
+        "num_sparse_points"
+      ],
+      "title": "KRRHypers",
+      "type": "object"
+    },
+    "LoRaFinetuneConfig": {
+      "additionalProperties": false,
+      "description": "Configuration for LoRA finetuning strategy.",
+      "properties": {
+        "rank": {
+          "description": "Rank of the LoRA matrices.",
+          "title": "Rank",
+          "type": "integer"
+        },
+        "alpha": {
+          "description": "Scaling factor for the LoRA matrices.",
+          "title": "Alpha",
+          "type": "number"
+        },
+        "target_modules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Target Modules",
+          "type": "array"
+        }
+      },
+      "required": [
+        "rank",
+        "alpha"
+      ],
+      "title": "LoRaFinetuneConfig",
+      "type": "object"
+    },
+    "LoRaFinetuneHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for LoRA finetuning of PET models.\n\nInjects LoRA layers and finetunes only them.",
+      "properties": {
+        "method": {
+          "const": "lora",
+          "description": "Finetuning method to use",
+          "title": "Method",
+          "type": "string"
+        },
+        "read_from": {
+          "description": "Path to the pretrained model checkpoint.",
+          "title": "Read From",
+          "type": "string"
+        },
+        "config": {
+          "$ref": "#/$defs/LoRaFinetuneConfig",
+          "description": "Configuration for LoRA finetuning."
+        },
+        "inherit_heads": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Mapping from new trainable targets (keys) to the existing targets\nin the model (values).\nThis allows for copying weights from the corresponding\nsource heads to the destination heads instead of random initialization.",
+          "title": "Inherit Heads",
+          "type": "object"
+        }
+      },
+      "required": [
+        "method",
+        "read_from",
+        "config",
+        "inherit_heads"
+      ],
+      "title": "LoRaFinetuneHypers",
+      "type": "object"
+    },
+    "LongRangeHypers": {
+      "additionalProperties": false,
+      "description": "In some systems and datasets, enabling long-range Coulomb interactions\nmight be beneficial for the accuracy of the model and/or\nits physical correctness.",
+      "properties": {
+        "enable": {
+          "description": "Toggle for enabling long-range interactions",
+          "title": "Enable",
+          "type": "boolean"
+        },
+        "use_ewald": {
+          "description": "Use Ewald summation. If False, P3M is used",
+          "title": "Use Ewald",
+          "type": "boolean"
+        },
+        "smearing": {
+          "description": "Smearing width in Fourier space",
+          "title": "Smearing",
+          "type": "number"
+        },
+        "kspace_resolution": {
+          "description": "Resolution of the reciprocal space grid",
+          "title": "Kspace Resolution",
+          "type": "number"
+        },
+        "interpolation_nodes": {
+          "description": "Number of grid points for interpolation (for PME only)",
+          "title": "Interpolation Nodes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "enable",
+        "use_ewald",
+        "smearing",
+        "kspace_resolution",
+        "interpolation_nodes"
+      ],
+      "title": "LongRangeHypers",
+      "type": "object"
+    },
+    "LossParams": {
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "weight": {
+          "title": "Weight",
+          "type": "number"
+        },
+        "reduction": {
+          "enum": [
+            "none",
+            "mean",
+            "sum"
+          ],
+          "title": "Reduction",
+          "type": "string"
+        }
+      },
+      "title": "LossParams",
+      "type": "object"
+    },
+    "LossSpecification": {
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "weight": {
+          "title": "Weight",
+          "type": "number"
+        },
+        "reduction": {
+          "enum": [
+            "none",
+            "mean",
+            "sum"
+          ],
+          "title": "Reduction",
+          "type": "string"
+        },
+        "gradients": {
+          "additionalProperties": {
+            "$ref": "#/$defs/LossParams"
+          },
+          "title": "Gradients",
+          "type": "object"
+        }
+      },
+      "title": "LossSpecification",
+      "type": "object"
+    },
+    "NoFinetuneHypers": {
+      "additionalProperties": false,
+      "description": "Hypers that indicate that no finetuning is to be applied.",
+      "properties": {
+        "read_from": {
+          "description": "No finetuning is indicated by setting this argument to None.\n\nThe rest of finetuning hyperparameters are then ignored.",
+          "title": "Read From",
+          "type": "null"
+        },
+        "method": {
+          "title": "Method"
+        },
+        "config": {
+          "title": "Config"
+        },
+        "inherit_heads": {
+          "title": "Inherit Heads"
+        }
+      },
+      "required": [
+        "read_from"
+      ],
+      "title": "NoFinetuneHypers",
+      "type": "object"
+    },
+    "RadialBasisHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameter concerning the radial basis functions used in the model.",
+      "properties": {
+        "max_eigenvalue": {
+          "description": "Maximum eigenvalue for the radial basis.",
+          "title": "Max Eigenvalue",
+          "type": "number"
+        },
+        "element_scale": {
+          "description": "Scaling factor for the element-dependent radial lengthscales.",
+          "title": "Element Scale",
+          "type": "number"
+        },
+        "mlp_depth": {
+          "description": "Depth of the radial MLP. Must be at least 2.",
+          "title": "Mlp Depth",
+          "type": "integer"
+        },
+        "mlp_expansion_ratio": {
+          "description": "Expansion ratio for the radial MLP hidden layers.",
+          "title": "Mlp Expansion Ratio",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "max_eigenvalue",
+        "element_scale",
+        "mlp_depth",
+        "mlp_expansion_ratio"
+      ],
+      "title": "RadialBasisHypers",
+      "type": "object"
+    },
+    "RepflowHypers": {
+      "additionalProperties": false,
+      "description": "RepFlow descriptor block parameters.",
+      "properties": {
+        "n_dim": {
+          "description": "Node feature dimension.",
+          "title": "N Dim",
+          "type": "integer"
+        },
+        "e_dim": {
+          "description": "Edge feature dimension.",
+          "title": "E Dim",
+          "type": "integer"
+        },
+        "a_dim": {
+          "description": "Angle feature dimension.",
+          "title": "A Dim",
+          "type": "integer"
+        },
+        "nlayers": {
+          "description": "Number of RepFlow interaction layers.",
+          "title": "Nlayers",
+          "type": "integer"
+        },
+        "e_rcut": {
+          "description": "Edge (pair) cutoff radius in length units.",
+          "title": "E Rcut",
+          "type": "number"
+        },
+        "e_rcut_smth": {
+          "description": "Start of cosine smoothing for the edge cutoff.",
+          "title": "E Rcut Smth",
+          "type": "number"
+        },
+        "e_sel": {
+          "description": "Maximum number of edge neighbors per atom.",
+          "title": "E Sel",
+          "type": "integer"
+        },
+        "a_rcut": {
+          "description": "Angle (triplet) cutoff radius in length units.",
+          "title": "A Rcut",
+          "type": "number"
+        },
+        "a_rcut_smth": {
+          "description": "Start of cosine smoothing for the angle cutoff.",
+          "title": "A Rcut Smth",
+          "type": "number"
+        },
+        "a_sel": {
+          "description": "Maximum number of angle neighbors per atom.",
+          "title": "A Sel",
+          "type": "integer"
+        },
+        "axis_neuron": {
+          "description": "Number of axis neurons in the embedding network.",
+          "title": "Axis Neuron",
+          "type": "integer"
+        },
+        "skip_stat": {
+          "description": "Skip statistics computation (use pretrained stats).",
+          "title": "Skip Stat",
+          "type": "boolean"
+        },
+        "a_compress_rate": {
+          "description": "Compression rate for angle features.",
+          "title": "A Compress Rate",
+          "type": "integer"
+        },
+        "a_compress_e_rate": {
+          "description": "Compression rate for angle-edge features.",
+          "title": "A Compress E Rate",
+          "type": "integer"
+        },
+        "a_compress_use_split": {
+          "description": "Use split compression for angle features.",
+          "title": "A Compress Use Split",
+          "type": "boolean"
+        },
+        "update_angle": {
+          "description": "Update angle features at each layer.",
+          "title": "Update Angle",
+          "type": "boolean"
+        },
+        "update_style": {
+          "description": "Residual update style. Options: ``\"res_residual\"``, ``\"res_avg\"``.",
+          "title": "Update Style",
+          "type": "string"
+        },
+        "update_residual": {
+          "description": "Residual scaling factor for updates.",
+          "title": "Update Residual",
+          "type": "number"
+        },
+        "update_residual_init": {
+          "description": "Initialisation for the residual scaling. Options: ``\"const\"``,\n``\"norm\"``.",
+          "title": "Update Residual Init",
+          "type": "string"
+        },
+        "smooth_edge_update": {
+          "description": "Apply smooth cutoff function to edge updates.",
+          "title": "Smooth Edge Update",
+          "type": "boolean"
+        },
+        "use_dynamic_sel": {
+          "description": "Dynamically adjust neighbor selection at runtime.",
+          "title": "Use Dynamic Sel",
+          "type": "boolean"
+        },
+        "sel_reduce_factor": {
+          "description": "Reduction factor for dynamic neighbor selection.",
+          "title": "Sel Reduce Factor",
+          "type": "number"
+        }
+      },
+      "required": [
+        "n_dim",
+        "e_dim",
+        "a_dim",
+        "nlayers",
+        "e_rcut",
+        "e_rcut_smth",
+        "e_sel",
+        "a_rcut",
+        "a_rcut_smth",
+        "a_sel",
+        "axis_neuron",
+        "skip_stat",
+        "a_compress_rate",
+        "a_compress_e_rate",
+        "a_compress_use_split",
+        "update_angle",
+        "update_style",
+        "update_residual",
+        "update_residual_init",
+        "smooth_edge_update",
+        "use_dynamic_sel",
+        "sel_reduce_factor"
+      ],
+      "title": "RepflowHypers",
+      "type": "object"
+    },
+    "SOAPBasisHypers": {
+      "additionalProperties": false,
+      "description": "Basis configuration for the SOAP descriptor.",
+      "properties": {
+        "type": {
+          "const": "TensorProduct",
+          "title": "Type",
+          "type": "string"
+        },
+        "max_angular": {
+          "description": "Maximum angular channels of the spherical harmonics when\ncomputing the SOAP descriptors. In general, increasing this\nhyperparameter might lead to better accuracy, especially on larger\ndatasets, at the cost of increased training and evaluation time.",
+          "title": "Max Angular",
+          "type": "integer"
+        },
+        "radial": {
+          "$ref": "#/$defs/SOAPBasisRadialHypers"
+        }
+      },
+      "required": [
+        "type",
+        "max_angular",
+        "radial"
+      ],
+      "title": "SOAPBasisHypers",
+      "type": "object"
+    },
+    "SOAPBasisRadialHypers": {
+      "additionalProperties": false,
+      "description": "Radial basis configuration for the SOAP descriptor.",
+      "properties": {
+        "type": {
+          "const": "Gto",
+          "title": "Type",
+          "type": "string"
+        },
+        "max_radial": {
+          "description": "Maximum radial channels of the spherical harmonics when\ncomputing the SOAP descriptors. In general, increasing this\nhyperparameter might lead to better accuracy, especially on larger\ndatasets, at the cost of increased training and evaluation time.",
+          "title": "Max Radial",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "max_radial"
+      ],
+      "title": "SOAPBasisRadialHypers",
+      "type": "object"
+    },
+    "SOAPConfig": {
+      "additionalProperties": false,
+      "description": "Configuration for the SOAP descriptors.",
+      "properties": {
+        "max_angular": {
+          "description": "Maximum angular channels of the spherical harmonics when\ncomputing the SOAP descriptors.",
+          "title": "Max Angular",
+          "type": "integer"
+        },
+        "max_radial": {
+          "description": "Maximum radial channels of the spherical harmonics when\ncomputing the SOAP descriptors.",
+          "title": "Max Radial",
+          "type": "integer"
+        },
+        "cutoff": {
+          "$ref": "#/$defs/SOAPCutoffConfig",
+          "description": "Determines the cutoff routine of the atomic environment."
+        }
+      },
+      "required": [
+        "max_angular",
+        "max_radial",
+        "cutoff"
+      ],
+      "title": "SOAPConfig",
+      "type": "object"
+    },
+    "SOAPCutoffConfig": {
+      "additionalProperties": false,
+      "description": "Cutoff configuration for the SOAP descriptor.",
+      "properties": {
+        "radius": {
+          "description": "Should be set to a value after which most of interatomic is expected\nto be negligible. Note that the values should be defined in the position\nunits of your dataset.",
+          "title": "Radius",
+          "type": "number"
+        },
+        "width": {
+          "description": "The radial cutoff of atomic environments is performed smoothly, over\nanother distance defined by this parameter.",
+          "title": "Width",
+          "type": "number"
+        }
+      },
+      "required": [
+        "radius",
+        "width"
+      ],
+      "title": "SOAPCutoffConfig",
+      "type": "object"
+    },
+    "SOAPCutoffHypers": {
+      "additionalProperties": false,
+      "description": "Cutoff configuration for the SOAP descriptor.",
+      "properties": {
+        "radius": {
+          "description": "This should be set to a value after which most of the\ninteractions between atoms is expected to be negligible.",
+          "title": "Radius",
+          "type": "number"
+        },
+        "smoothing": {
+          "$ref": "#/$defs/SOAPCutoffSmoothingHypers"
+        }
+      },
+      "required": [
+        "radius",
+        "smoothing"
+      ],
+      "title": "SOAPCutoffHypers",
+      "type": "object"
+    },
+    "SOAPCutoffSmoothingHypers": {
+      "additionalProperties": false,
+      "description": "Smoothing configuration for the SOAP descriptor cutoff.",
+      "properties": {
+        "type": {
+          "const": "ShiftedCosine",
+          "description": "Cutoff function used to smooth the behavior around the cutoff\nradius.\n\nCurrently, only the Shifted Cosine function is supported, which is defined\nas ``f(r) = 1/2 * (1 + cos(\u03c0 (r- cutoff + width) / width ))``.",
+          "title": "Type",
+          "type": "string"
+        },
+        "width": {
+          "title": "Width",
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "width"
+      ],
+      "title": "SOAPCutoffSmoothingHypers",
+      "type": "object"
+    },
+    "SOAPDensityHypers": {
+      "additionalProperties": false,
+      "description": "Density configuration for the SOAP descriptor.",
+      "properties": {
+        "type": {
+          "const": "Gaussian",
+          "description": "Currently, we only support a Gaussian type orbitals (GTO) as radial basis\nfunctions and radial integrals.",
+          "title": "Type",
+          "type": "string"
+        },
+        "center_atom_weight": {
+          "description": "Weight of the central atom contribution to the features. If\n1.0 the center atom contribution is weighted the same as any other\ncontribution. If 0.0 the central atom does not contribute to the features\nat all.",
+          "title": "Center Atom Weight",
+          "type": "number"
+        },
+        "width": {
+          "description": "Width of the atom-centered gaussian creating the atomic\ndensity.",
+          "title": "Width",
+          "type": "number"
+        },
+        "scaling": {
+          "$ref": "#/$defs/SOAPDensityScalingHypers",
+          "description": "Radial scaling can be used to reduce the importance of neighbor\natoms further away from the center, usually improving the performance\nof the model."
+        }
+      },
+      "required": [
+        "type",
+        "center_atom_weight",
+        "width",
+        "scaling"
+      ],
+      "title": "SOAPDensityHypers",
+      "type": "object"
+    },
+    "SOAPDensityScalingHypers": {
+      "additionalProperties": false,
+      "description": "Density scaling configuration for the SOAP descriptor.",
+      "properties": {
+        "type": {
+          "const": "Willatt2018",
+          "description": "Type of scaling, currently only one type is supported. It uses a\nlong-range algebraic decay and smooth behavior at\n:math:`r\\rightarrow 0`: as introduced by :footcite:t:`willatt_feature_2018` as\n``f(r) = rate / (rate + (r / scale) ^ exponent)``.",
+          "title": "Type",
+          "type": "string"
+        },
+        "rate": {
+          "title": "Rate",
+          "type": "number"
+        },
+        "scale": {
+          "title": "Scale",
+          "type": "number"
+        },
+        "exponent": {
+          "title": "Exponent",
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "rate",
+        "scale",
+        "exponent"
+      ],
+      "title": "SOAPDensityScalingHypers",
+      "type": "object"
+    },
+    "SOAPHypers": {
+      "additionalProperties": false,
+      "description": "Configuration for the SOAP descriptors.",
+      "properties": {
+        "cutoff": {
+          "$ref": "#/$defs/SOAPCutoffHypers",
+          "description": "Spherical cutoff (\u00c5) to use for atomic environments."
+        },
+        "density": {
+          "$ref": "#/$defs/SOAPDensityHypers"
+        },
+        "basis": {
+          "$ref": "#/$defs/SOAPBasisHypers"
+        }
+      },
+      "required": [
+        "cutoff",
+        "density",
+        "basis"
+      ],
+      "title": "SOAPHypers",
+      "type": "object"
+    },
+    "SphericalTargetConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "irreps": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/SphericalTargetIrrepsConfig"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "items": {
+                  "$ref": "#/$defs/SphericalTargetIrrepsConfig"
+                },
+                "type": "array"
+              },
+              "type": "object"
+            }
+          ],
+          "title": "Irreps"
+        },
+        "product": {
+          "enum": [
+            null,
+            "coupled",
+            "cartesian"
+          ],
+          "title": "Product"
+        }
+      },
+      "required": [
+        "irreps"
+      ],
+      "title": "SphericalTargetConfig",
+      "type": "object"
+    },
+    "SphericalTargetIrrepsConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "num": {
+          "title": "Num",
+          "type": "integer"
+        },
+        "o3_lambda": {
+          "title": "O3 Lambda",
+          "type": "integer"
+        },
+        "o3_sigma": {
+          "title": "O3 Sigma",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "o3_lambda",
+        "o3_sigma"
+      ],
+      "title": "SphericalTargetIrrepsConfig",
+      "type": "object"
+    },
+    "SphericalTargetTypeHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters to specify spherical target types.",
+      "properties": {
+        "spherical": {
+          "$ref": "#/$defs/SphericalTargetConfig"
+        }
+      },
+      "required": [
+        "spherical"
+      ],
+      "title": "SphericalTargetTypeHypers",
+      "type": "object"
+    },
+    "SystemsHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the systems in the dataset.",
+      "properties": {
+        "read_from": {
+          "title": "Read From",
+          "type": "string"
+        },
+        "reader": {
+          "anyOf": [
+            {
+              "enum": [
+                "ase",
+                "metatensor"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reader"
+        },
+        "length_unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Length Unit"
+        }
+      },
+      "title": "SystemsHypers",
+      "type": "object"
+    },
+    "TargetHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the targets in the dataset.",
+      "properties": {
+        "quantity": {
+          "title": "Quantity",
+          "type": "string"
+        },
+        "read_from": {
+          "title": "Read From",
+          "type": "string"
+        },
+        "reader": {
+          "anyOf": [
+            {
+              "enum": [
+                "ase",
+                "metatensor"
+              ],
+              "type": "string"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reader"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string"
+        },
+        "sample_kind": {
+          "enum": [
+            "system",
+            "atom"
+          ],
+          "title": "Sample Kind",
+          "type": "string"
+        },
+        "per_atom": {
+          "title": "Per Atom",
+          "type": "boolean"
+        },
+        "type": {
+          "oneOf": [
+            {
+              "const": "scalar",
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/CartesianTargetTypeHypers"
+            },
+            {
+              "$ref": "#/$defs/SphericalTargetTypeHypers"
+            }
+          ],
+          "title": "Type"
+        },
+        "num_subtargets": {
+          "title": "Num Subtargets",
+          "type": "integer"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "forces": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/GradientDict"
+            }
+          ],
+          "title": "Forces"
+        },
+        "stress": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/GradientDict"
+            }
+          ],
+          "title": "Stress"
+        },
+        "virial": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/GradientDict"
+            }
+          ],
+          "title": "Virial"
+        }
+      },
+      "title": "TargetHypers",
+      "type": "object"
+    },
+    "classifierArchitecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "experimental.classifier",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__experimental__classifier__documentation__ModelHypers",
+          "default": {
+            "hidden_sizes": [
+              64,
+              64
+            ],
+            "feature_layer_index": -1
+          }
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__experimental__classifier__documentation__TrainerHypers",
+          "default": {
+            "batch_size": 32,
+            "num_epochs": 100,
+            "learning_rate": 0.001,
+            "warmup_fraction": 0.1,
+            "model_checkpoint": null,
+            "log_interval": 1,
+            "checkpoint_interval": 100
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "experimental.classifierArchitecture",
+      "type": "object"
+    },
+    "dpa3Architecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "experimental.dpa3",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__experimental__dpa3__documentation__ModelHypers",
+          "default": {
+            "dpa3_model": null,
+            "descriptor": {
+              "activation_function": "custom_silu:10.0",
+              "concat_output_tebd": false,
+              "precision": 32,
+              "repflow": {
+                "a_compress_e_rate": 2,
+                "a_compress_rate": 1,
+                "a_compress_use_split": true,
+                "a_dim": 32,
+                "a_rcut": 4.0,
+                "a_rcut_smth": 3.5,
+                "a_sel": 300,
+                "axis_neuron": 4,
+                "e_dim": 64,
+                "e_rcut": 6.0,
+                "e_rcut_smth": 5.3,
+                "e_sel": 1200,
+                "n_dim": 128,
+                "nlayers": 6,
+                "sel_reduce_factor": 10.0,
+                "skip_stat": true,
+                "smooth_edge_update": true,
+                "update_angle": true,
+                "update_residual": 0.1,
+                "update_residual_init": "const",
+                "update_style": "res_residual",
+                "use_dynamic_sel": true
+              },
+              "type": "dpa3",
+              "use_tebd_bias": false
+            },
+            "fitting_net": {
+              "activation_function": "custom_silu:10.0",
+              "atom_ener": [],
+              "dim_case_embd": 0,
+              "neuron": [
+                240,
+                240,
+                240
+              ],
+              "numb_aparam": 0,
+              "numb_fparam": 0,
+              "precision": 32,
+              "rcond": null,
+              "resnet_dt": true,
+              "seed": 1,
+              "trainable": true,
+              "type": "ener",
+              "use_aparam_as_mask": false
+            }
+          },
+          "description": "Hyperparameters for the DPA3 model.\n\nThe ``type_map`` needed by deepmd-kit is derived automatically from the\ndataset's atomic numbers and should not be set manually.\n"
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__experimental__dpa3__documentation__TrainerHypers",
+          "default": {
+            "distributed": false,
+            "distributed_port": 39591,
+            "batch_size": 8,
+            "num_epochs": 100,
+            "learning_rate": 0.001,
+            "scheduler_patience": 100,
+            "scheduler_factor": 0.8,
+            "log_interval": 1,
+            "checkpoint_interval": 100,
+            "scale_targets": true,
+            "fixed_composition_weights": {},
+            "per_structure_targets": [],
+            "log_mae": false,
+            "log_separate_blocks": false,
+            "best_model_metric": "rmse_prod",
+            "loss": "mse"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "experimental.dpa3Architecture",
+      "type": "object"
+    },
+    "flashmdArchitecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "experimental.flashmd",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__experimental__flashmd__documentation__ModelHypers",
+          "default": {
+            "predict_momenta_as_difference": false,
+            "cutoff": 4.5,
+            "cutoff_width": 0.2,
+            "d_pet": 128,
+            "d_head": 128,
+            "d_node": 512,
+            "d_feedforward": 256,
+            "num_heads": 8,
+            "num_attention_layers": 2,
+            "num_gnn_layers": 3,
+            "normalization": "RMSNorm",
+            "activation": "SwiGLU",
+            "attention_temperature": 1.0,
+            "transformer_type": "PreLN",
+            "featurizer_type": "feedforward",
+            "long_range": {
+              "enable": false,
+              "interpolation_nodes": 5,
+              "kspace_resolution": 1.33,
+              "smearing": 1.4,
+              "use_ewald": false
+            }
+          }
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__experimental__flashmd__documentation__TrainerHypers",
+          "default": {
+            "timestep": null,
+            "masses": {},
+            "distributed": false,
+            "distributed_port": 39591,
+            "batch_size": 16,
+            "num_epochs": 1000,
+            "warmup_fraction": 0.01,
+            "learning_rate": 0.0003,
+            "weight_decay": null,
+            "log_interval": 1,
+            "checkpoint_interval": 100,
+            "atomic_baseline": {},
+            "scale_targets": true,
+            "fixed_scaling_weights": {},
+            "per_structure_targets": [],
+            "num_workers": null,
+            "log_mae": false,
+            "log_separate_blocks": false,
+            "best_model_metric": "rmse_prod",
+            "grad_clip_norm": 1.0,
+            "loss": "mse",
+            "batch_atom_bounds": [
+              null,
+              null
+            ],
+            "finetune": {
+              "config": {},
+              "inherit_heads": {},
+              "method": "full",
+              "read_from": null
+            }
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "experimental.flashmdArchitecture",
+      "type": "object"
+    },
+    "flashmd_symplecticArchitecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "experimental.flashmd_symplectic",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__experimental__flashmd_symplectic__documentation__ModelHypers",
+          "default": {
+            "cutoff": 4.5,
+            "cutoff_width": 0.2,
+            "d_pet": 128,
+            "d_head": 128,
+            "d_node": 512,
+            "d_feedforward": 256,
+            "num_heads": 8,
+            "num_attention_layers": 2,
+            "num_gnn_layers": 3,
+            "normalization": "RMSNorm",
+            "activation": "SwiGLU",
+            "attention_temperature": 1.0,
+            "transformer_type": "PreLN",
+            "featurizer_type": "feedforward",
+            "long_range": {
+              "enable": false,
+              "interpolation_nodes": 5,
+              "kspace_resolution": 1.33,
+              "smearing": 1.4,
+              "use_ewald": false
+            }
+          }
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__experimental__flashmd_symplectic__documentation__TrainerHypers",
+          "default": {
+            "timestep": null,
+            "masses": {},
+            "distributed": false,
+            "distributed_port": 39591,
+            "batch_size": 16,
+            "num_epochs": 1000,
+            "warmup_fraction": 0.01,
+            "learning_rate": 0.0003,
+            "weight_decay": null,
+            "log_interval": 1,
+            "checkpoint_interval": 100,
+            "scale_targets": true,
+            "fixed_scaling_weights": {},
+            "per_structure_targets": [],
+            "num_workers": null,
+            "log_mae": true,
+            "log_separate_blocks": false,
+            "best_model_metric": "rmse_prod",
+            "grad_clip_norm": 1.0,
+            "loss": "mse",
+            "batch_atom_bounds": [
+              null,
+              null
+            ],
+            "finetune": {
+              "config": {},
+              "inherit_heads": {},
+              "method": "full",
+              "read_from": null
+            }
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "experimental.flashmd_symplecticArchitecture",
+      "type": "object"
+    },
+    "gapArchitecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "gap",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__gap__documentation__ModelHypers",
+          "default": {
+            "soap": {
+              "basis": {
+                "max_angular": 6,
+                "radial": {
+                  "max_radial": 7,
+                  "type": "Gto"
+                },
+                "type": "TensorProduct"
+              },
+              "cutoff": {
+                "radius": 5.0,
+                "smoothing": {
+                  "type": "ShiftedCosine",
+                  "width": 1.0
+                }
+              },
+              "density": {
+                "center_atom_weight": 1.0,
+                "scaling": {
+                  "exponent": 7.0,
+                  "rate": 1.0,
+                  "scale": 2.0,
+                  "type": "Willatt2018"
+                },
+                "type": "Gaussian",
+                "width": 0.3
+              }
+            },
+            "krr": {
+              "degree": 2,
+              "num_sparse_points": 500
+            },
+            "zbl": false
+          }
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__gap__documentation__TrainerHypers",
+          "default": {
+            "regularizer": 0.001,
+            "regularizer_forces": null
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "gapArchitecture",
+      "type": "object"
+    },
+    "llprArchitecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "llpr",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__llpr__documentation__ModelHypers",
+          "default": {
+            "num_ensemble_members": {}
+          }
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__llpr__documentation__TrainerHypers",
+          "default": {
+            "distributed": false,
+            "distributed_port": 39591,
+            "batch_size": 8,
+            "regularizer": null,
+            "model_checkpoint": null,
+            "loss": "gaussian_nll_ensemble",
+            "num_epochs": null,
+            "train_all_parameters": false,
+            "warmup_fraction": 0.01,
+            "learning_rate": 0.0003,
+            "weight_decay": null,
+            "log_interval": 1,
+            "checkpoint_interval": 100,
+            "per_structure_targets": [],
+            "num_workers": null,
+            "log_mae": false,
+            "log_separate_blocks": false,
+            "best_model_metric": "loss",
+            "grad_clip_norm": 1.0,
+            "batch_atom_bounds": [
+              null,
+              null
+            ],
+            "calibration_method": "absolute_residuals"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "llprArchitecture",
+      "type": "object"
+    },
+    "maceArchitecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "experimental.mace",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__experimental__mace__documentation__ModelHypers",
+          "default": {
+            "mace_model": null,
+            "mace_head_target": "energy",
+            "r_max": 5.0,
+            "num_radial_basis": 8,
+            "radial_type": "bessel",
+            "num_cutoff_basis": 5,
+            "max_ell": 3,
+            "interaction": "RealAgnosticResidualInteractionBlock",
+            "num_interactions": 2,
+            "hidden_irreps": "128x0e + 128x1o + 128x2e",
+            "edge_irreps": null,
+            "apply_cutoff": true,
+            "avg_num_neighbors": 1,
+            "pair_repulsion": false,
+            "distance_transform": null,
+            "correlation": 3,
+            "gate": "silu",
+            "interaction_first": "RealAgnosticResidualInteractionBlock",
+            "MLP_irreps": "16x0e",
+            "radial_MLP": [
+              64,
+              64,
+              64
+            ],
+            "use_embedding_readout": false,
+            "use_last_readout_only": false,
+            "use_agnostic_product": false
+          }
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__experimental__mace__documentation__TrainerHypers",
+          "default": {
+            "optimizer": "adam",
+            "learning_rate": 0.01,
+            "weight_decay": 5e-07,
+            "amsgrad": true,
+            "beta": 0.9,
+            "lr_scheduler": "ReduceLROnPlateau",
+            "lr_scheduler_gamma": 0.9993,
+            "lr_factor": 0.8,
+            "lr_scheduler_patience": 50,
+            "distributed": false,
+            "distributed_port": 39591,
+            "batch_size": 16,
+            "num_epochs": 1000,
+            "log_interval": 1,
+            "checkpoint_interval": 100,
+            "scale_targets": true,
+            "atomic_baseline": {},
+            "fixed_scaling_weights": {},
+            "per_structure_targets": [],
+            "num_workers": null,
+            "log_mae": true,
+            "log_separate_blocks": false,
+            "best_model_metric": "mae_prod",
+            "grad_clip_norm": 1.0,
+            "loss": "mse",
+            "batch_atom_bounds": [
+              null,
+              null
+            ]
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "experimental.maceArchitecture",
+      "type": "object"
+    },
+    "metatrain__experimental__classifier__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the Classifier model.",
+      "properties": {
+        "hidden_sizes": {
+          "default": [
+            64,
+            64
+          ],
+          "description": "List of hidden layer sizes for the MLP.\nFor example, [64, 32] creates a 2-layer MLP with 64 and 32 neurons\nrespectively. The last hidden size should be set to a small number\n(generally one or two) if the goal is to extract collective variables.",
+          "items": {
+            "type": "integer"
+          },
+          "title": "Hidden Sizes",
+          "type": "array"
+        },
+        "feature_layer_index": {
+          "default": -1,
+          "description": "Index of the MLP layer to be mapped to the 'feature' output.\nCan be negative to index from the end. Default is -1 (the output layer).",
+          "title": "Feature Layer Index",
+          "type": "integer"
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__classifier__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the Classifier trainer.",
+      "properties": {
+        "batch_size": {
+          "default": 32,
+          "description": "Batch size for training.",
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "num_epochs": {
+          "default": 100,
+          "description": "Number of training epochs.",
+          "title": "Num Epochs",
+          "type": "integer"
+        },
+        "learning_rate": {
+          "default": 0.001,
+          "description": "Learning rate for the optimizer.",
+          "title": "Learning Rate",
+          "type": "number"
+        },
+        "warmup_fraction": {
+          "default": 0.1,
+          "description": "Fraction of total training steps used for learning rate warmup.\nThe learning rate increases linearly from 0 to the base learning rate\nduring this period, then follows a cosine annealing schedule.",
+          "title": "Warmup Fraction",
+          "type": "number"
+        },
+        "model_checkpoint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Path to the pre-trained model checkpoint.\nThis checkpoint's backbone will be frozen and used for feature extraction.",
+          "title": "Model Checkpoint"
+        },
+        "log_interval": {
+          "default": 1,
+          "description": "Interval for logging training progress (in epochs).",
+          "title": "Log Interval",
+          "type": "integer"
+        },
+        "checkpoint_interval": {
+          "default": 100,
+          "description": "Interval for saving checkpoints during training (in epochs).",
+          "title": "Checkpoint Interval",
+          "type": "integer"
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__dpa3__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the DPA3 model.\n\nThe ``type_map`` needed by deepmd-kit is derived automatically from the\ndataset's atomic numbers and should not be set manually.",
+      "properties": {
+        "dpa3_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Path to a pretrained DPA3 model file (deepmd-kit checkpoint or saved\nModule).  When provided, the model weights are loaded from this file\ninstead of being initialised from scratch.  Energy biases and standard\ndeviations stored in the deepmd-kit model are extracted and handed to\nmetatrain's ``CompositionModel`` and ``Scaler`` so that fine-tuning starts\nfrom the pretrained values.",
+          "title": "Dpa3 Model"
+        },
+        "descriptor": {
+          "$ref": "#/$defs/DescriptorHypers",
+          "default": {
+            "type": "dpa3",
+            "repflow": {
+              "a_compress_e_rate": 2,
+              "a_compress_rate": 1,
+              "a_compress_use_split": true,
+              "a_dim": 32,
+              "a_rcut": 4.0,
+              "a_rcut_smth": 3.5,
+              "a_sel": 300,
+              "axis_neuron": 4,
+              "e_dim": 64,
+              "e_rcut": 6.0,
+              "e_rcut_smth": 5.3,
+              "e_sel": 1200,
+              "n_dim": 128,
+              "nlayers": 6,
+              "sel_reduce_factor": 10.0,
+              "skip_stat": true,
+              "smooth_edge_update": true,
+              "update_angle": true,
+              "update_residual": 0.1,
+              "update_residual_init": "const",
+              "update_style": "res_residual",
+              "use_dynamic_sel": true
+            },
+            "activation_function": "custom_silu:10.0",
+            "use_tebd_bias": false,
+            "precision": 32,
+            "concat_output_tebd": false
+          },
+          "description": "Descriptor configuration (RepFlow block and related settings)."
+        },
+        "fitting_net": {
+          "$ref": "#/$defs/FittingNetHypers",
+          "default": {
+            "neuron": [
+              240,
+              240,
+              240
+            ],
+            "resnet_dt": true,
+            "seed": 1,
+            "precision": 32,
+            "activation_function": "custom_silu:10.0",
+            "type": "ener",
+            "numb_fparam": 0,
+            "numb_aparam": 0,
+            "dim_case_embd": 0,
+            "trainable": true,
+            "rcond": null,
+            "atom_ener": [],
+            "use_aparam_as_mask": false
+          },
+          "description": "Fitting network configuration."
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__dpa3__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for training DPA3 models.",
+      "properties": {
+        "distributed": {
+          "default": false,
+          "description": "Whether to use distributed training.",
+          "title": "Distributed",
+          "type": "boolean"
+        },
+        "distributed_port": {
+          "default": 39591,
+          "description": "Port for DDP communication.",
+          "title": "Distributed Port",
+          "type": "integer"
+        },
+        "batch_size": {
+          "default": 8,
+          "description": "The number of samples to use in each batch of training. This\nhyperparameter controls the tradeoff between training speed and memory usage. In\ngeneral, larger batch sizes will lead to faster training, but might require more\nmemory.",
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "num_epochs": {
+          "default": 100,
+          "description": "Number of epochs.",
+          "title": "Num Epochs",
+          "type": "integer"
+        },
+        "learning_rate": {
+          "default": 0.001,
+          "description": "Learning rate.",
+          "title": "Learning Rate",
+          "type": "number"
+        },
+        "scheduler_patience": {
+          "default": 100,
+          "description": "Number of epochs with no improvement before reducing the learning rate.",
+          "title": "Scheduler Patience",
+          "type": "integer"
+        },
+        "scheduler_factor": {
+          "default": 0.8,
+          "description": "Factor by which the learning rate is reduced on plateau.",
+          "title": "Scheduler Factor",
+          "type": "number"
+        },
+        "log_interval": {
+          "default": 1,
+          "description": "Interval to log metrics.",
+          "title": "Log Interval",
+          "type": "integer"
+        },
+        "checkpoint_interval": {
+          "default": 100,
+          "description": "Interval to save checkpoints.",
+          "title": "Checkpoint Interval",
+          "type": "integer"
+        },
+        "scale_targets": {
+          "default": true,
+          "description": "Normalize targets to unit std during training.\n\nIf true, a single scale is computed for each target, given by the uncentered\nstandard deviation across all values in the dataset for that target.\n\nFor targets with more than one property (i.e. > 1 block or >= 1 block with > 1\nproperty), per-property scales are also computed, and used to re-scale model\npredictions.\n\nSee also :ref:`scale-targets`.",
+          "title": "Scale Targets",
+          "type": "boolean"
+        },
+        "fixed_composition_weights": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "Weights for atomic contributions.\n\nThis is passed to the ``fixed_weights`` argument of\n:meth:`CompositionModel.train_model\n<metatrain.utils.additive.composition.CompositionModel.train_model>`,\nsee its documentation to understand exactly what to pass here.",
+          "title": "Fixed Composition Weights",
+          "type": "object"
+        },
+        "per_structure_targets": {
+          "default": [],
+          "description": "Targets to calculate per-structure losses.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Per Structure Targets",
+          "type": "array"
+        },
+        "log_mae": {
+          "default": false,
+          "description": "Log MAE alongside RMSE.",
+          "title": "Log Mae",
+          "type": "boolean"
+        },
+        "log_separate_blocks": {
+          "default": false,
+          "description": "Log per-block error.",
+          "title": "Log Separate Blocks",
+          "type": "boolean"
+        },
+        "best_model_metric": {
+          "default": "rmse_prod",
+          "description": "Metric used to select best checkpoint (e.g., ``rmse_prod``).",
+          "enum": [
+            "rmse_prod",
+            "mae_prod",
+            "loss"
+          ],
+          "title": "Best Model Metric",
+          "type": "string"
+        },
+        "loss": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/LossSpecification"
+              },
+              "type": "object"
+            }
+          ],
+          "default": "mse",
+          "description": "This section describes the loss function to be used. See the\n:ref:`loss-functions` for more details.",
+          "title": "Loss"
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__flashmd__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the FlashMD model.",
+      "properties": {
+        "predict_momenta_as_difference": {
+          "default": false,
+          "description": "This parameter controls whether the model will\npredict future momenta directly or as a difference between the future and the\ncurrent momenta. Setting it to true will help when predicting relatively small\ntimesteps (when compared to the momentum autocorrelation time), while setting\nit to false is beneficial when predicting large timesteps.",
+          "title": "Predict Momenta As Difference",
+          "type": "boolean"
+        },
+        "cutoff": {
+          "default": 4.5,
+          "description": "Cutoff radius for neighbor search.\n\nThis should be set to a value after which most of the interactions\nbetween atoms is expected to be negligible. A lower cutoff will lead\nto faster models.",
+          "title": "Cutoff",
+          "type": "number"
+        },
+        "cutoff_width": {
+          "default": 0.2,
+          "description": "Width of the smoothing function at the cutoff",
+          "title": "Cutoff Width",
+          "type": "number"
+        },
+        "d_pet": {
+          "default": 128,
+          "description": "Dimension of the edge features.\n\nThis hyperparameters controls width of the neural network. In general,\nincreasing it might lead to better accuracy, especially on larger datasets, at the\ncost of increased training and evaluation time.",
+          "title": "D Pet",
+          "type": "integer"
+        },
+        "d_head": {
+          "default": 128,
+          "description": "Dimension of the attention heads.",
+          "title": "D Head",
+          "type": "integer"
+        },
+        "d_node": {
+          "default": 512,
+          "description": "Dimension of the node features.\n\nIncreasing this hyperparameter might lead to better accuracy,\nwith a relatively small increase in inference time.",
+          "title": "D Node",
+          "type": "integer"
+        },
+        "d_feedforward": {
+          "default": 256,
+          "description": "Dimension of the feedforward network in the attention layer.",
+          "title": "D Feedforward",
+          "type": "integer"
+        },
+        "num_heads": {
+          "default": 8,
+          "description": "Attention heads per attention layer.",
+          "title": "Num Heads",
+          "type": "integer"
+        },
+        "num_attention_layers": {
+          "default": 2,
+          "description": "The number of attention layers in each layer of the graph\nneural network. Depending on the dataset, increasing this hyperparameter might\nlead to better accuracy, at the cost of increased training and evaluation time.",
+          "title": "Num Attention Layers",
+          "type": "integer"
+        },
+        "num_gnn_layers": {
+          "default": 3,
+          "description": "The number of graph neural network layers.\n\nIn general, decreasing this hyperparameter to 1 will lead to much faster models,\nat the expense of accuracy. Increasing it may or may not lead to better accuracy,\ndepending on the dataset, at the cost of increased training and evaluation time.",
+          "title": "Num Gnn Layers",
+          "type": "integer"
+        },
+        "normalization": {
+          "default": "RMSNorm",
+          "description": "Layer normalization type.",
+          "enum": [
+            "RMSNorm",
+            "LayerNorm"
+          ],
+          "title": "Normalization",
+          "type": "string"
+        },
+        "activation": {
+          "default": "SwiGLU",
+          "description": "Activation function.",
+          "enum": [
+            "SiLU",
+            "SwiGLU"
+          ],
+          "title": "Activation",
+          "type": "string"
+        },
+        "attention_temperature": {
+          "default": 1.0,
+          "description": "The temperature scaling factor for attention scores.",
+          "title": "Attention Temperature",
+          "type": "number"
+        },
+        "transformer_type": {
+          "default": "PreLN",
+          "description": "The order in which the layer normalization and attention\nare applied in a transformer block. Available options are ``PreLN``\n(normalization before attention) and ``PostLN`` (normalization after attention).",
+          "enum": [
+            "PreLN",
+            "PostLN"
+          ],
+          "title": "Transformer Type",
+          "type": "string"
+        },
+        "featurizer_type": {
+          "default": "feedforward",
+          "description": "Implementation of the featurizer of the model to use. Available\noptions are ``residual`` (the original featurizer from the PET paper, that uses\nresidual connections at each GNN layer for readout) and ``feedforward`` (a modern\nversion that uses the last representation after all GNN iterations for readout).\nAdditionally, the feedforward version uses bidirectional features flow during the\nmessage passing iterations, that favors features flowing from atom ``i`` to atom\n``j`` to be not equal to the features flowing from atom ``j`` to atom ``i``.",
+          "enum": [
+            "residual",
+            "feedforward"
+          ],
+          "title": "Featurizer Type",
+          "type": "string"
+        },
+        "long_range": {
+          "$ref": "#/$defs/LongRangeHypers",
+          "default": {
+            "enable": false,
+            "use_ewald": false,
+            "smearing": 1.4,
+            "kspace_resolution": 1.33,
+            "interpolation_nodes": 5
+          },
+          "description": "Long-range Coulomb interactions parameters."
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__flashmd__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for training FlashMD models.",
+      "properties": {
+        "timestep": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The time interval (in fs) between the current and the future positions\nand momenta that the model must predict. This option is not used in the\ntraining, but it is registered in the model and it will be used to validate\nthat the timestep used during inference in MD engines is the same as the\none used during training. This hyperparameter must be provided by the user.",
+          "title": "Timestep"
+        },
+        "masses": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "default": {},
+          "description": "A dictionary mapping atomic species to their masses (in atomic mass\nunits).\n\nIndeed, it should be noted that FlashMD models, as implemented in metatrain,\nare not transferable across different isotopes. The masses are not used during\ntraining, but they are registered in the model and they will be used during\ninference to validate that the masses used in MD engines are the same as the\nones used during training. If not provided, masses from the ``ase.data``\nmodule will be used. These correspond to masses averaged over the natural\nisotopic abundance of each element.",
+          "title": "Masses",
+          "type": "object"
+        },
+        "distributed": {
+          "default": false,
+          "description": "Whether to use distributed training",
+          "title": "Distributed",
+          "type": "boolean"
+        },
+        "distributed_port": {
+          "default": 39591,
+          "description": "Port for DDP communication",
+          "title": "Distributed Port",
+          "type": "integer"
+        },
+        "batch_size": {
+          "default": 16,
+          "description": "The number of samples to use in each batch of training. This\nhyperparameter controls the tradeoff between training speed and memory usage. In\ngeneral, larger batch sizes will lead to faster training, but might require more\nmemory.",
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "num_epochs": {
+          "default": 1000,
+          "description": "Number of epochs.",
+          "title": "Num Epochs",
+          "type": "integer"
+        },
+        "warmup_fraction": {
+          "default": 0.01,
+          "description": "Fraction of training steps used for learning rate warmup.",
+          "title": "Warmup Fraction",
+          "type": "number"
+        },
+        "learning_rate": {
+          "default": 0.0003,
+          "description": "Learning rate.",
+          "title": "Learning Rate",
+          "type": "number"
+        },
+        "weight_decay": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weight Decay"
+        },
+        "log_interval": {
+          "default": 1,
+          "description": "Interval to log metrics.",
+          "title": "Log Interval",
+          "type": "integer"
+        },
+        "checkpoint_interval": {
+          "default": 100,
+          "description": "Interval to save checkpoints.",
+          "title": "Checkpoint Interval",
+          "type": "integer"
+        },
+        "atomic_baseline": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "The baselines for each target.\n\nBy default, ``metatrain`` will fit a linear model (:class:`CompositionModel\n<metatrain.utils.additive.composition.CompositionModel>`) to compute the\nleast squares baseline for each atomic species for each target.\n\nHowever, this hyperparameter allows you to provide your own baselines.\nThe value of the hyperparameter should be a dictionary where the keys are the\ntarget names, and the values are either (1) a single baseline to be used for\nall atomic types, or (2) a dictionary mapping atomic types to their baselines.\nFor example:\n\n- ``atomic_baseline: {\"energy\": {1: -0.5, 6: -10.0}}`` will fix the energy\n  baseline for hydrogen (Z=1) to -0.5 and for carbon (Z=6) to -10.0, while\n  fitting the baselines for the energy of all other atomic types, as well\n  as fitting the baselines for all other targets.\n- ``atomic_baseline: {\"energy\": -5.0}`` will fix the energy baseline for\n  all atomic types to -5.0.\n- ``atomic_baseline: {\"mtt:dos\": 0.0}`` sets the baseline for the \"mtt:dos\"\n  target to 0.0, effectively disabling the atomic baseline for that target.\n\nThis atomic baseline is substracted from the targets during training, which\navoids the main model needing to learn atomic contributions, and likely makes\ntraining easier. When the model is used in evaluation mode, the atomic baseline\nis added on top of the model predictions automatically.\n\n.. note::\n\n    This atomic baseline is a per-atom contribution. Therefore, if the property\n    you are predicting is a sum over all atoms (e.g., total energy), the\n    contribution of the atomic baseline to the total property will be the\n    atomic baseline multiplied by the number of atoms of that type in the\n    structure.",
+          "title": "Atomic Baseline",
+          "type": "object"
+        },
+        "scale_targets": {
+          "default": true,
+          "description": "Normalize targets to unit std during training.\n\nIf true, a single scale is computed for each target, given by the uncentered\nstandard deviation across all values in the dataset for that target.\n\nFor targets with more than one property (i.e. > 1 block or >= 1 block with > 1\nproperty), per-property scales are also computed, and used to re-scale model\npredictions.\n\nSee also :ref:`scale-targets`.",
+          "title": "Scale Targets",
+          "type": "boolean"
+        },
+        "fixed_scaling_weights": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "Weights for target scaling.\n\nThis is passed to the ``fixed_weights`` argument of\n:meth:`Scaler.train_model <metatrain.utils.scaler.scaler.Scaler.train_model>`,\nsee its documentation to understand exactly what to pass here.",
+          "title": "Fixed Scaling Weights",
+          "type": "object"
+        },
+        "per_structure_targets": {
+          "default": [],
+          "description": "Targets to calculate per-structure losses and errors on.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Per Structure Targets",
+          "type": "array"
+        },
+        "num_workers": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of workers for data loading. If not provided, it is set\nautomatically.",
+          "title": "Num Workers"
+        },
+        "log_mae": {
+          "default": false,
+          "description": "Log MAE alongside RMSE",
+          "title": "Log Mae",
+          "type": "boolean"
+        },
+        "log_separate_blocks": {
+          "default": false,
+          "description": "Log per-block error.",
+          "title": "Log Separate Blocks",
+          "type": "boolean"
+        },
+        "best_model_metric": {
+          "default": "rmse_prod",
+          "description": "Metric used to select best checkpoint (e.g., ``rmse_prod``)",
+          "enum": [
+            "rmse_prod",
+            "mae_prod",
+            "loss"
+          ],
+          "title": "Best Model Metric",
+          "type": "string"
+        },
+        "grad_clip_norm": {
+          "default": 1.0,
+          "description": "Maximum gradient norm value, by default inf (no clipping)",
+          "title": "Grad Clip Norm",
+          "type": "number"
+        },
+        "loss": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/LossSpecification"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "type": "object"
+            }
+          ],
+          "default": "mse",
+          "description": "This section describes the loss function to be used. See the\n:ref:`loss-functions` for more details.",
+          "title": "Loss"
+        },
+        "batch_atom_bounds": {
+          "default": [
+            null,
+            null
+          ],
+          "description": "Bounds for the number of atoms per batch as [min, max]. Batches with atom\ncounts outside these bounds will be skipped during training. Use ``None`` for\neither value to disable that bound. This is useful for preventing out-of-memory\nerrors and ensuring consistent computational load. Default: ``[None, None]``.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Batch Atom Bounds",
+          "type": "array"
+        },
+        "finetune": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NoFinetuneHypers"
+            },
+            {
+              "$ref": "#/$defs/FullFinetuneHypers"
+            },
+            {
+              "$ref": "#/$defs/LoRaFinetuneHypers"
+            },
+            {
+              "$ref": "#/$defs/HeadsFinetuneHypers"
+            }
+          ],
+          "default": {
+            "read_from": null,
+            "method": "full",
+            "config": {},
+            "inherit_heads": {}
+          },
+          "description": "Parameters for fine-tuning trained FlashMD models.",
+          "title": "Finetune"
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__flashmd_symplectic__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the FlashMD model.",
+      "properties": {
+        "cutoff": {
+          "default": 4.5,
+          "description": "Cutoff radius for neighbor search.\n\nThis should be set to a value after which most of the interactions\nbetween atoms is expected to be negligible. A lower cutoff will lead\nto faster models.",
+          "title": "Cutoff",
+          "type": "number"
+        },
+        "cutoff_width": {
+          "default": 0.2,
+          "description": "Width of the smoothing function at the cutoff",
+          "title": "Cutoff Width",
+          "type": "number"
+        },
+        "d_pet": {
+          "default": 128,
+          "description": "Dimension of the edge features.\n\nThis hyperparameters controls width of the neural network. In general,\nincreasing it might lead to better accuracy, especially on larger datasets, at the\ncost of increased training and evaluation time.",
+          "title": "D Pet",
+          "type": "integer"
+        },
+        "d_head": {
+          "default": 128,
+          "description": "Dimension of the attention heads.",
+          "title": "D Head",
+          "type": "integer"
+        },
+        "d_node": {
+          "default": 512,
+          "description": "Dimension of the node features.\n\nIncreasing this hyperparameter might lead to better accuracy,\nwith a relatively small increase in inference time.",
+          "title": "D Node",
+          "type": "integer"
+        },
+        "d_feedforward": {
+          "default": 256,
+          "description": "Dimension of the feedforward network in the attention layer.",
+          "title": "D Feedforward",
+          "type": "integer"
+        },
+        "num_heads": {
+          "default": 8,
+          "description": "Attention heads per attention layer.",
+          "title": "Num Heads",
+          "type": "integer"
+        },
+        "num_attention_layers": {
+          "default": 2,
+          "description": "The number of attention layers in each layer of the graph\nneural network. Depending on the dataset, increasing this hyperparameter might\nlead to better accuracy, at the cost of increased training and evaluation time.",
+          "title": "Num Attention Layers",
+          "type": "integer"
+        },
+        "num_gnn_layers": {
+          "default": 3,
+          "description": "The number of graph neural network layers.\n\nIn general, decreasing this hyperparameter to 1 will lead to much faster models,\nat the expense of accuracy. Increasing it may or may not lead to better accuracy,\ndepending on the dataset, at the cost of increased training and evaluation time.",
+          "title": "Num Gnn Layers",
+          "type": "integer"
+        },
+        "normalization": {
+          "default": "RMSNorm",
+          "description": "Layer normalization type.",
+          "enum": [
+            "RMSNorm",
+            "LayerNorm"
+          ],
+          "title": "Normalization",
+          "type": "string"
+        },
+        "activation": {
+          "default": "SwiGLU",
+          "description": "Activation function.",
+          "enum": [
+            "SiLU",
+            "SwiGLU"
+          ],
+          "title": "Activation",
+          "type": "string"
+        },
+        "attention_temperature": {
+          "default": 1.0,
+          "description": "The temperature scaling factor for attention scores.",
+          "title": "Attention Temperature",
+          "type": "number"
+        },
+        "transformer_type": {
+          "default": "PreLN",
+          "description": "The order in which the layer normalization and attention\nare applied in a transformer block. Available options are ``PreLN``\n(normalization before attention) and ``PostLN`` (normalization after attention).",
+          "enum": [
+            "PreLN",
+            "PostLN"
+          ],
+          "title": "Transformer Type",
+          "type": "string"
+        },
+        "featurizer_type": {
+          "default": "feedforward",
+          "description": "Implementation of the featurizer of the model to use. Available\noptions are ``residual`` (the original featurizer from the PET paper, that uses\nresidual connections at each GNN layer for readout) and ``feedforward`` (a modern\nversion that uses the last representation after all GNN iterations for readout).\nAdditionally, the feedforward version uses bidirectional features flow during the\nmessage passing iterations, that favors features flowing from atom ``i`` to atom\n``j`` to be not equal to the features flowing from atom ``j`` to atom ``i``.",
+          "enum": [
+            "residual",
+            "feedforward"
+          ],
+          "title": "Featurizer Type",
+          "type": "string"
+        },
+        "long_range": {
+          "$ref": "#/$defs/LongRangeHypers",
+          "default": {
+            "enable": false,
+            "use_ewald": false,
+            "smearing": 1.4,
+            "kspace_resolution": 1.33,
+            "interpolation_nodes": 5
+          },
+          "description": "Long-range Coulomb interactions parameters."
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__flashmd_symplectic__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for training symplectic FlashMD models.",
+      "properties": {
+        "timestep": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The time interval (in fs) between the current and the future positions\nand momenta that the model must predict. This option is not used in the\ntraining, but it is registered in the model and it will be used to validate\nthat the timestep used during inference in MD engines is the same as the\none used during training. This hyperparameter must be provided by the user.",
+          "title": "Timestep"
+        },
+        "masses": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "default": {},
+          "description": "A dictionary mapping atomic species to their masses (in atomic mass\nunits).\n\nIndeed, it should be noted that FlashMD models, as implemented in metatrain,\nare not transferable across different isotopes. The masses are not used during\ntraining, but they are registered in the model and they will be used during\ninference to validate that the masses used in MD engines are the same as the\nones used during training. If not provided, masses from the ``ase.data``\nmodule will be used. These correspond to masses averaged over the natural\nisotopic abundance of each element.",
+          "title": "Masses",
+          "type": "object"
+        },
+        "distributed": {
+          "default": false,
+          "description": "Whether to use distributed training",
+          "title": "Distributed",
+          "type": "boolean"
+        },
+        "distributed_port": {
+          "default": 39591,
+          "description": "Port for DDP communication",
+          "title": "Distributed Port",
+          "type": "integer"
+        },
+        "batch_size": {
+          "default": 16,
+          "description": "The number of samples to use in each batch of training. This\nhyperparameter controls the tradeoff between training speed and memory usage. In\ngeneral, larger batch sizes will lead to faster training, but might require more\nmemory.",
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "num_epochs": {
+          "default": 1000,
+          "description": "Number of epochs.",
+          "title": "Num Epochs",
+          "type": "integer"
+        },
+        "warmup_fraction": {
+          "default": 0.01,
+          "description": "Fraction of training steps used for learning rate warmup.",
+          "title": "Warmup Fraction",
+          "type": "number"
+        },
+        "learning_rate": {
+          "default": 0.0003,
+          "description": "Learning rate.",
+          "title": "Learning Rate",
+          "type": "number"
+        },
+        "weight_decay": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Weight decay (L2 penalty).",
+          "title": "Weight Decay"
+        },
+        "log_interval": {
+          "default": 1,
+          "description": "Interval to log metrics.",
+          "title": "Log Interval",
+          "type": "integer"
+        },
+        "checkpoint_interval": {
+          "default": 100,
+          "description": "Interval to save checkpoints.",
+          "title": "Checkpoint Interval",
+          "type": "integer"
+        },
+        "scale_targets": {
+          "default": true,
+          "description": "Normalize targets to unit std during training.\n\nIf true, a single scale is computed for each target, given by the uncentered\nstandard deviation across all values in the dataset for that target.\n\nFor targets with more than one property (i.e. > 1 block or >= 1 block with > 1\nproperty), per-property scales are also computed, and used to re-scale model\npredictions.\n\nSee also :ref:`scale-targets`.",
+          "title": "Scale Targets",
+          "type": "boolean"
+        },
+        "fixed_scaling_weights": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "Weights for target scaling.\n\nThis is passed to the ``fixed_weights`` argument of\n:meth:`Scaler.train_model <metatrain.utils.scaler.scaler.Scaler.train_model>`,\nsee its documentation to understand exactly what to pass here.\n\n.. warning::\n\n    For symplectic FlashMD, the scaling weights for the variables\n    (``mtt::delta_q`` and ``mtt::delta_p``) must be identical. This is because\n    they are both derivatives of the same generating function :math:`S^3`.\n    Scaling them differently would lead to inconsistencies.",
+          "title": "Fixed Scaling Weights",
+          "type": "object"
+        },
+        "per_structure_targets": {
+          "default": [],
+          "description": "Targets to calculate per-structure losses.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Per Structure Targets",
+          "type": "array"
+        },
+        "num_workers": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of workers for data loading. If not provided, it is set\nautomatically.",
+          "title": "Num Workers"
+        },
+        "log_mae": {
+          "default": true,
+          "description": "Log MAE alongside RMSE",
+          "title": "Log Mae",
+          "type": "boolean"
+        },
+        "log_separate_blocks": {
+          "default": false,
+          "description": "Log per-block error.",
+          "title": "Log Separate Blocks",
+          "type": "boolean"
+        },
+        "best_model_metric": {
+          "default": "rmse_prod",
+          "description": "Metric used to select best checkpoint (e.g., ``rmse_prod``)",
+          "enum": [
+            "rmse_prod",
+            "mae_prod",
+            "loss"
+          ],
+          "title": "Best Model Metric",
+          "type": "string"
+        },
+        "grad_clip_norm": {
+          "default": 1.0,
+          "description": "Maximum gradient norm value, by default inf (no clipping)",
+          "title": "Grad Clip Norm",
+          "type": "number"
+        },
+        "loss": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/LossSpecification"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "type": "object"
+            }
+          ],
+          "default": "mse",
+          "description": "This section describes the loss function to be used. See the\n:ref:`loss-functions` for more details.",
+          "title": "Loss"
+        },
+        "batch_atom_bounds": {
+          "default": [
+            null,
+            null
+          ],
+          "description": "Bounds for the number of atoms per batch as [min, max]. Batches with atom\ncounts outside these bounds will be skipped during training. Use ``None`` for\neither value to disable that bound. This is useful for preventing out-of-memory\nerrors and ensuring consistent computational load. Default: ``[None, None]``.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Batch Atom Bounds",
+          "type": "array"
+        },
+        "finetune": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NoFinetuneHypers"
+            },
+            {
+              "$ref": "#/$defs/FullFinetuneHypers"
+            },
+            {
+              "$ref": "#/$defs/LoRaFinetuneHypers"
+            },
+            {
+              "$ref": "#/$defs/HeadsFinetuneHypers"
+            }
+          ],
+          "default": {
+            "read_from": null,
+            "method": "full",
+            "config": {},
+            "inherit_heads": {}
+          },
+          "description": "Parameters for fine-tuning trained FlashMD models.",
+          "title": "Finetune"
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__mace__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "properties": {
+        "mace_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Path to a pretrained MACE model file.\n\nFor example, this can be `a foundation MACE model\n<https://github.com/ACEsuit/mace-foundations>`_. If not provided, a new MACE model\nwill be initialized from scratch using the rest of hyperparameters of the\narchitecture.",
+          "title": "Mace Model"
+        },
+        "mace_head_target": {
+          "default": "energy",
+          "description": "Target to which the MACE head is related.\n\n``metatrain`` adds arbitrary heads on top of MACE to predict arbitrary targets.\nHowever, MACE models have themselves a head. This hyperparameter specifies which\nmetatrain target corresponds to the MACE head. For this target, no new head will be\nadded, and the output of MACE's head will be used directly.\n\n.. note::\n    MACE models with multiple heads also exist, but ``metatrain`` only supports\n    using this hyperparameter to deal with single-head MACE models for now.",
+          "title": "Mace Head Target",
+          "type": "string"
+        },
+        "r_max": {
+          "default": 5.0,
+          "description": "Cutoff radius for neighbor search.\n\nThis should be set to a value after which most of the interactions between atoms is\nexpected to be negligible. A lower cutoff will lead to faster models.",
+          "title": "R Max",
+          "type": "number"
+        },
+        "num_radial_basis": {
+          "default": 8,
+          "description": "Number of radial basis functions for the radial embedding.",
+          "title": "Num Radial Basis",
+          "type": "integer"
+        },
+        "radial_type": {
+          "default": "bessel",
+          "description": "Type of radial basis functions to use in the radial embedding.",
+          "enum": [
+            "bessel",
+            "gaussian",
+            "chebyshev"
+          ],
+          "title": "Radial Type",
+          "type": "string"
+        },
+        "num_cutoff_basis": {
+          "default": 5,
+          "description": "Number of basis functions for smooth cutoff",
+          "title": "Num Cutoff Basis",
+          "type": "integer"
+        },
+        "max_ell": {
+          "default": 3,
+          "description": "Highest :math:`\\ell` of spherical harmonics used in the interactions.\n\nNote that this is not the maximum :math:`\\ell` in ``hidden_irreps``, since\nhidden_irreps can contain :math:`\\ell` values as high as ``max_ell*correlation``.",
+          "title": "Max Ell",
+          "type": "integer"
+        },
+        "interaction": {
+          "default": "RealAgnosticResidualInteractionBlock",
+          "description": "Name of interaction block.\n\nClass that will be used to compute interactions between atoms at each layer.",
+          "enum": [
+            "RealAgnosticResidualInteractionBlock",
+            "RealAgnosticAttResidualInteractionBlock",
+            "RealAgnosticInteractionBlock",
+            "RealAgnosticDensityInteractionBlock",
+            "RealAgnosticDensityResidualInteractionBlock",
+            "RealAgnosticResidualNonLinearInteractionBlock"
+          ],
+          "title": "Interaction",
+          "type": "string"
+        },
+        "num_interactions": {
+          "default": 2,
+          "description": "Number of message passing steps.\n\nMACE's last message passing step only outputs scalar features, so if you are\ntraining on a target that is not scalar (e.g. a vector or some spherical\ntensor with higher order), the effective number of message passing steps for\nthat target will be ``num_interactions - 1``.",
+          "title": "Num Interactions",
+          "type": "integer"
+        },
+        "hidden_irreps": {
+          "default": "128x0e + 128x1o + 128x2e",
+          "description": "Irreps for hidden node features.\n\nThis defines the shape of the node features at each layer of the MACE model\n(except for the last layer, which only contains scalars). The notation for\nthe irreps is `e3nn's standard notation <https://docs.e3nn.org/en/stable/api/\no3/o3_irreps.html>`_. Essentially, the irreps string is a sum of terms of the\nform ``{multiplicity}x{ell}{parity}``, where ``{multiplicity}`` is the number of\nchannels with angular momentum ``{ell}`` and parity ``{parity}`` (``e`` for even,\n``o`` for odd). For example, ``16x0e + 32x1o`` means that there are 16 scalar\nchannels (:math:`\\ell=0`) and 32 vector channels (:math:`\\ell=1`) at each layer.\n\nIncreasing the multiplicities makes the network wider, which generally leads to\nbetter accuracy at the cost of increased training and evaluation time.\n\nIncreasing the maximum :math:`\\ell` included in the irreps allows the network to\ncapture more complex angular dependencies. However, its effect might be heavily\ndependent on your dataset and target. The hidden irreps should include at least\nup to the maximum :math:`\\ell` of the target you are training on. For example, if\nyou are training on dipole moments (:math:`\\ell=1`), the hidden irreps should\ninclude at least :math:`\\ell=1` channels.\n\n.. note::\n\n    At the time of writing, MACE enforces that all channels of ``hidden_irreps``\n    should have the same multiplicity.",
+          "title": "Hidden Irreps",
+          "type": "string"
+        },
+        "edge_irreps": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Irreps for edge features.",
+          "title": "Edge Irreps"
+        },
+        "apply_cutoff": {
+          "default": true,
+          "description": "Apply cutoff to the radial basis functions before MLP",
+          "title": "Apply Cutoff",
+          "type": "boolean"
+        },
+        "avg_num_neighbors": {
+          "default": 1,
+          "description": "Normalization factor for the messages.",
+          "title": "Avg Num Neighbors",
+          "type": "number"
+        },
+        "pair_repulsion": {
+          "default": false,
+          "description": "Use pair repulsion term with ZBL potential",
+          "title": "Pair Repulsion",
+          "type": "boolean"
+        },
+        "distance_transform": {
+          "anyOf": [
+            {
+              "enum": [
+                "Agnesi",
+                "Soft"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Use distance transform for radial basis functions",
+          "title": "Distance Transform"
+        },
+        "correlation": {
+          "default": 3,
+          "description": "Correlation order at each layer.\n\nAfter computing pair-wise (2-body) messages between atoms, MACE applies\nproducts that construct higher order correlations between messages.\nThis hyperparameter controls the amount of products applied. For example,\n``correlation=1`` means that the interactions are purely 2-body, while\n``correlation=2`` would roughly equate to including 3-body interactions,\nand so on.\n\nThis hyperparameter together with ``max_ell`` determine the maximum\nangular momentum that will be non-zero in ``hidden_irreps``, which is\n``max_ell * correlation``.",
+          "title": "Correlation",
+          "type": "integer"
+        },
+        "gate": {
+          "anyOf": [
+            {
+              "enum": [
+                "silu",
+                "tanh",
+                "abs"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "silu",
+          "description": "Non linearity used for the non linear readouts.\n\nThis determines which kind of non-linearity is applied in the non linear\nreadouts. The non linear readouts are: MACE's internal MLP readout (applied\nonly at the last layer) and arbitrary MLP heads added on top of MACE by\n``metatrain``.\n\nThe non-linearity is applied only to scalar channels, therefore it won't\nhave any effect for non-scalar targets.",
+          "title": "Gate"
+        },
+        "interaction_first": {
+          "default": "RealAgnosticResidualInteractionBlock",
+          "description": "Name of interaction block for the first interaction layer.\n\nClass that will be used to compute interactions between atoms at the\nfirst layer.",
+          "enum": [
+            "RealAgnosticResidualInteractionBlock",
+            "RealAgnosticInteractionBlock",
+            "RealAgnosticDensityInteractionBlock",
+            "RealAgnosticDensityResidualInteractionBlock",
+            "RealAgnosticResidualNonLinearInteractionBlock"
+          ],
+          "title": "Interaction First",
+          "type": "string"
+        },
+        "MLP_irreps": {
+          "default": "16x0e",
+          "description": "Hidden irreps of the MLP readouts.\n\nThe MLP readouts are: MACE's internal MLP readout (applied\nonly at the last layer) and arbitrary MLP heads added on top of MACE by\n``metatrain``.\n\nThe non-linearity is applied only to scalar channels, therefore these\nirreps should only contain scalar channels.",
+          "title": "Mlp Irreps",
+          "type": "string"
+        },
+        "radial_MLP": {
+          "default": [
+            64,
+            64,
+            64
+          ],
+          "description": "Width of the radial MLP.\n\nOnly used for MACE's internal MLP.",
+          "items": {
+            "type": "integer"
+          },
+          "title": "Radial Mlp",
+          "type": "array"
+        },
+        "use_embedding_readout": {
+          "default": false,
+          "description": "Use embedding readout for the final output",
+          "title": "Use Embedding Readout",
+          "type": "boolean"
+        },
+        "use_last_readout_only": {
+          "default": false,
+          "description": "Use only the last readout for the final output.\n\nThis is only used by the internal MACE readout, arbitrary heads by\n``metatrain`` always use as input a concatenation of the node\nfeatures from all layers.",
+          "title": "Use Last Readout Only",
+          "type": "boolean"
+        },
+        "use_agnostic_product": {
+          "default": false,
+          "description": "Use element agnostic product",
+          "title": "Use Agnostic Product",
+          "type": "boolean"
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__mace__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "properties": {
+        "optimizer": {
+          "default": "adam",
+          "description": "Optimizer for parameter optimization",
+          "enum": [
+            "adam",
+            "adamw",
+            "schedulefree"
+          ],
+          "title": "Optimizer",
+          "type": "string"
+        },
+        "learning_rate": {
+          "default": 0.01,
+          "description": "Learning rate of the optimizer.",
+          "title": "Learning Rate",
+          "type": "number"
+        },
+        "weight_decay": {
+          "default": 5e-07,
+          "description": "Weight decay (L2 penalty).",
+          "title": "Weight Decay",
+          "type": "number"
+        },
+        "amsgrad": {
+          "default": true,
+          "description": "Use amsgrad variant of optimizer.",
+          "title": "Amsgrad",
+          "type": "boolean"
+        },
+        "beta": {
+          "default": 0.9,
+          "description": "Beta parameter for the optimizer",
+          "title": "Beta",
+          "type": "number"
+        },
+        "lr_scheduler": {
+          "default": "ReduceLROnPlateau",
+          "description": "Type of learning rate scheduler.",
+          "title": "Lr Scheduler",
+          "type": "string"
+        },
+        "lr_scheduler_gamma": {
+          "default": 0.9993,
+          "description": "Gamma parameter for learning rate scheduler.",
+          "title": "Lr Scheduler Gamma",
+          "type": "number"
+        },
+        "lr_factor": {
+          "default": 0.8,
+          "description": "Learning rate factor",
+          "title": "Lr Factor",
+          "type": "number"
+        },
+        "lr_scheduler_patience": {
+          "default": 50,
+          "description": "Scheduler patience.",
+          "title": "Lr Scheduler Patience",
+          "type": "integer"
+        },
+        "distributed": {
+          "default": false,
+          "description": "Whether to use distributed training",
+          "title": "Distributed",
+          "type": "boolean"
+        },
+        "distributed_port": {
+          "default": 39591,
+          "description": "Port for DDP communication",
+          "title": "Distributed Port",
+          "type": "integer"
+        },
+        "batch_size": {
+          "default": 16,
+          "description": "The number of samples to use in each batch of training. This\nhyperparameter controls the tradeoff between training speed and memory usage. In\ngeneral, larger batch sizes will lead to faster training, but might require more\nmemory.",
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "num_epochs": {
+          "default": 1000,
+          "description": "Number of epochs.",
+          "title": "Num Epochs",
+          "type": "integer"
+        },
+        "log_interval": {
+          "default": 1,
+          "description": "Interval to log metrics.",
+          "title": "Log Interval",
+          "type": "integer"
+        },
+        "checkpoint_interval": {
+          "default": 100,
+          "description": "Interval to save checkpoints.",
+          "title": "Checkpoint Interval",
+          "type": "integer"
+        },
+        "scale_targets": {
+          "default": true,
+          "description": "Normalize targets to unit std during training.\n\nIf true, a single scale is computed for each target, given by the uncentered\nstandard deviation across all values in the dataset for that target.\n\nFor targets with more than one property (i.e. > 1 block or >= 1 block with > 1\nproperty), per-property scales are also computed, and used to re-scale model\npredictions.\n\nSee also :ref:`scale-targets`.",
+          "title": "Scale Targets",
+          "type": "boolean"
+        },
+        "atomic_baseline": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "The baselines for each target.\n\nBy default, ``metatrain`` will fit a linear model (:class:`CompositionModel\n<metatrain.utils.additive.composition.CompositionModel>`) to compute the\nleast squares baseline for each atomic species for each target.\n\nHowever, this hyperparameter allows you to provide your own baselines.\nThe value of the hyperparameter should be a dictionary where the keys are the\ntarget names, and the values are either (1) a single baseline to be used for\nall atomic types, or (2) a dictionary mapping atomic types to their baselines.\nFor example:\n\n- ``atomic_baseline: {\"energy\": {1: -0.5, 6: -10.0}}`` will fix the energy\n  baseline for hydrogen (Z=1) to -0.5 and for carbon (Z=6) to -10.0, while\n  fitting the baselines for the energy of all other atomic types, as well\n  as fitting the baselines for all other targets.\n- ``atomic_baseline: {\"energy\": -5.0}`` will fix the energy baseline for\n  all atomic types to -5.0.\n- ``atomic_baseline: {\"mtt:dos\": 0.0}`` sets the baseline for the \"mtt:dos\"\n  target to 0.0, effectively disabling the atomic baseline for that target.\n\nThis atomic baseline is substracted from the targets during training, which\navoids the main model needing to learn atomic contributions, and likely makes\ntraining easier. When the model is used in evaluation mode, the atomic baseline\nis added on top of the model predictions automatically.\n\n.. note::\n    This atomic baseline is a per-atom contribution. Therefore, if the property\n    you are predicting is a sum over all atoms (e.g., total energy), the\n    contribution of the atomic baseline to the total property will be the\n    atomic baseline multiplied by the number of atoms of that type in the\n    structure.\n\n.. note::\n    If a MACE model is loaded through the ``mace_model`` hyperparameter, the\n    atomic baselines in the MACE model are used by default for the target\n    indicated in ``mace_head_target``. If you want to override them, you need\n    to set explicitly the baselines for that target in this hyperparameter.",
+          "title": "Atomic Baseline",
+          "type": "object"
+        },
+        "fixed_scaling_weights": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "Weights for target scaling.\n\nThis is passed to the ``fixed_weights`` argument of :meth:`Scaler.train_model\n<metatrain.utils.scaler.scaler.Scaler.train_model>`, see its documentation to\nunderstand exactly what to pass here.\n\n.. note::\n    If a MACE model is loaded through the ``mace_model`` hyperparameter, the\n    scales in the MACE model are used by default for the target\n    indicated in ``mace_head_target``. If you want to override them, you need\n    to set explicitly the baselines for that target in this hyperparameter.",
+          "title": "Fixed Scaling Weights",
+          "type": "object"
+        },
+        "per_structure_targets": {
+          "default": [],
+          "description": "Targets to calculate per-structure losses and errors on.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Per Structure Targets",
+          "type": "array"
+        },
+        "num_workers": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of workers for data loading. If not provided, it is set automatically.",
+          "title": "Num Workers"
+        },
+        "log_mae": {
+          "default": true,
+          "description": "Log MAE alongside RMSE",
+          "title": "Log Mae",
+          "type": "boolean"
+        },
+        "log_separate_blocks": {
+          "default": false,
+          "description": "Log per-block error.",
+          "title": "Log Separate Blocks",
+          "type": "boolean"
+        },
+        "best_model_metric": {
+          "default": "mae_prod",
+          "description": "Metric used to select best checkpoint (e.g., ``rmse_prod``)",
+          "enum": [
+            "rmse_prod",
+            "mae_prod",
+            "loss"
+          ],
+          "title": "Best Model Metric",
+          "type": "string"
+        },
+        "grad_clip_norm": {
+          "default": 1.0,
+          "description": "Maximum gradient norm value, by default inf (no clipping)",
+          "title": "Grad Clip Norm",
+          "type": "number"
+        },
+        "loss": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/LossSpecification"
+              },
+              "type": "object"
+            }
+          ],
+          "default": "mse",
+          "description": "This section describes the loss function to be used. See the\n:ref:`loss-functions` for more details.",
+          "title": "Loss"
+        },
+        "batch_atom_bounds": {
+          "default": [
+            null,
+            null
+          ],
+          "description": "Bounds for the number of atoms per batch as [min, max]. Batches with atom\ncounts outside these bounds will be skipped during training. Use ``None`` for\neither value to disable that bound. This is useful for preventing out-of-memory\nerrors and ensuring consistent computational load. Default: ``[None, None]``.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Batch Atom Bounds",
+          "type": "array"
+        },
+        "finetune": {
+          "$ref": "#/$defs/FullFinetuneHypers",
+          "description": "Finetuning parameters for MetaMACE models that have been pretrained.\n\nSee :ref:`fine-tuning` for more details."
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__phace__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the experimental.phace model.",
+      "properties": {
+        "num_tensor_products": {
+          "default": 6,
+          "description": "Number of tensor products per GNN layer.",
+          "title": "Num Tensor Products",
+          "type": "integer"
+        },
+        "num_gnn_layers": {
+          "default": 3,
+          "description": "Number of GNN layers.\n\nIncreasing this value might increase the accuracy of the model (especially on\nlarger datasets), at the expense of computational efficiency.",
+          "title": "Num Gnn Layers",
+          "type": "integer"
+        },
+        "cutoff": {
+          "default": 8.0,
+          "description": "Cutoff radius for neighbor search.\n\nThis should be set to a value after which most of the interactions\nbetween atoms is expected to be negligible. A lower cutoff will lead\nto faster models.",
+          "title": "Cutoff",
+          "type": "number"
+        },
+        "num_neighbors_adaptive": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 16,
+          "description": "Target number of neighbors for the adaptive cutoff scheme.\n\nThis parameter activates the adaptive cutoff functionality.\nEach atomic environment has a different cutoff, that is chosen\nsuch that the number of neighbors is approximately equal to this\nvalue. This can be useful to have a more uniform number of neighbors\nper atom, especially in sparse systems. Setting it to None disables\nthis feature and uses all neighbors within the fixed cutoff radius.",
+          "title": "Num Neighbors Adaptive"
+        },
+        "cutoff_width": {
+          "default": 1.0,
+          "description": "Width of the cutoff smoothing function.",
+          "title": "Cutoff Width",
+          "type": "number"
+        },
+        "num_element_channels": {
+          "default": 128,
+          "description": "Number of channels per element.\n\nThis determines the size of the embedding used to encode the atomic species, and it\nincreases or decreases the size of the internal features used in the model.",
+          "title": "Num Element Channels",
+          "type": "integer"
+        },
+        "force_rectangular": {
+          "default": false,
+          "description": "Makes the number of channels per irrep the same.\n\nThis might improve accuracy with a limited increase in computational cost.",
+          "title": "Force Rectangular",
+          "type": "boolean"
+        },
+        "radial_basis": {
+          "$ref": "#/$defs/RadialBasisHypers",
+          "default": {
+            "max_eigenvalue": 25.0,
+            "element_scale": 0.7,
+            "mlp_depth": 3,
+            "mlp_expansion_ratio": 4
+          },
+          "description": "Hyperparameters for the radial basis functions.\n\nRaising``max_eigenvalue`` from its default will increase the number of spherical\nirreducible representations (irreps) used in the model, which can improve accuracy\nat the cost of computational efficiency. Increasing this value will also increase\nthe number of radial basis functions (and therefore internal features) used for each\nirrep."
+        },
+        "initial_scaling": {
+          "default": 1.0,
+          "description": "Scaling for the initial features.",
+          "title": "Initial Scaling",
+          "type": "number"
+        },
+        "message_scaling": {
+          "default": 0.1,
+          "description": "Scaling for message passing.",
+          "title": "Message Scaling",
+          "type": "number"
+        },
+        "final_scaling": {
+          "default": 1.0,
+          "description": "Final scaling factor applied to the model outputs.",
+          "title": "Final Scaling",
+          "type": "number"
+        },
+        "use_sphericart": {
+          "default": false,
+          "description": "Whether to use spherical Cartesian coordinates.",
+          "title": "Use Sphericart",
+          "type": "boolean"
+        },
+        "mlp_head_num_layers": {
+          "default": 1,
+          "description": "Number of layers in the heads for MLP heads.",
+          "title": "Mlp Head Num Layers",
+          "type": "integer"
+        },
+        "mlp_head_expansion_ratio": {
+          "default": 4,
+          "description": "Expansion ratio for the hidden layers of the MLP head.",
+          "title": "Mlp Head Expansion Ratio",
+          "type": "integer"
+        },
+        "tensor_product_expansion_ratio": {
+          "default": 2,
+          "description": "Expansion ratio for the tensor product iterations.",
+          "title": "Tensor Product Expansion Ratio",
+          "type": "integer"
+        },
+        "heads": {
+          "additionalProperties": {
+            "enum": [
+              "mlp",
+              "linear"
+            ],
+            "type": "string"
+          },
+          "default": {},
+          "description": "Heads to use in the model, with options being \"linear\" or \"mlp\".",
+          "title": "Heads",
+          "type": "object"
+        },
+        "zbl": {
+          "default": false,
+          "description": "Whether to use the ZBL potential in the model.",
+          "title": "Zbl",
+          "type": "boolean"
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__experimental__phace__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for training the experimental.phace model.",
+      "properties": {
+        "compile": {
+          "default": false,
+          "description": "Whether to use `torch.compile` during training.\n\nThis can lead to significant speedups, but it will cause a compilation step at the\nbeginning of training which might take up to 5-10 minutes, mainly depending on\n``max_eigenvalue``. Note that this option does not work at the moment with adaptive\ncutoffs.",
+          "title": "Compile",
+          "type": "boolean"
+        },
+        "distributed": {
+          "default": false,
+          "description": "Whether to use distributed training.",
+          "title": "Distributed",
+          "type": "boolean"
+        },
+        "distributed_port": {
+          "default": 39591,
+          "description": "Port for DDP communication.",
+          "title": "Distributed Port",
+          "type": "integer"
+        },
+        "batch_size": {
+          "default": 8,
+          "description": "Batch size for training.\n\nDecrease this value if you run into out-of-memory errors during training. You can\ntry to increase it if your structures are very small (less than 20 atoms) and you\nhave a good GPU.",
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "num_epochs": {
+          "default": 1000,
+          "description": "Number of epochs to train the model.\n\nA larger number of epochs might lead to better accuracy. In general, if you see\nthat the validation metrics are not much worse than the training ones at the end of\ntraining, it might be a good idea to increase this value.",
+          "title": "Num Epochs",
+          "type": "integer"
+        },
+        "learning_rate": {
+          "default": 0.003,
+          "description": "Learning rate for the optimizer.\n\nYou can try to increase this value (e.g., to 0.01) if training is stable and\nslow or decrease it (e.g., to 0.001 or less) if you see divergence in the first\nfew epochs and/or instabilities.",
+          "title": "Learning Rate",
+          "type": "number"
+        },
+        "warmup_fraction": {
+          "default": 0.01,
+          "description": "Fraction of training steps for learning rate warmup.",
+          "title": "Warmup Fraction",
+          "type": "number"
+        },
+        "gradient_clipping": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 1.0,
+          "description": "Gradient clipping value. If None, no clipping is applied.",
+          "title": "Gradient Clipping"
+        },
+        "ema_decay": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0.999,
+          "description": "Decay factor for exponential moving average of model parameters.\nIf None, EMA is not used.",
+          "title": "Ema Decay"
+        },
+        "log_interval": {
+          "default": 1,
+          "description": "Interval to log metrics during training.",
+          "title": "Log Interval",
+          "type": "integer"
+        },
+        "checkpoint_interval": {
+          "default": 25,
+          "description": "Interval to save model checkpoints.",
+          "title": "Checkpoint Interval",
+          "type": "integer"
+        },
+        "scale_targets": {
+          "default": true,
+          "description": "Normalize targets to unit std during training.\n\nIf true, a single scale is computed for each target, given by the uncentered\nstandard deviation across all values in the dataset for that target.\n\nFor targets with more than one property (i.e. > 1 block or >= 1 block with > 1\nproperty), per-property scales are also computed, and used to re-scale model\npredictions.\n\nSee also :ref:`scale-targets`.",
+          "title": "Scale Targets",
+          "type": "boolean"
+        },
+        "atomic_baseline": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "The baselines for each target.\n\nBy default, ``metatrain`` will fit a linear model (:class:`CompositionModel\n<metatrain.utils.additive.composition.CompositionModel>`) to compute the\nleast squares baseline for each atomic species for each target.\n\nHowever, this hyperparameter allows you to provide your own baselines.\nThe value of the hyperparameter should be a dictionary where the keys are the\ntarget names, and the values are either (1) a single baseline to be used for\nall atomic types, or (2) a dictionary mapping atomic types to their baselines.\nFor example:\n\n- ``atomic_baseline: {\"energy\": {1: -0.5, 6: -10.0}}`` will fix the energy\n  baseline for hydrogen (Z=1) to -0.5 and for carbon (Z=6) to -10.0, while\n  fitting the baselines for the energy of all other atomic types, as well\n  as fitting the baselines for all other targets.\n- ``atomic_baseline: {\"energy\": -5.0}`` will fix the energy baseline for\n  all atomic types to -5.0.\n- ``atomic_baseline: {\"mtt:dos\": 0.0}`` sets the baseline for the \"mtt:dos\"\n  target to 0.0, effectively disabling the atomic baseline for that target.\n\nThis atomic baseline is substracted from the targets during training, which\navoids the main model needing to learn atomic contributions, and likely makes\ntraining easier. When the model is used in evaluation mode, the atomic baseline\nis added on top of the model predictions automatically.\n\n.. note::\n    This atomic baseline is a per-atom contribution. Therefore, if the property\n    you are predicting is a sum over all atoms (e.g., total energy), the\n    contribution of the atomic baseline to the total property will be the\n    atomic baseline multiplied by the number of atoms of that type in the\n    structure.\n\n.. note::\n    If a MACE model is loaded through the ``mace_model`` hyperparameter, the\n    atomic baselines in the MACE model are used by default for the target\n    indicated in ``mace_head_target``. If you want to override them, you need\n    to set explicitly the baselines for that target in this hyperparameter.",
+          "title": "Atomic Baseline",
+          "type": "object"
+        },
+        "fixed_scaling_weights": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "Fixed scaling weights for the model.",
+          "title": "Fixed Scaling Weights",
+          "type": "object"
+        },
+        "num_workers": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of workers for data loading.",
+          "title": "Num Workers"
+        },
+        "per_structure_targets": {
+          "default": [],
+          "description": "List of targets to calculate per-structure losses.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Per Structure Targets",
+          "type": "array"
+        },
+        "log_separate_blocks": {
+          "default": false,
+          "description": "Whether to log per-block error during training.",
+          "title": "Log Separate Blocks",
+          "type": "boolean"
+        },
+        "log_mae": {
+          "default": false,
+          "description": "Whether to log MAE alongside RMSE during training.",
+          "title": "Log Mae",
+          "type": "boolean"
+        },
+        "best_model_metric": {
+          "default": "rmse_prod",
+          "description": "Metric used to select the best model checkpoint.",
+          "enum": [
+            "rmse_prod",
+            "mae_prod",
+            "loss"
+          ],
+          "title": "Best Model Metric",
+          "type": "string"
+        },
+        "loss": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/LossSpecification"
+              },
+              "type": "object"
+            }
+          ],
+          "default": "mse",
+          "description": "Loss function used for training.",
+          "title": "Loss"
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "metatrain__gap__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the GAP model.",
+      "properties": {
+        "soap": {
+          "$ref": "#/$defs/SOAPHypers",
+          "default": {
+            "cutoff": {
+              "radius": 5.0,
+              "smoothing": {
+                "type": "ShiftedCosine",
+                "width": 1.0
+              }
+            },
+            "density": {
+              "center_atom_weight": 1.0,
+              "scaling": {
+                "exponent": 7.0,
+                "rate": 1.0,
+                "scale": 2.0,
+                "type": "Willatt2018"
+              },
+              "type": "Gaussian",
+              "width": 0.3
+            },
+            "basis": {
+              "max_angular": 6,
+              "radial": {
+                "max_radial": 7,
+                "type": "Gto"
+              },
+              "type": "TensorProduct"
+            }
+          }
+        },
+        "krr": {
+          "$ref": "#/$defs/KRRHypers",
+          "default": {
+            "degree": 2,
+            "num_sparse_points": 500
+          }
+        },
+        "zbl": {
+          "default": false,
+          "title": "Zbl",
+          "type": "boolean"
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__gap__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the GAP trainer.",
+      "properties": {
+        "regularizer": {
+          "default": 0.001,
+          "description": "Value of the regularizer for the energy. It should\nbe tuned depending on the specific dataset. If it is too small might\nlead to overfitting, if it is too big might lead to bad accuracy.",
+          "title": "Regularizer",
+          "type": "number"
+        },
+        "regularizer_forces": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Value of the regularizer for the forces. It has\na similar effect as ``regularizer``. If ``None``, it is set equal to\n``regularizer``. It might be changed to have better accuracy.",
+          "title": "Regularizer Forces"
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "metatrain__llpr__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the LLPR model.",
+      "properties": {
+        "num_ensemble_members": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "default": {},
+          "description": "Number of ensemble members for each target property for which LLPR ensembles\nshould be generated. No ensembles will be generated for targets which are not\nlisted.",
+          "title": "Num Ensemble Members",
+          "type": "object"
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__llpr__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the LLPR trainer.",
+      "properties": {
+        "distributed": {
+          "default": false,
+          "description": "Whether to use distributed training",
+          "title": "Distributed",
+          "type": "boolean"
+        },
+        "distributed_port": {
+          "default": 39591,
+          "description": "Port for distributed communication among processes",
+          "title": "Distributed Port",
+          "type": "integer"
+        },
+        "batch_size": {
+          "default": 8,
+          "description": "This defines the batch size used in the computation of last-layer\nfeatures, covariance matrix, etc.",
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "regularizer": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "This is the regularizer value :math:`\\varsigma` that is used in\napplying Eq. 24 of Bigi et al :footcite:p:`bigi_mlst_2024`:\n\n.. math::\n\n    \\sigma^2_\\star = \\alpha^2 \\boldsymbol{\\mathrm{f}}^{\\mathrm{T}}_\\star\n    (\\boldsymbol{\\mathrm{F}}^{\\mathrm{T}} \\boldsymbol{\\mathrm{F}} + \\varsigma^2\n    \\boldsymbol{\\mathrm{I}})^{-1} \\boldsymbol{\\mathrm{f}}_\\star\n\nIf set to ``null``, the internal routine will determine the smallest regularizer\nvalue that guarantees numerical stability in matrix inversion. Having exposed the\nformula here, we also note to the user that the training routine of the LLPR\nwrapper model finds the ideal global calibration factor :math:`\\alpha`.",
+          "title": "Regularizer"
+        },
+        "model_checkpoint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "This should provide the checkpoint to the model for which the\nuser wants to perform UQ based on the LLPR approach. Note that the model\narchitecture must comply with the requirement that the last-layer features are\nexposed under the convention defined by metatrain.",
+          "title": "Model Checkpoint"
+        },
+        "loss": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/LossSpecification"
+              },
+              "type": "object"
+            }
+          ],
+          "default": "gaussian_nll_ensemble",
+          "description": "This section describes the loss function to be used during LLPR ensemble\nweight training. We strongly suggest only using ensemble-specific loss functions,\ni.e. one of \"gaussian_nll_ensemble\", \"gaussian_crps_ensemble\",\n\"empirical_crps_ensemble\".\nPlease refer to the :ref:`loss-functions` documentation for more details of the rest\nof the hypers.",
+          "title": "Loss"
+        },
+        "num_epochs": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of epochs for which the LLPR ensemble weight training should\ntake place. If set to ``null``, only the LLPR covariance matrix computation\nand calibration will be performed, without ensemble weight training.",
+          "title": "Num Epochs"
+        },
+        "train_all_parameters": {
+          "default": false,
+          "description": "Whether to train all parameters of the LLPR-wrapped model, or only the\nensemble weights. If ``true``, all parameters will be trained, including those\nof the base model. If ``false``, only the last-layer ensemble weights will be\ntrained. Note that training all parameters (i.e., setting this flag to ``true``)\nwill potentially change the uncertainty estimates given by the LLPR through the\n``uncertainty`` outputs (because the last-layer features will change).\nIn that case, only uncertainties calculated as standard deviations over the ensemble\nmembers (``ensemble`` outputs) will be meaningful.",
+          "title": "Train All Parameters",
+          "type": "boolean"
+        },
+        "warmup_fraction": {
+          "default": 0.01,
+          "description": "Fraction of training steps used for learning rate warmup.",
+          "title": "Warmup Fraction",
+          "type": "number"
+        },
+        "learning_rate": {
+          "default": 0.0003,
+          "description": "Learning rate.",
+          "title": "Learning Rate",
+          "type": "number"
+        },
+        "weight_decay": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weight Decay"
+        },
+        "log_interval": {
+          "default": 1,
+          "description": "Interval to log metrics.",
+          "title": "Log Interval",
+          "type": "integer"
+        },
+        "checkpoint_interval": {
+          "default": 100,
+          "description": "Interval to save checkpoints.",
+          "title": "Checkpoint Interval",
+          "type": "integer"
+        },
+        "per_structure_targets": {
+          "default": [],
+          "description": "Targets to calculate per-structure losses and errors on.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Per Structure Targets",
+          "type": "array"
+        },
+        "num_workers": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of workers for data loading. If not provided, it is set\nautomatically.",
+          "title": "Num Workers"
+        },
+        "log_mae": {
+          "default": false,
+          "description": "Log MAE alongside RMSE",
+          "title": "Log Mae",
+          "type": "boolean"
+        },
+        "log_separate_blocks": {
+          "default": false,
+          "description": "Log per-block error.",
+          "title": "Log Separate Blocks",
+          "type": "boolean"
+        },
+        "best_model_metric": {
+          "default": "loss",
+          "description": "Metric used to select best checkpoint (e.g., ``rmse_prod``)",
+          "enum": [
+            "rmse_prod",
+            "mae_prod",
+            "loss"
+          ],
+          "title": "Best Model Metric",
+          "type": "string"
+        },
+        "grad_clip_norm": {
+          "default": 1.0,
+          "description": "Maximum gradient norm value, by default inf (no clipping)",
+          "title": "Grad Clip Norm",
+          "type": "number"
+        },
+        "batch_atom_bounds": {
+          "default": [
+            null,
+            null
+          ],
+          "description": "Bounds for the number of atoms per batch as [min, max]. Batches with atom\ncounts outside these bounds will be skipped during training. Use ``None`` for\neither value to disable that bound. This is useful for preventing out-of-memory\nerrors and ensuring consistent computational load. Default: ``[None, None]``.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Batch Atom Bounds",
+          "type": "array"
+        },
+        "calibration_method": {
+          "default": "absolute_residuals",
+          "description": "This determines how to calculate the calibration factor :math:`\\alpha` in\nEq. 24 of Bigi et al :footcite:p:`bigi_mlst_2024`:\n\n.. math::\n\n    \\sigma^2_\\star = \\alpha^2 \\boldsymbol{\\mathrm{f}}^{\\mathrm{T}}_\\star\n    (\\boldsymbol{\\mathrm{F}}^{\\mathrm{T}} \\boldsymbol{\\mathrm{F}} + \\varsigma^2\n    \\boldsymbol{\\mathrm{I}})^{-1} \\boldsymbol{\\mathrm{f}}_\\star\n\nIn any case, a Gaussian error distribution is assumed. If set to\n``squared_residuals``, the calibration factor is computed minimizing the negative\nlog-likelihood. If set to ``absolute_residuals``, the calibration factor is computed\nfrom mean absolute error assuming Gaussian errors. The latter choice is more robust\nto outliers and we recommend using it for large and/or uncurated datasets.\nIf set to ``crps``, continuous ranked probability score (CRPS) is minimized to find\nthe calibration factor. You might want to use this option if you then want to train\nthe ensemble weights using a CRPS loss.",
+          "enum": [
+            "absolute_residuals",
+            "squared_residuals",
+            "crps"
+          ],
+          "title": "Calibration Method",
+          "type": "string"
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "metatrain__pet__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the PET model.",
+      "properties": {
+        "cutoff": {
+          "default": 4.5,
+          "description": "Cutoff radius for neighbor search.\n\nThis should be set to a value after which most of the interactions\nbetween atoms is expected to be negligible. A lower cutoff will lead\nto faster models.",
+          "title": "Cutoff",
+          "type": "number"
+        },
+        "num_neighbors_adaptive": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Target number of neighbors for the adaptive cutoff scheme.\n\nThis parameter activates the adaptive cutoff functionality.\nEach atomic environments has a different cutoff, that is chosen\nsuch that the number of neighbors is approximately equal to this\nvalue. This can be useful to have a more uniform number of neighbors\nper atom, especially in sparse systems. Setting it to None disables\nthis feature and uses all neighbors within the fixed cutoff radius.",
+          "title": "Num Neighbors Adaptive"
+        },
+        "adaptive_cutoff_method": {
+          "default": "solver",
+          "description": "Algorithm used to compute the per-atom adaptive cutoffs.\n\n``\"grid\"`` evaluates the smoothed neighbor count on a discrete probe-cutoff\ngrid and returns a Gaussian-weighted average of the probes (legacy\nbehaviour). ``\"solver\"`` solves ``n_total(r) = num_neighbors_adaptive`` via\na Newton-bisection root finder (default; faster and more accurate). Only\nhas effect when ``num_neighbors_adaptive`` is set.",
+          "enum": [
+            "grid",
+            "solver"
+          ],
+          "title": "Adaptive Cutoff Method",
+          "type": "string"
+        },
+        "cutoff_function": {
+          "default": "Bump",
+          "description": "Type of the smoothing function at the cutoff",
+          "enum": [
+            "Cosine",
+            "Bump"
+          ],
+          "title": "Cutoff Function",
+          "type": "string"
+        },
+        "cutoff_width": {
+          "default": 0.5,
+          "description": "Width of the smoothing function at the cutoff",
+          "title": "Cutoff Width",
+          "type": "number"
+        },
+        "cutoff_width_adaptive": {
+          "default": 1.0,
+          "description": "Width of the smooth cutoff taper used by the adaptive cutoff scheme.\n\nThis controls the taper width of the smoothed neighbor count used to\ncompute the per-atom adaptive cutoffs. Only has effect when\n``num_neighbors_adaptive`` is set.",
+          "title": "Cutoff Width Adaptive",
+          "type": "number"
+        },
+        "d_pet": {
+          "default": 128,
+          "description": "Dimension of the edge features.\n\nThis hyperparameters controls width of the neural network. In general,\nincreasing it might lead to better accuracy, especially on larger datasets, at the\ncost of increased training and evaluation time.",
+          "title": "D Pet",
+          "type": "integer"
+        },
+        "d_head": {
+          "default": 128,
+          "description": "Dimension of the attention heads.",
+          "title": "D Head",
+          "type": "integer"
+        },
+        "d_node": {
+          "default": 256,
+          "description": "Dimension of the node features.\n\nIncreasing this hyperparameter might lead to better accuracy,\nwith a relatively small increase in inference time.",
+          "title": "D Node",
+          "type": "integer"
+        },
+        "d_feedforward": {
+          "default": 256,
+          "description": "Dimension of the feedforward network in the attention layer.",
+          "title": "D Feedforward",
+          "type": "integer"
+        },
+        "num_heads": {
+          "default": 8,
+          "description": "Attention heads per attention layer.",
+          "title": "Num Heads",
+          "type": "integer"
+        },
+        "num_attention_layers": {
+          "default": 2,
+          "description": "The number of attention layers in each layer of the graph\nneural network. Depending on the dataset, increasing this hyperparameter might\nlead to better accuracy, at the cost of increased training and evaluation time.",
+          "title": "Num Attention Layers",
+          "type": "integer"
+        },
+        "num_gnn_layers": {
+          "default": 2,
+          "description": "The number of graph neural network layers.\n\nIn general, decreasing this hyperparameter to 1 will lead to much faster models,\nat the expense of accuracy. Increasing it may or may not lead to better accuracy,\ndepending on the dataset, at the cost of increased training and evaluation time.",
+          "title": "Num Gnn Layers",
+          "type": "integer"
+        },
+        "normalization": {
+          "default": "RMSNorm",
+          "description": "Layer normalization type.",
+          "enum": [
+            "RMSNorm",
+            "LayerNorm"
+          ],
+          "title": "Normalization",
+          "type": "string"
+        },
+        "activation": {
+          "default": "SwiGLU",
+          "description": "Activation function.",
+          "enum": [
+            "SiLU",
+            "SwiGLU"
+          ],
+          "title": "Activation",
+          "type": "string"
+        },
+        "attention_temperature": {
+          "default": 1.0,
+          "description": "The temperature scaling factor for attention scores.",
+          "title": "Attention Temperature",
+          "type": "number"
+        },
+        "transformer_type": {
+          "default": "PreLN",
+          "description": "The order in which the layer normalization and attention\nare applied in a transformer block. Available options are ``PreLN``\n(normalization before attention) and ``PostLN`` (normalization after attention).",
+          "enum": [
+            "PreLN",
+            "PostLN"
+          ],
+          "title": "Transformer Type",
+          "type": "string"
+        },
+        "featurizer_type": {
+          "default": "feedforward",
+          "description": "Implementation of the featurizer of the model to use. Available\noptions are ``residual`` (the original featurizer from the PET paper, that uses\nresidual connections at each GNN layer for readout) and ``feedforward`` (a modern\nversion that uses the last representation after all GNN iterations for readout).\nAdditionally, the feedforward version uses bidirectional features flow during the\nmessage passing iterations, that favors features flowing from atom ``i`` to atom\n``j`` to be not equal to the features flowing from atom ``j`` to atom ``i``.",
+          "enum": [
+            "residual",
+            "feedforward"
+          ],
+          "title": "Featurizer Type",
+          "type": "string"
+        },
+        "zbl": {
+          "default": false,
+          "description": "Use ZBL potential for short-range repulsion",
+          "title": "Zbl",
+          "type": "boolean"
+        },
+        "long_range": {
+          "$ref": "#/$defs/LongRangeHypers",
+          "default": {
+            "enable": false,
+            "use_ewald": false,
+            "smearing": 1.4,
+            "kspace_resolution": 1.33,
+            "interpolation_nodes": 5
+          },
+          "description": "Long-range Coulomb interactions parameters."
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__pet__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for training PET models.",
+      "properties": {
+        "distributed": {
+          "default": false,
+          "description": "Whether to use distributed training",
+          "title": "Distributed",
+          "type": "boolean"
+        },
+        "distributed_port": {
+          "default": 39591,
+          "description": "Port for distributed communication among processes",
+          "title": "Distributed Port",
+          "type": "integer"
+        },
+        "batch_size": {
+          "default": 16,
+          "description": "The number of samples to use in each batch of training. This\nhyperparameter controls the tradeoff between training speed and memory usage. In\ngeneral, larger batch sizes will lead to faster training, but might require more\nmemory.",
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "num_epochs": {
+          "default": 1000,
+          "description": "Number of epochs.",
+          "title": "Num Epochs",
+          "type": "integer"
+        },
+        "warmup_fraction": {
+          "default": 0.01,
+          "description": "Fraction of training steps used for learning rate warmup.",
+          "title": "Warmup Fraction",
+          "type": "number"
+        },
+        "learning_rate": {
+          "default": 0.0001,
+          "description": "Learning rate.",
+          "title": "Learning Rate",
+          "type": "number"
+        },
+        "weight_decay": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weight Decay"
+        },
+        "log_interval": {
+          "default": 1,
+          "description": "Interval to log metrics.",
+          "title": "Log Interval",
+          "type": "integer"
+        },
+        "checkpoint_interval": {
+          "default": 100,
+          "description": "Interval to save checkpoints.",
+          "title": "Checkpoint Interval",
+          "type": "integer"
+        },
+        "atomic_baseline": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "The baselines for each target.\n\nBy default, ``metatrain`` will fit a linear model (:class:`CompositionModel\n<metatrain.utils.additive.composition.CompositionModel>`) to compute the\nleast squares baseline for each atomic species for each target.\n\nHowever, this hyperparameter allows you to provide your own baselines.\nThe value of the hyperparameter should be a dictionary where the keys are the\ntarget names, and the values are either (1) a single baseline to be used for\nall atomic types, or (2) a dictionary mapping atomic types to their baselines.\nFor example:\n\n- ``atomic_baseline: {\"energy\": {1: -0.5, 6: -10.0}}`` will fix the energy\n  baseline for hydrogen (Z=1) to -0.5 and for carbon (Z=6) to -10.0, while\n  fitting the baselines for the energy of all other atomic types, as well\n  as fitting the baselines for all other targets.\n- ``atomic_baseline: {\"energy\": -5.0}`` will fix the energy baseline for\n  all atomic types to -5.0.\n- ``atomic_baseline: {\"mtt:dos\": 0.0}`` sets the baseline for the \"mtt:dos\"\n  target to 0.0, effectively disabling the atomic baseline for that target.\n\nThis atomic baseline is substracted from the targets during training, which\navoids the main model needing to learn atomic contributions, and likely makes\ntraining easier. When the model is used in evaluation mode, the atomic baseline\nis added on top of the model predictions automatically.\n\n.. note::\n\n    This atomic baseline is a per-atom contribution. Therefore, if the property\n    you are predicting is a sum over all atoms (e.g., total energy), the\n    contribution of the atomic baseline to the total property will be the\n    atomic baseline multiplied by the number of atoms of that type in the\n    structure.",
+          "title": "Atomic Baseline",
+          "type": "object"
+        },
+        "scale_targets": {
+          "default": true,
+          "description": "Normalize targets to unit std during training.\n\nIf true, a single scale is computed for each target, given by the uncentered\nstandard deviation across all values in the dataset for that target.\n\nFor targets with more than one property (i.e. > 1 block or >= 1 block with > 1\nproperty), per-property scales are also computed, and used to re-scale model\npredictions.\n\nSee also :ref:`scale-targets`.",
+          "title": "Scale Targets",
+          "type": "boolean"
+        },
+        "fixed_scaling_weights": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "Weights for target scaling.\n\nThis is passed to the ``fixed_weights`` argument of\n:meth:`Scaler.train_model <metatrain.utils.scaler.scaler.Scaler.train_model>`,\nsee its documentation to understand exactly what to pass here.",
+          "title": "Fixed Scaling Weights",
+          "type": "object"
+        },
+        "per_structure_targets": {
+          "default": [],
+          "description": "Targets to calculate per-structure losses and errors on.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Per Structure Targets",
+          "type": "array"
+        },
+        "num_workers": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of workers for data loading. If not provided, it is set\nautomatically.",
+          "title": "Num Workers"
+        },
+        "log_mae": {
+          "default": true,
+          "description": "Log MAE alongside RMSE",
+          "title": "Log Mae",
+          "type": "boolean"
+        },
+        "log_separate_blocks": {
+          "default": false,
+          "description": "Log per-block error.",
+          "title": "Log Separate Blocks",
+          "type": "boolean"
+        },
+        "best_model_metric": {
+          "default": "mae_prod",
+          "description": "Metric used to select best checkpoint (e.g., ``rmse_prod``)",
+          "enum": [
+            "rmse_prod",
+            "mae_prod",
+            "loss"
+          ],
+          "title": "Best Model Metric",
+          "type": "string"
+        },
+        "grad_clip_norm": {
+          "default": 1.0,
+          "description": "Maximum gradient norm value.",
+          "title": "Grad Clip Norm",
+          "type": "number"
+        },
+        "loss": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/LossSpecification"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "type": "object"
+            }
+          ],
+          "default": "mse",
+          "description": "This section describes the loss function to be used. See the\n:ref:`loss-functions` for more details.",
+          "title": "Loss"
+        },
+        "batch_atom_bounds": {
+          "default": [
+            null,
+            null
+          ],
+          "description": "Bounds for the number of atoms per batch as [min, max]. Batches with atom\ncounts outside these bounds will be skipped during training. Use ``None`` for\neither value to disable that bound. This is useful for preventing out-of-memory\nerrors and ensuring consistent computational load. Default: ``[None, None]``.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Batch Atom Bounds",
+          "type": "array"
+        },
+        "max_atoms_per_batch": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "If set, use greedy atom-count packing instead of fixed ``batch_size``.\nStructures are accumulated into each batch until adding another would exceed this\nlimit, producing variable numbers of structures per batch. Only supported with\n``MemmapDataset``. When set, ``batch_size`` is ignored for constructing training\nand validation batches (it is still used internally for composition model and\nscaler fitting). ``batch_atom_bounds`` filtering in the collate function is also\ndisabled, as atom-count bounds are enforced at packing time instead.",
+          "title": "Max Atoms Per Batch"
+        },
+        "min_atoms_per_batch": {
+          "default": 0,
+          "description": "Minimum total number of atoms required to keep a batch when\n``max_atoms_per_batch`` is set. Batches whose total atom count falls below this\nthreshold are discarded during packing. Defaults to ``0`` (no minimum).",
+          "title": "Min Atoms Per Batch",
+          "type": "integer"
+        },
+        "finetune": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NoFinetuneHypers"
+            },
+            {
+              "$ref": "#/$defs/FullFinetuneHypers"
+            },
+            {
+              "$ref": "#/$defs/LoRaFinetuneHypers"
+            },
+            {
+              "$ref": "#/$defs/HeadsFinetuneHypers"
+            }
+          ],
+          "default": {
+            "read_from": null,
+            "method": "full",
+            "config": {},
+            "inherit_heads": {}
+          },
+          "description": "Parameters for fine-tuning trained PET models.\n\nSee :ref:`label_fine_tuning_concept` for more details.",
+          "title": "Finetune"
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "metatrain__soap_bpnn__documentation__ModelHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for the SOAP + BPNN architecture.",
+      "properties": {
+        "soap": {
+          "$ref": "#/$defs/SOAPConfig",
+          "default": {
+            "max_angular": 6,
+            "max_radial": 7,
+            "cutoff": {
+              "radius": 5.0,
+              "width": 0.5
+            }
+          },
+          "description": "Configuration of the SOAP descriptors."
+        },
+        "legacy": {
+          "default": true,
+          "description": "If true, uses the legacy implementation without chemical embedding and with one\nMLP head per atomic species.",
+          "title": "Legacy",
+          "type": "boolean"
+        },
+        "bpnn": {
+          "$ref": "#/$defs/BPNNConfig",
+          "default": {
+            "num_hidden_layers": 2,
+            "num_neurons_per_layer": 32,
+            "layernorm": true
+          },
+          "description": "Configuration of the neural network architecture."
+        },
+        "add_lambda_basis": {
+          "default": true,
+          "description": "This boolean parameter controls whether or not to add a spherical\nexpansion term of the same angular order as the targets, when they are\ntensorial.",
+          "title": "Add Lambda Basis",
+          "type": "boolean"
+        },
+        "heads": {
+          "additionalProperties": {
+            "enum": [
+              "mlp",
+              "linear"
+            ],
+            "type": "string"
+          },
+          "default": {},
+          "description": "The type of head (\u201clinear\u201d or \u201cmlp\u201d) to use for each target\n(e.g. heads: {\"energy\": \"linear\", \"mtt::dipole\": \"mlp\"}). All omitted\ntargets will use a MLP (multi-layer perceptron) head. MLP heads consists\nof one hidden layer with as many neurons as the\nSOAP-BPNN (see ``BPNNConfig.num_neurons_per_layer``).",
+          "title": "Heads",
+          "type": "object"
+        },
+        "zbl": {
+          "default": false,
+          "description": "Whether to use the ZBL short-range repulsion as the baseline for the model.\nMay be needed to achieve better description at the close-contact, repulsive regime.",
+          "title": "Zbl",
+          "type": "boolean"
+        },
+        "long_range": {
+          "$ref": "#/$defs/LongRangeHypers",
+          "default": {
+            "enable": false,
+            "use_ewald": false,
+            "smearing": 1.4,
+            "kspace_resolution": 1.33,
+            "interpolation_nodes": 5
+          },
+          "description": "Parameters related to long-range interactions.\n\nMay be needed to describe important long-range effects not captured by\nthe short-range SOAP-BPNN model"
+        }
+      },
+      "title": "ModelHypers",
+      "type": "object"
+    },
+    "metatrain__soap_bpnn__documentation__TrainerHypers": {
+      "additionalProperties": false,
+      "description": "Hyperparameters for training SOAP BPNN models.",
+      "properties": {
+        "distributed": {
+          "default": false,
+          "description": "Whether to use distributed training",
+          "title": "Distributed",
+          "type": "boolean"
+        },
+        "distributed_port": {
+          "default": 39591,
+          "description": "Port for distributed communication among processes",
+          "title": "Distributed Port",
+          "type": "integer"
+        },
+        "batch_size": {
+          "default": 8,
+          "description": "The number of samples to use in each batch of training. This\nhyperparameter controls the tradeoff between training speed and memory usage. In\ngeneral, larger batch sizes will lead to faster training, but might require more\nmemory.",
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "num_epochs": {
+          "default": 100,
+          "description": "Number of epochs.",
+          "title": "Num Epochs",
+          "type": "integer"
+        },
+        "warmup_fraction": {
+          "default": 0.01,
+          "description": "Fraction of training steps used for learning rate warmup.",
+          "title": "Warmup Fraction",
+          "type": "number"
+        },
+        "learning_rate": {
+          "default": 0.001,
+          "description": "Learning rate.",
+          "title": "Learning Rate",
+          "type": "number"
+        },
+        "log_interval": {
+          "default": 5,
+          "description": "Interval to log metrics.",
+          "title": "Log Interval",
+          "type": "integer"
+        },
+        "checkpoint_interval": {
+          "default": 25,
+          "description": "Interval to save checkpoints.",
+          "title": "Checkpoint Interval",
+          "type": "integer"
+        },
+        "atomic_baseline": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "The baselines for each target.\n\nBy default, ``metatrain`` will fit a linear model (:class:`CompositionModel\n<metatrain.utils.additive.composition.CompositionModel>`) to compute the\nleast squares baseline for each atomic species for each target.\n\nHowever, this hyperparameter allows you to provide your own baselines.\nThe value of the hyperparameter should be a dictionary where the keys are the\ntarget names, and the values are either (1) a single baseline to be used for\nall atomic types, or (2) a dictionary mapping atomic types to their baselines.\nFor example:\n\n- ``atomic_baseline: {\"energy\": {1: -0.5, 6: -10.0}}`` will fix the energy\n  baseline for hydrogen (Z=1) to -0.5 and for carbon (Z=6) to -10.0, while\n  fitting the baselines for the energy of all other atomic types, as well\n  as fitting the baselines for all other targets.\n- ``atomic_baseline: {\"energy\": -5.0}`` will fix the energy baseline for\n  all atomic types to -5.0.\n- ``atomic_baseline: {\"mtt:dos\": 0.0}`` sets the baseline for the \"mtt:dos\"\n  target to 0.0, effectively disabling the atomic baseline for that target.\n\nThis atomic baseline is substracted from the targets during training, which\navoids the main model needing to learn atomic contributions, and likely makes\ntraining easier. When the model is used in evaluation mode, the atomic baseline\nis added on top of the model predictions automatically.\n\n.. note::\n\n    This atomic baseline is a per-atom contribution. Therefore, if the property\n    you are predicting is a sum over all atoms (e.g., total energy), the\n    contribution of the atomic baseline to the total property will be the\n    atomic baseline multiplied by the number of atoms of that type in the\n    structure.",
+          "title": "Atomic Baseline",
+          "type": "object"
+        },
+        "scale_targets": {
+          "default": true,
+          "description": "Normalize targets to unit std during training.\n\nIf true, a single scale is computed for each target, given by the uncentered\nstandard deviation across all values in the dataset for that target.\n\nFor targets with more than one property (i.e. > 1 block or >= 1 block with > 1\nproperty), per-property scales are also computed, and used to re-scale model\npredictions.\n\nSee also :ref:`scale-targets`.",
+          "title": "Scale Targets",
+          "type": "boolean"
+        },
+        "fixed_scaling_weights": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "default": {},
+          "description": "Weights for target scaling.\n\nThis is passed to the ``fixed_weights`` argument of\n:meth:`Scaler.train_model <metatrain.utils.scaler.scaler.Scaler.train_model>`,\nsee its documentation to understand exactly what to pass here.",
+          "title": "Fixed Scaling Weights",
+          "type": "object"
+        },
+        "per_structure_targets": {
+          "default": [],
+          "description": "Targets to calculate per-structure losses and errors on.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Per Structure Targets",
+          "type": "array"
+        },
+        "num_workers": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of workers for data loading. If not provided, it is set\nautomatically.",
+          "title": "Num Workers"
+        },
+        "log_mae": {
+          "default": false,
+          "description": "Log MAE alongside RMSE",
+          "title": "Log Mae",
+          "type": "boolean"
+        },
+        "log_separate_blocks": {
+          "default": false,
+          "description": "Log per-block error.",
+          "title": "Log Separate Blocks",
+          "type": "boolean"
+        },
+        "best_model_metric": {
+          "default": "rmse_prod",
+          "description": "Metric used to select best checkpoint (e.g., ``rmse_prod``)",
+          "enum": [
+            "rmse_prod",
+            "mae_prod",
+            "loss"
+          ],
+          "title": "Best Model Metric",
+          "type": "string"
+        },
+        "loss": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/LossSpecification"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "type": "object"
+            }
+          ],
+          "default": "mse",
+          "description": "This section describes the loss function to be used. See the\n:ref:`loss-functions` for more details.",
+          "title": "Loss"
+        },
+        "batch_atom_bounds": {
+          "default": [
+            null,
+            null
+          ],
+          "description": "Bounds for the number of atoms per batch as [min, max]. Batches with atom\ncounts outside these bounds will be skipped during training. Use ``None`` for\neither value to disable that bound. This is useful for preventing out-of-memory\nerrors and ensuring consistent computational load. Default: ``[None, None]``.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Batch Atom Bounds",
+          "type": "array"
+        }
+      },
+      "title": "TrainerHypers",
+      "type": "object"
+    },
+    "petArchitecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "pet",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__pet__documentation__ModelHypers",
+          "default": {
+            "cutoff": 4.5,
+            "num_neighbors_adaptive": null,
+            "adaptive_cutoff_method": "solver",
+            "cutoff_function": "Bump",
+            "cutoff_width": 0.5,
+            "cutoff_width_adaptive": 1.0,
+            "d_pet": 128,
+            "d_head": 128,
+            "d_node": 256,
+            "d_feedforward": 256,
+            "num_heads": 8,
+            "num_attention_layers": 2,
+            "num_gnn_layers": 2,
+            "normalization": "RMSNorm",
+            "activation": "SwiGLU",
+            "attention_temperature": 1.0,
+            "transformer_type": "PreLN",
+            "featurizer_type": "feedforward",
+            "zbl": false,
+            "long_range": {
+              "enable": false,
+              "interpolation_nodes": 5,
+              "kspace_resolution": 1.33,
+              "smearing": 1.4,
+              "use_ewald": false
+            }
+          }
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__pet__documentation__TrainerHypers",
+          "default": {
+            "distributed": false,
+            "distributed_port": 39591,
+            "batch_size": 16,
+            "num_epochs": 1000,
+            "warmup_fraction": 0.01,
+            "learning_rate": 0.0001,
+            "weight_decay": null,
+            "log_interval": 1,
+            "checkpoint_interval": 100,
+            "atomic_baseline": {},
+            "scale_targets": true,
+            "fixed_scaling_weights": {},
+            "per_structure_targets": [],
+            "num_workers": null,
+            "log_mae": true,
+            "log_separate_blocks": false,
+            "best_model_metric": "mae_prod",
+            "grad_clip_norm": 1.0,
+            "loss": "mse",
+            "batch_atom_bounds": [
+              null,
+              null
+            ],
+            "max_atoms_per_batch": null,
+            "min_atoms_per_batch": 0,
+            "finetune": {
+              "config": {},
+              "inherit_heads": {},
+              "method": "full",
+              "read_from": null
+            }
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "petArchitecture",
+      "type": "object"
+    },
+    "phaceArchitecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "experimental.phace",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__experimental__phace__documentation__ModelHypers",
+          "default": {
+            "num_tensor_products": 6,
+            "num_gnn_layers": 3,
+            "cutoff": 8.0,
+            "num_neighbors_adaptive": 16,
+            "cutoff_width": 1.0,
+            "num_element_channels": 128,
+            "force_rectangular": false,
+            "radial_basis": {
+              "element_scale": 0.7,
+              "max_eigenvalue": 25.0,
+              "mlp_depth": 3,
+              "mlp_expansion_ratio": 4
+            },
+            "initial_scaling": 1.0,
+            "message_scaling": 0.1,
+            "final_scaling": 1.0,
+            "use_sphericart": false,
+            "mlp_head_num_layers": 1,
+            "mlp_head_expansion_ratio": 4,
+            "tensor_product_expansion_ratio": 2,
+            "heads": {},
+            "zbl": false
+          }
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__experimental__phace__documentation__TrainerHypers",
+          "default": {
+            "compile": false,
+            "distributed": false,
+            "distributed_port": 39591,
+            "batch_size": 8,
+            "num_epochs": 1000,
+            "learning_rate": 0.003,
+            "warmup_fraction": 0.01,
+            "gradient_clipping": 1.0,
+            "ema_decay": 0.999,
+            "log_interval": 1,
+            "checkpoint_interval": 25,
+            "scale_targets": true,
+            "atomic_baseline": {},
+            "fixed_scaling_weights": {},
+            "num_workers": null,
+            "per_structure_targets": [],
+            "log_separate_blocks": false,
+            "log_mae": false,
+            "best_model_metric": "rmse_prod",
+            "loss": "mse"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "experimental.phaceArchitecture",
+      "type": "object"
+    },
+    "soap_bpnnArchitecture": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "soap_bpnn",
+          "description": "Name of the architecture. The architecure options will depend on the chosen architecture.",
+          "title": "Name",
+          "type": "string"
+        },
+        "atomic_types": {
+          "default": null,
+          "items": {
+            "type": "integer"
+          },
+          "title": "Atomic Types",
+          "type": "array"
+        },
+        "model": {
+          "$ref": "#/$defs/metatrain__soap_bpnn__documentation__ModelHypers",
+          "default": {
+            "soap": {
+              "cutoff": {
+                "radius": 5.0,
+                "width": 0.5
+              },
+              "max_angular": 6,
+              "max_radial": 7
+            },
+            "legacy": true,
+            "bpnn": {
+              "layernorm": true,
+              "num_hidden_layers": 2,
+              "num_neurons_per_layer": 32
+            },
+            "add_lambda_basis": true,
+            "heads": {},
+            "zbl": false,
+            "long_range": {
+              "enable": false,
+              "interpolation_nodes": 5,
+              "kspace_resolution": 1.33,
+              "smearing": 1.4,
+              "use_ewald": false
+            }
+          }
+        },
+        "training": {
+          "$ref": "#/$defs/metatrain__soap_bpnn__documentation__TrainerHypers",
+          "default": {
+            "distributed": false,
+            "distributed_port": 39591,
+            "batch_size": 8,
+            "num_epochs": 100,
+            "warmup_fraction": 0.01,
+            "learning_rate": 0.001,
+            "log_interval": 5,
+            "checkpoint_interval": 25,
+            "atomic_baseline": {},
+            "scale_targets": true,
+            "fixed_scaling_weights": {},
+            "per_structure_targets": [],
+            "num_workers": null,
+            "log_mae": false,
+            "log_separate_blocks": false,
+            "best_model_metric": "rmse_prod",
+            "loss": "mse",
+            "batch_atom_bounds": [
+              null,
+              null
+            ]
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "soap_bpnnArchitecture",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Base hyperparameters for all models.",
+  "properties": {
+    "architecture": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/soap_bpnnArchitecture"
+        },
+        {
+          "$ref": "#/$defs/llprArchitecture"
+        },
+        {
+          "$ref": "#/$defs/petArchitecture"
+        },
+        {
+          "$ref": "#/$defs/gapArchitecture"
+        },
+        {
+          "$ref": "#/$defs/flashmdArchitecture"
+        },
+        {
+          "$ref": "#/$defs/classifierArchitecture"
+        },
+        {
+          "$ref": "#/$defs/dpa3Architecture"
+        },
+        {
+          "$ref": "#/$defs/flashmd_symplecticArchitecture"
+        },
+        {
+          "$ref": "#/$defs/phaceArchitecture"
+        },
+        {
+          "$ref": "#/$defs/maceArchitecture"
+        }
+      ],
+      "title": "Architecture"
+    },
+    "device": {
+      "title": "Device",
+      "type": "string"
+    },
+    "base_precision": {
+      "enum": [
+        16,
+        32,
+        64
+      ],
+      "title": "Base Precision",
+      "type": "integer"
+    },
+    "seed": {
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "wandb": {
+      "additionalProperties": true,
+      "title": "Wandb",
+      "type": "object"
+    },
+    "training_set": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DatasetDictHypers"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/DatasetDictHypers"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Training Set"
+    },
+    "validation_set": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/IndicesOnlyHypers"
+        },
+        {
+          "$ref": "#/$defs/DatasetDictHypers"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/DatasetDictHypers"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "ge": 0.0,
+          "lt": 1.0
+        }
+      ],
+      "title": "Validation Set"
+    },
+    "test_set": {
+      "default": 0.0,
+      "oneOf": [
+        {
+          "$ref": "#/$defs/IndicesOnlyHypers"
+        },
+        {
+          "$ref": "#/$defs/DatasetDictHypers"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/DatasetDictHypers"
+          },
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "ge": 0.0,
+          "lt": 1.0
+        }
+      ],
+      "title": "Test Set"
+    }
+  },
+  "required": [
+    "architecture"
+  ],
+  "title": "BaseHypers",
+  "type": "object"
+}

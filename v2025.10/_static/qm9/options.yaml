@@ -1,0 +1,18 @@
+# architecture used to train the model
+architecture:
+  name: soap_bpnn
+  training:
+    num_epochs: 5  # a very short training run
+    batch_size: 10
+
+# Mandatory section defining the parameters for system and target data of the
+# training set
+training_set:
+  systems: qm9_reduced_100.xyz  # file where the positions are stored
+  targets:
+    energy:
+      key: U0  # name of the target value
+      unit: eV  # unit of the target value
+
+test_set: 0.1  # 10 % of the training_set are randomly split and taken for test set
+validation_set: 0.1  # 10 % of the training_set are randomly split and for validation

@@ -1,0 +1,145 @@
+.. _arch-soap_bpnn:
+
+SOAP-BPNN
+=========
+
+This is a Behler-Parrinello type neural network :footcite:p:`behler_generalized_2007`,
+which, instead of their original atom-centered symmetry functions, we use the Smooth
+overlap of atomic positions (SOAP) :footcite:p:`bartok_representing_2013` as the atomic
+descriptors, computed with `torch-spex <https://github.com/lab-cosmo/torch-spex>`_.
+
+.. _arch-soap_bpnn_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[soap_bpnn]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``soap_bpnn``.
+
+Additional outputs
+------------------
+
+In addition to the targets defined in the dataset, the SOAP-BPNN architecture can also
+output the following additional quantity:
+
+- ``features``: the internal features, before the different heads for each target.
+- :ref:`mtt-aux-target-last-layer-features`: The features for a given target, taken
+  before the last linear layer of the corresponding head.
+
+.. _arch-soap_bpnn_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``soap_bpnn`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/soap_bpnn-default-hypers.yaml
+   :language: yaml
+
+.. _arch-soap_bpnn_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.ModelHypers.soap
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.ModelHypers.legacy
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.ModelHypers.bpnn
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.ModelHypers.add_lambda_basis
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.ModelHypers.heads
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.ModelHypers.zbl
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.ModelHypers.long_range
+
+
+
+with the following definitions needed to fully understand some of the parameters:
+
+.. autoclass:: metatrain.soap_bpnn.documentation.SOAPConfig
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.soap_bpnn.documentation.SOAPCutoffConfig
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.soap_bpnn.documentation.BPNNConfig
+    :members:
+    :undoc-members:
+
+.. _arch-soap_bpnn_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.distributed
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.warmup_fraction
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.atomic_baseline
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.scale_targets
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.fixed_scaling_weights
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.num_workers
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.loss
+
+        .. autoattribute:: metatrain.soap_bpnn.documentation.TrainerHypers.batch_atom_bounds
+
+
+
+.. _arch-soap_bpnn_references:
+
+References
+----------
+
+.. footbibliography::

@@ -1,0 +1,203 @@
+.. _arch-pet:
+
+PET
+===
+
+PET is a cleaner, more user-friendly reimplementation of the original
+PET model :footcite:p:`pozdnyakov_smooth_2023`. It is designed for better
+modularity and maintainability, while preseving compatibility with the original
+PET implementation in ``metatrain``. It also adds new features like long-range
+features, better fine-tuning implementation, a possibility to train on
+arbitrarty targets, and a faster inference due to the ``fast attention``.
+
+.. _arch-pet_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[pet]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``pet``.
+
+Additional outputs
+------------------
+
+In addition to the targets defined in the dataset, the PET architecture can also output
+the following additional quantity:
+
+- ``features``: the internal PET features, before the different heads for each target.
+- :ref:`mtt-aux-target-last-layer-features`: The features for a given target, taken
+  before the last linear layer of the corresponding head.
+
+.. _arch-pet_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``pet`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/pet-default-hypers.yaml
+   :language: yaml
+
+Tuning hyperparameters
+----------------------
+
+The default hyperparameters above will work well in most cases, but they may not be
+optimal for your specific dataset. There is good number of parameters to tune, both for
+the :ref:`model <arch-pet_model_hypers>` and the :ref:`trainer
+<arch-pet_trainer_hypers>`. Since seeing them for the first time might be
+overwhelming, here we provide a **list of the parameters that are in general the most
+important** (in decreasing order of importance):
+
+.. container:: mtt-hypers-remove-classname
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.cutoff
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_neighbors_adaptive
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.TrainerHypers.learning_rate
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.TrainerHypers.batch_size
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_pet
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_node
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_gnn_layers
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_attention_layers
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.TrainerHypers.loss
+      :no-index:
+
+  .. autoattribute:: metatrain.pet.documentation.ModelHypers.long_range
+      :no-index:
+
+.. _arch-pet_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.cutoff
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_neighbors_adaptive
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.cutoff_function
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.cutoff_width
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_pet
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_head
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_node
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.d_feedforward
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_heads
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_attention_layers
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.num_gnn_layers
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.normalization
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.activation
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.attention_temperature
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.transformer_type
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.featurizer_type
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.zbl
+
+        .. autoattribute:: metatrain.pet.documentation.ModelHypers.long_range
+
+
+
+.. _arch-pet_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.distributed
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.warmup_fraction
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.weight_decay
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.atomic_baseline
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.scale_targets
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.fixed_scaling_weights
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.num_workers
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.grad_clip_norm
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.loss
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.batch_atom_bounds
+
+        .. autoattribute:: metatrain.pet.documentation.TrainerHypers.finetune
+
+
+
+.. _arch-pet_references:
+
+References
+----------
+
+.. footbibliography::

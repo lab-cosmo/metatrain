@@ -1,0 +1,825 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="LLPR" href="llpr.html"><link rel="prev" title="FlashMD" href="flashmd.html">
+        <link rel="canonical" href="https://docs.metatensor.org/metatrain/latest/architectures/generated/gap.html">
+        <link rel="prefetch" href="../../_static/images/metatrain-horizontal.png" as="image">
+        <link rel="prefetch" href="../../_static/images/metatrain-horizontal-dark.png" as="image">
+
+    <link rel="shortcut icon" href="../../_static/metatrain-64.png"><!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>GAP - metatrain 2026.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles.css?v=e1ddca15" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">metatrain 2026.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../../_static/images/metatrain-horizontal.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../../_static/images/metatrain-horizontal-dark.png" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation/installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../getting-started/index.html">Getting started</a><input aria-label="Toggle navigation of Getting started" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/train_yaml_config.html">Training YAML Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/override.html">Override Architecture’s Default Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/checkpoints.html">Restarting and Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started/units.html">Units</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Available Architectures</a><input aria-label="Toggle navigation of Available Architectures" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="flashmd.html">FlashMD</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">GAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="llpr.html">LLPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mace.html">MACE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nanopet.html">NanoPET (deprecated)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pet.html">PET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="soap_bpnn.html">SOAP-BPNN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../generated_examples/index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../generated_examples/0-beginner/index.html">Beginner Tutorials</a><input aria-label="Toggle navigation of Beginner Tutorials" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/00-basic-usage.html">Basic Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/01-data_preparation.html">How to prepare data for training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/02-fine-tuning.html">Fine-tuning a pre-trained model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/03-train_from_scratch.html">Training a model from scratch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/04-parity_plot.html">Model validation with parity plots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/0-beginner/05-run_ase.html">Running molecular dynamics with ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../generated_examples/1-advanced/index.html">Advanced Tutorials</a><input aria-label="Toggle navigation of Advanced Tutorials" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/00-transfer-learning.html">Transfer Learning (experimental)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/01-llpr.html">Computing LLPR uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/02-zbl.html">Training a model with ZBL corrections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/03-fitting-generic-targets.html">Fitting generic targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/04-flashmd.html">Training or fine-tuning a FlashMD model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/05-multi-gpu.html">Multi-GPU training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/06-mixed-stress-training.html">Training with Mixed Stress Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/07-dos-training.html">Training a DOS model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated_examples/1-advanced/08-llpr-ensemble-training.html">Generating and training an LLPR-derived shallow ensemble model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../concepts/index.html">Concepts and Design</a><input aria-label="Toggle navigation of Concepts and Design" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/output-naming.html">Output naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/fine-tuning.html">Fine-tune a pre-trained model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/loss-functions.html">Loss functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/auxiliary-outputs.html">Auxiliary outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/batch-bounds.html">Training with Batch Bounds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cite.html">Citing Metatrain</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../dev-docs/index.html">Developer documentation</a><input aria-label="Toggle navigation of Developer documentation" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/getting-started.html">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/architecture-life-cycle.html">Life Cycle of an Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/new-architecture.html">Adding a new architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/dataset-information.html">Dataset Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/new-loss.html">Adding a new loss function</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../dev-docs/cli/index.html">CLI API</a><input aria-label="Toggle navigation of CLI API" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/train.html">Train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/eval.html">Eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/export.html">Export</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/cli/formatter.html">Formatter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../dev-docs/utils/index.html">Utility API</a><input aria-label="Toggle navigation of Utility API" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../dev-docs/utils/additive/index.html">Additive models</a><input aria-label="Toggle navigation of Additive models" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/additive/remove_additive.html">Removing additive contributions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/additive/composition.html">Composition model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/additive/zbl.html">ZBL short-range potential</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../dev-docs/utils/scaler/index.html">Scaler models</a><input aria-label="Toggle navigation of Scaler models" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/scaler/scaler.html">Scaler model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/scaler/remove_scale.html">Removing the scale from targets</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../dev-docs/utils/data/index.html">Data</a><input aria-label="Toggle navigation of Data" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/combine_dataloaders.html">Combining dataloaders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/dataset.html">Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/get_dataset.html">Reading a dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/readers.html">Readers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/writers.html">Target data Writers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../dev-docs/utils/data/systems_to_ase.html">Converting Systems to ASE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/abc.html">Abstract base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/architectures.html">Architectures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/augmentation.html">Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/devices.html">Device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/dtype.html">Dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/errors.html">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/evaluate_model.html">Evaluating a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/external_naming.html">External Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/hypers.html">Hyperparameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/io.html">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/long_range.html">Long-range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/loss.html">Loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/neighbor_lists.html">Neighbor lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/omegaconf.html">Custom omegaconf functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/output_gradient.html">Output gradient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/per_atom.html">Averaging predictions per atom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/pydantic.html">Pydantic utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/sum_over_atoms.html">Summing over atoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/testing.html">Testing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/transfer.html">Data type and device transfers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dev-docs/utils/units.html">Unit handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/base-hypers.html">Base hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev-docs/changelog.html">Changelog</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/architectures/generated/gap.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="gap">
+<span id="architecture-gap"></span><h1>GAP<a class="headerlink" href="#gap" title="Link to this heading">¶</a></h1>
+<p>This is an implementation of the sparse Gaussian Approximation Potential
+(GAP) <a class="footnote-reference brackets" href="#footcite-bartok-representing-2013" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> using Smooth Overlap of Atomic Positions
+(SOAP) <a class="footnote-reference brackets" href="#footcite-bartok-gaussian-2010" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> implemented in <a class="reference external" href="https://github.com/Luthaf/featomic">featomic</a>.</p>
+<p>The GAP model in metatrain can only train on CPU, but evaluation
+is also supported on GPU.</p>
+<section id="installation">
+<span id="architecture-gap-installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install this architecture along with the <code class="docutils literal notranslate"><span class="pre">metatrain</span></code> package, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>metatrain<span class="o">[</span>gap<span class="o">]</span>
+</pre></div>
+</div>
+<p>where the square brackets indicate that you want to install the optional
+dependencies required for <code class="docutils literal notranslate"><span class="pre">gap</span></code>.</p>
+</section>
+<section id="default-hyperparameters">
+<span id="architecture-gap-default-hypers"></span><h2>Default Hyperparameters<a class="headerlink" href="#default-hyperparameters" title="Link to this heading">¶</a></h2>
+<p>The description of all the hyperparameters used in <code class="docutils literal notranslate"><span class="pre">gap</span></code> is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">architecture</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gap</span>
+<span class="w">  </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">soap</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">cutoff</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">radius</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span>
+<span class="w">        </span><span class="nt">smoothing</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ShiftedCosine</span>
+<span class="w">          </span><span class="nt">width</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="w">      </span><span class="nt">density</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Gaussian</span>
+<span class="w">        </span><span class="nt">center_atom_weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="w">        </span><span class="nt">width</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.3</span>
+<span class="w">        </span><span class="nt">scaling</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Willatt2018</span>
+<span class="w">          </span><span class="nt">rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="w">          </span><span class="nt">scale</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.0</span>
+<span class="w">          </span><span class="nt">exponent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.0</span>
+<span class="w">      </span><span class="nt">basis</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TensorProduct</span>
+<span class="w">        </span><span class="nt">max_angular</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+<span class="w">        </span><span class="nt">radial</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Gto</span>
+<span class="w">          </span><span class="nt">max_radial</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span>
+<span class="w">    </span><span class="nt">krr</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">degree</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">      </span><span class="nt">num_sparse_points</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">    </span><span class="nt">zbl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">training</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">regularizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.001</span>
+<span class="w">    </span><span class="nt">regularizer_forces</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+</pre></div>
+</div>
+</section>
+<section id="model-hyperparameters">
+<span id="architecture-gap-model-hypers"></span><h2>Model hyperparameters<a class="headerlink" href="#model-hyperparameters" title="Link to this heading">¶</a></h2>
+<p>The parameters that go under the <code class="docutils literal notranslate"><span class="pre">architecture.model</span></code> section of the config file
+are the following:</p>
+<div class="mtt-hypers-remove-classname docutils container">
+<blockquote>
+<div><dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.ModelHypers.soap">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">soap</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.gap.documentation.SOAPHypers" title="metatrain.gap.documentation.SOAPHypers"><span class="pre">SOAPHypers</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'basis':</span> <span class="pre">{'max_angular':</span> <span class="pre">6,</span> <span class="pre">'radial':</span> <span class="pre">{'max_radial':</span> <span class="pre">7,</span> <span class="pre">'type':</span> <span class="pre">'Gto'},</span> <span class="pre">'type':</span> <span class="pre">'TensorProduct'},</span> <span class="pre">'cutoff':</span> <span class="pre">{'radius':</span> <span class="pre">5.0,</span> <span class="pre">'smoothing':</span> <span class="pre">{'type':</span> <span class="pre">'ShiftedCosine',</span> <span class="pre">'width':</span> <span class="pre">1.0}},</span> <span class="pre">'density':</span> <span class="pre">{'center_atom_weight':</span> <span class="pre">1.0,</span> <span class="pre">'scaling':</span> <span class="pre">{'exponent':</span> <span class="pre">7.0,</span> <span class="pre">'rate':</span> <span class="pre">1.0,</span> <span class="pre">'scale':</span> <span class="pre">2.0,</span> <span class="pre">'type':</span> <span class="pre">'Willatt2018'},</span> <span class="pre">'type':</span> <span class="pre">'Gaussian',</span> <span class="pre">'width':</span> <span class="pre">0.3}}</span></em><a class="headerlink" href="#metatrain.gap.documentation.ModelHypers.soap" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.ModelHypers.krr">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">krr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.gap.documentation.KRRHypers" title="metatrain.gap.documentation.KRRHypers"><span class="pre">KRRHypers</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'degree':</span> <span class="pre">2,</span> <span class="pre">'num_sparse_points':</span> <span class="pre">500}</span></em><a class="headerlink" href="#metatrain.gap.documentation.ModelHypers.krr" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.ModelHypers.zbl">
+<span class="sig-prename descclassname"><span class="pre">ModelHypers.</span></span><span class="sig-name descname"><span class="pre">zbl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#metatrain.gap.documentation.ModelHypers.zbl" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+</div>
+<p>with the following definitions needed to fully understand some of the parameters:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.KRRHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.gap.documentation.</span></span><span class="sig-name descname"><span class="pre">KRRHypers</span></span><a class="reference internal" href="../../_modules/metatrain/gap/documentation.html#KRRHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.gap.documentation.KRRHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Hyperparameters for the KRR model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.KRRHypers.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">2</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#metatrain.gap.documentation.KRRHypers.degree" title="Link to this definition">¶</a></dt>
+<dd><p>Degree of the kernel. For now, only 2 is allowed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.KRRHypers.num_sparse_points">
+<span class="sig-name descname"><span class="pre">num_sparse_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">500</span></em><a class="headerlink" href="#metatrain.gap.documentation.KRRHypers.num_sparse_points" title="Link to this definition">¶</a></dt>
+<dd><p>Number of sparse points to use during
+the training, it select the number of actual samples
+to use during the training. The selection is done with
+the Further Point Sampling (FPS) algorithm.
+The optimal number of sparse points depends on the system.
+Increasing it might impreve the accuracy, but it also increase the
+memory and time required for training.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.gap.documentation.</span></span><span class="sig-name descname"><span class="pre">SOAPHypers</span></span><a class="reference internal" href="../../_modules/metatrain/gap/documentation.html#SOAPHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.gap.documentation.SOAPHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the SOAP descriptors.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPHypers.cutoff">
+<span class="sig-name descname"><span class="pre">cutoff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.gap.documentation.SOAPCutoffHypers" title="metatrain.gap.documentation.SOAPCutoffHypers"><span class="pre">SOAPCutoffHypers</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'radius':</span> <span class="pre">5.0,</span> <span class="pre">'smoothing':</span> <span class="pre">{'type':</span> <span class="pre">'ShiftedCosine',</span> <span class="pre">'width':</span> <span class="pre">1.0}}</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPHypers.cutoff" title="Link to this definition">¶</a></dt>
+<dd><p>Spherical cutoff (Å) to use for atomic environments.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPHypers.density">
+<span class="sig-name descname"><span class="pre">density</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityHypers" title="metatrain.gap.documentation.SOAPDensityHypers"><span class="pre">SOAPDensityHypers</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'center_atom_weight':</span> <span class="pre">1.0,</span> <span class="pre">'scaling':</span> <span class="pre">{'exponent':</span> <span class="pre">7.0,</span> <span class="pre">'rate':</span> <span class="pre">1.0,</span> <span class="pre">'scale':</span> <span class="pre">2.0,</span> <span class="pre">'type':</span> <span class="pre">'Willatt2018'},</span> <span class="pre">'type':</span> <span class="pre">'Gaussian',</span> <span class="pre">'width':</span> <span class="pre">0.3}</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPHypers.density" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPHypers.basis">
+<span class="sig-name descname"><span class="pre">basis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.gap.documentation.SOAPBasisHypers" title="metatrain.gap.documentation.SOAPBasisHypers"><span class="pre">SOAPBasisHypers</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'max_angular':</span> <span class="pre">6,</span> <span class="pre">'radial':</span> <span class="pre">{'max_radial':</span> <span class="pre">7,</span> <span class="pre">'type':</span> <span class="pre">'Gto'},</span> <span class="pre">'type':</span> <span class="pre">'TensorProduct'}</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPHypers.basis" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPCutoffHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.gap.documentation.</span></span><span class="sig-name descname"><span class="pre">SOAPCutoffHypers</span></span><a class="reference internal" href="../../_modules/metatrain/gap/documentation.html#SOAPCutoffHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.gap.documentation.SOAPCutoffHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Cutoff configuration for the SOAP descriptor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPCutoffHypers.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5.0</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPCutoffHypers.radius" title="Link to this definition">¶</a></dt>
+<dd><p>This should be set to a value after which most of the
+interactions between atoms is expected to be negligible.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPCutoffHypers.smoothing">
+<span class="sig-name descname"><span class="pre">smoothing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.gap.documentation.SOAPCutoffSmoothingHypers" title="metatrain.gap.documentation.SOAPCutoffSmoothingHypers"><span class="pre">SOAPCutoffSmoothingHypers</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'type':</span> <span class="pre">'ShiftedCosine',</span> <span class="pre">'width':</span> <span class="pre">1.0}</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPCutoffHypers.smoothing" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPCutoffSmoothingHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.gap.documentation.</span></span><span class="sig-name descname"><span class="pre">SOAPCutoffSmoothingHypers</span></span><a class="reference internal" href="../../_modules/metatrain/gap/documentation.html#SOAPCutoffSmoothingHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.gap.documentation.SOAPCutoffSmoothingHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Smoothing configuration for the SOAP descriptor cutoff.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPCutoffSmoothingHypers.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ShiftedCosine'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ShiftedCosine'</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPCutoffSmoothingHypers.type" title="Link to this definition">¶</a></dt>
+<dd><p>Cutoff function used to smooth the behavior around the cutoff
+radius.</p>
+<p>Currently, only the Shifted Cosine function is supported, which is defined
+as <code class="docutils literal notranslate"><span class="pre">f(r)</span> <span class="pre">=</span> <span class="pre">1/2</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">cos(π</span> <span class="pre">(r-</span> <span class="pre">cutoff</span> <span class="pre">+</span> <span class="pre">width)</span> <span class="pre">/</span> <span class="pre">width</span> <span class="pre">))</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPCutoffSmoothingHypers.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPCutoffSmoothingHypers.width" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.gap.documentation.</span></span><span class="sig-name descname"><span class="pre">SOAPDensityHypers</span></span><a class="reference internal" href="../../_modules/metatrain/gap/documentation.html#SOAPDensityHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Density configuration for the SOAP descriptor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityHypers.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Gaussian'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Gaussian'</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityHypers.type" title="Link to this definition">¶</a></dt>
+<dd><p>Currently, we only support a Gaussian type orbitals (GTO) as radial basis
+functions and radial integrals.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityHypers.center_atom_weight">
+<span class="sig-name descname"><span class="pre">center_atom_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityHypers.center_atom_weight" title="Link to this definition">¶</a></dt>
+<dd><p>Weight of the central atom contribution to the features. If
+1.0 the center atom contribution is weighted the same as any other
+contribution. If 0.0 the central atom does not contribute to the features
+at all.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityHypers.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.3</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityHypers.width" title="Link to this definition">¶</a></dt>
+<dd><p>Width of the atom-centered gaussian creating the atomic
+density.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityHypers.scaling">
+<span class="sig-name descname"><span class="pre">scaling</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityScalingHypers" title="metatrain.gap.documentation.SOAPDensityScalingHypers"><span class="pre">SOAPDensityScalingHypers</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'exponent':</span> <span class="pre">7.0,</span> <span class="pre">'rate':</span> <span class="pre">1.0,</span> <span class="pre">'scale':</span> <span class="pre">2.0,</span> <span class="pre">'type':</span> <span class="pre">'Willatt2018'}</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityHypers.scaling" title="Link to this definition">¶</a></dt>
+<dd><p>Radial scaling can be used to reduce the importance of neighbor
+atoms further away from the center, usually improving the performance
+of the model.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityScalingHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.gap.documentation.</span></span><span class="sig-name descname"><span class="pre">SOAPDensityScalingHypers</span></span><a class="reference internal" href="../../_modules/metatrain/gap/documentation.html#SOAPDensityScalingHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityScalingHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Density scaling configuration for the SOAP descriptor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityScalingHypers.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Willatt2018'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Willatt2018'</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityScalingHypers.type" title="Link to this definition">¶</a></dt>
+<dd><p>Type of scaling, currently only one type is supported. It uses a
+long-range algebraic decay and smooth behavior at
+<span class="math notranslate nohighlight">\(r\rightarrow 0\)</span>: as introduced by Willatt <em>et al.</em><a class="footnote-reference brackets" href="#footcite-willatt-feature-2018" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> as
+<code class="docutils literal notranslate"><span class="pre">f(r)</span> <span class="pre">=</span> <span class="pre">rate</span> <span class="pre">/</span> <span class="pre">(rate</span> <span class="pre">+</span> <span class="pre">(r</span> <span class="pre">/</span> <span class="pre">scale)</span> <span class="pre">^</span> <span class="pre">exponent)</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityScalingHypers.rate">
+<span class="sig-name descname"><span class="pre">rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityScalingHypers.rate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityScalingHypers.scale">
+<span class="sig-name descname"><span class="pre">scale</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2.0</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityScalingHypers.scale" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPDensityScalingHypers.exponent">
+<span class="sig-name descname"><span class="pre">exponent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7.0</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPDensityScalingHypers.exponent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPBasisHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.gap.documentation.</span></span><span class="sig-name descname"><span class="pre">SOAPBasisHypers</span></span><a class="reference internal" href="../../_modules/metatrain/gap/documentation.html#SOAPBasisHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.gap.documentation.SOAPBasisHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Basis configuration for the SOAP descriptor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPBasisHypers.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'TensorProduct'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'TensorProduct'</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPBasisHypers.type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPBasisHypers.max_angular">
+<span class="sig-name descname"><span class="pre">max_angular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPBasisHypers.max_angular" title="Link to this definition">¶</a></dt>
+<dd><p>Maximum angular channels of the spherical harmonics when
+computing the SOAP descriptors. In general, increasing this
+hyperparameter might lead to better accuracy, especially on larger
+datasets, at the cost of increased training and evaluation time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPBasisHypers.radial">
+<span class="sig-name descname"><span class="pre">radial</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#metatrain.gap.documentation.SOAPBasisRadialHypers" title="metatrain.gap.documentation.SOAPBasisRadialHypers"><span class="pre">SOAPBasisRadialHypers</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'max_radial':</span> <span class="pre">7,</span> <span class="pre">'type':</span> <span class="pre">'Gto'}</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPBasisHypers.radial" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPBasisRadialHypers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metatrain.gap.documentation.</span></span><span class="sig-name descname"><span class="pre">SOAPBasisRadialHypers</span></span><a class="reference internal" href="../../_modules/metatrain/gap/documentation.html#SOAPBasisRadialHypers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metatrain.gap.documentation.SOAPBasisRadialHypers" title="Link to this definition">¶</a></dt>
+<dd><p>Radial basis configuration for the SOAP descriptor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPBasisRadialHypers.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Gto'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Gto'</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPBasisRadialHypers.type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.SOAPBasisRadialHypers.max_radial">
+<span class="sig-name descname"><span class="pre">max_radial</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#metatrain.gap.documentation.SOAPBasisRadialHypers.max_radial" title="Link to this definition">¶</a></dt>
+<dd><p>Maximum radial channels of the spherical harmonics when
+computing the SOAP descriptors. In general, increasing this
+hyperparameter might lead to better accuracy, especially on larger
+datasets, at the cost of increased training and evaluation time.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="trainer-hyperparameters">
+<span id="architecture-gap-trainer-hypers"></span><h2>Trainer hyperparameters<a class="headerlink" href="#trainer-hyperparameters" title="Link to this heading">¶</a></h2>
+<p>The parameters that go under the <code class="docutils literal notranslate"><span class="pre">architecture.trainer</span></code> section of the config file
+are the following:</p>
+<div class="mtt-hypers-remove-classname docutils container">
+<blockquote>
+<div><dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.TrainerHypers.regularizer">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">regularizer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.001</span></em><a class="headerlink" href="#metatrain.gap.documentation.TrainerHypers.regularizer" title="Link to this definition">¶</a></dt>
+<dd><p>Value of the regularizer for the energy. It should
+be tuned depending on the specific dataset. If it is too small might
+lead to overfitting, if it is too big might lead to bad accuracy.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metatrain.gap.documentation.TrainerHypers.regularizer_forces">
+<span class="sig-prename descclassname"><span class="pre">TrainerHypers.</span></span><span class="sig-name descname"><span class="pre">regularizer_forces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#metatrain.gap.documentation.TrainerHypers.regularizer_forces" title="Link to this definition">¶</a></dt>
+<dd><p>Value of the regularizer for the forces. It has
+a similar effect as <code class="docutils literal notranslate"><span class="pre">regularizer</span></code>. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it is set equal to
+<code class="docutils literal notranslate"><span class="pre">regularizer</span></code>. It might be changed to have better accuracy.</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+</section>
+<section id="references">
+<span id="architecture-gap-references"></span><h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<div class="docutils container" id="id4">
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="footcite-bartok-representing-2013" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Albert P. Bartók, Risi Kondor, and Gábor Csányi. On representing chemical environments. <em>Phys. Rev. B</em>, 87(18):184115, May 2013. <a class="reference external" href="https://doi.org/10.1103/PhysRevB.87.184115">doi:10.1103/PhysRevB.87.184115</a>.</p>
+</aside>
+<aside class="footnote brackets" id="footcite-bartok-gaussian-2010" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Albert P. Bartók, Mike C. Payne, Risi Kondor, and Gábor Csányi. Gaussian Approximation Potentials: The Accuracy of Quantum Mechanics, without the Electrons. <em>Phys. Rev. Lett.</em>, 104(13):136403, April 2010. <a class="reference external" href="https://doi.org/10.1103/PhysRevLett.104.136403">doi:10.1103/PhysRevLett.104.136403</a>.</p>
+</aside>
+<aside class="footnote brackets" id="footcite-willatt-feature-2018" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>Michael J. Willatt, Félix Musil, and Michele Ceriotti. Feature optimization for atomistic machine learning yields a data-driven construction of the periodic table of the elements. <em>Phys. Chem. Chem. Phys.</em>, 20(47):29661–29668, December 2018. <a class="reference external" href="https://doi.org/10.1039/C8CP05921G">doi:10.1039/C8CP05921G</a>.</p>
+</aside>
+</aside>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="llpr.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">LLPR</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="flashmd.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">FlashMD</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, metatrain developers
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link fa-brands fa-github fa-2x" href="https://github.com/metatensor/metatrain" aria-label="GitHub"></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">GAP</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#default-hyperparameters">Default Hyperparameters</a></li>
+<li><a class="reference internal" href="#model-hyperparameters">Model hyperparameters</a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.ModelHypers.soap"><code class="docutils literal notranslate"><span class="pre">ModelHypers.soap</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.ModelHypers.krr"><code class="docutils literal notranslate"><span class="pre">ModelHypers.krr</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.ModelHypers.zbl"><code class="docutils literal notranslate"><span class="pre">ModelHypers.zbl</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.KRRHypers"><code class="docutils literal notranslate"><span class="pre">KRRHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.KRRHypers.degree"><code class="docutils literal notranslate"><span class="pre">KRRHypers.degree</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.KRRHypers.num_sparse_points"><code class="docutils literal notranslate"><span class="pre">KRRHypers.num_sparse_points</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPHypers"><code class="docutils literal notranslate"><span class="pre">SOAPHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPHypers.cutoff"><code class="docutils literal notranslate"><span class="pre">SOAPHypers.cutoff</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPHypers.density"><code class="docutils literal notranslate"><span class="pre">SOAPHypers.density</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPHypers.basis"><code class="docutils literal notranslate"><span class="pre">SOAPHypers.basis</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPCutoffHypers"><code class="docutils literal notranslate"><span class="pre">SOAPCutoffHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPCutoffHypers.radius"><code class="docutils literal notranslate"><span class="pre">SOAPCutoffHypers.radius</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPCutoffHypers.smoothing"><code class="docutils literal notranslate"><span class="pre">SOAPCutoffHypers.smoothing</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPCutoffSmoothingHypers"><code class="docutils literal notranslate"><span class="pre">SOAPCutoffSmoothingHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPCutoffSmoothingHypers.type"><code class="docutils literal notranslate"><span class="pre">SOAPCutoffSmoothingHypers.type</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPCutoffSmoothingHypers.width"><code class="docutils literal notranslate"><span class="pre">SOAPCutoffSmoothingHypers.width</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityHypers"><code class="docutils literal notranslate"><span class="pre">SOAPDensityHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityHypers.type"><code class="docutils literal notranslate"><span class="pre">SOAPDensityHypers.type</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityHypers.center_atom_weight"><code class="docutils literal notranslate"><span class="pre">SOAPDensityHypers.center_atom_weight</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityHypers.width"><code class="docutils literal notranslate"><span class="pre">SOAPDensityHypers.width</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityHypers.scaling"><code class="docutils literal notranslate"><span class="pre">SOAPDensityHypers.scaling</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityScalingHypers"><code class="docutils literal notranslate"><span class="pre">SOAPDensityScalingHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityScalingHypers.type"><code class="docutils literal notranslate"><span class="pre">SOAPDensityScalingHypers.type</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityScalingHypers.rate"><code class="docutils literal notranslate"><span class="pre">SOAPDensityScalingHypers.rate</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityScalingHypers.scale"><code class="docutils literal notranslate"><span class="pre">SOAPDensityScalingHypers.scale</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPDensityScalingHypers.exponent"><code class="docutils literal notranslate"><span class="pre">SOAPDensityScalingHypers.exponent</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPBasisHypers"><code class="docutils literal notranslate"><span class="pre">SOAPBasisHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPBasisHypers.type"><code class="docutils literal notranslate"><span class="pre">SOAPBasisHypers.type</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPBasisHypers.max_angular"><code class="docutils literal notranslate"><span class="pre">SOAPBasisHypers.max_angular</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPBasisHypers.radial"><code class="docutils literal notranslate"><span class="pre">SOAPBasisHypers.radial</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPBasisRadialHypers"><code class="docutils literal notranslate"><span class="pre">SOAPBasisRadialHypers</span></code></a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPBasisRadialHypers.type"><code class="docutils literal notranslate"><span class="pre">SOAPBasisRadialHypers.type</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.SOAPBasisRadialHypers.max_radial"><code class="docutils literal notranslate"><span class="pre">SOAPBasisRadialHypers.max_radial</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#trainer-hyperparameters">Trainer hyperparameters</a><ul>
+<li><a class="reference internal" href="#metatrain.gap.documentation.TrainerHypers.regularizer"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.regularizer</span></code></a></li>
+<li><a class="reference internal" href="#metatrain.gap.documentation.TrainerHypers.regularizer_forces"><code class="docutils literal notranslate"><span class="pre">TrainerHypers.regularizer_forces</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=3822dbdc"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

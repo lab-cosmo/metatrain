@@ -1,0 +1,139 @@
+
+
+.. _sphx_glr_generated_examples_0-beginner:
+
+.. _beginner_tutorials:
+
+Beginner Tutorials
+------------------
+
+This sections includes the beginner tutorials on the usage of the ``metatrain`` package.
+
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="metatrain is designed for a direct usage from the command line (cli). The program is registered via the abbreviation mtt to your command line. The general help of metatrain can be accessed using ">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_00-basic-usage_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_generated_examples_0-beginner_00-basic-usage.sh`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Basic Usage</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="    This tutorial is only relevant for users who need to prepare their data from scratch     from several files or for big datasets. If you already have your data in a common     file format (like XYZ or `ASE database`_), you can skip this tutorial and directly     start training.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_01-data_preparation_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_generated_examples_0-beginner_01-data_preparation.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">How to prepare data for training</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="  This section of the documentation is only relevant for PET model so far.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_02-fine-tuning_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_generated_examples_0-beginner_02-fine-tuning.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fine-tune a pre-trained model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial explains how to train a model with metatrain from scratch and evaluate it. This dataset &lt;ethanol_reduced_100.xyz&gt; is used here as an example of the preferred dataset format. If you have your own dataset, you can simply replace the dataset file name with yours.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_03-train_from_scratch_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_generated_examples_0-beginner_03-train_from_scratch.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training a model from scratch</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial shows how to visualise your model output using parity plots. In the sphx_glr_generated_examples_0-beginner_03-train_from_scratch.py we learned how to evaluate a trained model on a test set and save the results to an output file. Here we will show how to create parity plots from these results.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_04-parity_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_generated_examples_0-beginner_04-parity_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Model validation with parity plots</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to use an already trained and exported model to run an ASE simulation of a single ethanol molecule in vacuum. We use a model that was trained using the architecture-soap_bpnn architecture on 100 ethanol systems containing energies and forces. You can obtain the dataset file &lt;ethanol_reduced_100.xyz&gt; used in this example from our website. The dataset is a subset of the rMD17 dataset.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_05-run_ase_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_generated_examples_0-beginner_05-run_ase.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Running molecular dynamics with ASE</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /generated_examples/0-beginner/00-basic-usage
+   /generated_examples/0-beginner/01-data_preparation
+   /generated_examples/0-beginner/02-fine-tuning
+   /generated_examples/0-beginner/03-train_from_scratch
+   /generated_examples/0-beginner/04-parity_plot
+   /generated_examples/0-beginner/05-run_ase
+

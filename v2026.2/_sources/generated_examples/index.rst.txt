@@ -1,0 +1,366 @@
+:orphan:
+
+Tutorials
+=========
+
+Here we present beginner and advanced examples of how to use ``metatrain`` for
+various applications. The beginner examples cover basic usage and data
+preparation, while the advanced examples demonstrate more complex scenarios.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Beginner Tutorials
+------------------
+
+This sections includes the beginner tutorials on the usage of the ``metatrain`` package.
+
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="metatrain is designed for a direct usage from the command line (cli). The program is registered via the abbreviation mtt to your command line. The general help of metatrain can be accessed using ">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_00-basic-usage_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/0-beginner/00-basic-usage`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Basic Usage</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="    This tutorial is only relevant for users who need to prepare their data from scratch     based on several files or for big datasets. If you already have your data in a     common file format (like XYZ or `ASE database`_), you can skip this tutorial and     directly start training.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_01-data_preparation_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/0-beginner/01-data_preparation`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">How to prepare data for training</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="  Finetuning is currently only available for the PET architecture.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_02-fine-tuning_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/0-beginner/02-fine-tuning`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fine-tuning a pre-trained model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial explains how to train a model with metatrain from scratch and evaluate it. This dataset &lt;ethanol_reduced_100.xyz&gt; is used here as an example of the preferred dataset format. If you have your own dataset, you can simply replace the dataset file name with yours.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_03-train_from_scratch_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/0-beginner/03-train_from_scratch`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training a model from scratch</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial shows how to visualise your model output using parity plots. In the sphx_glr_generated_examples_0-beginner_03-train_from_scratch.py we learned how to evaluate a trained model on a test set and save the results to an output file. Here we will show how to create parity plots from these results.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_04-parity_plot_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/0-beginner/04-parity_plot`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Model validation with parity plots</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to use an already trained and exported model to run an ASE simulation of a single ethanol molecule in vacuum. We use a model that was trained using the arch-soap_bpnn architecture on 100 ethanol systems containing energies and forces. You can obtain the dataset file &lt;ethanol_reduced_100.xyz&gt; used in this example from our website. The dataset is a subset of the rMD17 dataset.">
+
+.. only:: html
+
+  .. image:: /generated_examples/0-beginner/images/thumb/sphx_glr_05-run_ase_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/0-beginner/05-run_ase`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Running molecular dynamics with ASE</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Advanced Tutorials
+------------------
+
+This sections includes the advanced tutorials on the usage of the ``metatrain`` package.
+If you are new to ``metatrain``, we recommend to start with the :ref:`label_quickstart`
+and the :ref:`beginner_tutorials`.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="  This section of the documentation is only relevant for PET model so far.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_00-transfer-learning_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/00-transfer-learning`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Transfer Learning (experimental)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a model with uncertainties using metatrain. It involves the computation of the uncertainties on ethanol molecules, using the last-layer prediction rigidity (LLPR) approximation. Both total and local (LPR) uncertainties are computed">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_01-llpr_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/01-llpr`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Computing LLPR uncertainties</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a model with ZBL corrections.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_02-zbl_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/02-zbl`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training a model with ZBL corrections</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Besides energy-like targets, the library also supports reading (and training on) more generic targets.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_03-fitting-generic-targets_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/03-fitting-generic-targets`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fitting generic targets</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train or fine-tune a FlashMD model for the direct prediction of molecular dynamics. This type of model affords faster MD simulations compared to MLIPs by one or two orders of magnitude (https://arxiv.org/abs/2505.19350).">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_04-flashmd_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/04-flashmd`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training or fine-tuning a FlashMD model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="metatrain supports training a model with several GPUs, which can accelerate the training, especially when the training dataset is large / there are many training epochs. This feature is enabled by the :pytorch.distributed module, and thus can do multiprocess parallelism across several nodes.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_05-multi-gpu_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/05-multi-gpu`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Multi-GPU training</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a model on datasets containing structures with and without stress information in the same training set. This is useful when working with:">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_06-mixed-stress-training_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/06-mixed-stress-training`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training with Mixed Stress Structures</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a model for the prediction of the electronic density of states (DOS), while accounting for the unique properties of the DOS using the masked dos loss function &lt;dos-loss&gt;. This procedure can be used to train PET-MAD-DOS, a universal model for the electronic density of states. (https://arxiv.org/abs/2508.17418)">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_07-dos-training_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/07-dos-training`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training a DOS model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to generate and, optionally, further train an LLPR-derived shallow ensemble model using metatrain. Building on the LLPR approach, this more advanced technique allows for 1) generation of a last-layer ensemble model from an LLPR model and 2) gradient-based tuning of ensemble weights using a negative log-likelihood (NLL) loss, often leading to improved uncertainty estimates at the cost of further training.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_08-llpr-ensemble-training_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/08-llpr-ensemble-training`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Generating and training an LLPR-derived shallow ensemble model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to train a classifier model using metatrain. The classifier model is a transfer learning architecture that takes a pre-trained model, freezes its backbone, and trains a small multi-layer perceptron (MLP) on top of the extracted features for classification tasks.">
+
+.. only:: html
+
+  .. image:: /generated_examples/1-advanced/images/thumb/sphx_glr_09-classifier_thumb.png
+    :alt:
+
+  :doc:`/generated_examples/1-advanced/09-classifier`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training a Classifier Model</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+   :includehidden:
+
+
+   /generated_examples/0-beginner/index.rst
+   /generated_examples/1-advanced/index.rst
+
+
+.. only:: html
+
+  .. container:: sphx-glr-footer sphx-glr-footer-gallery
+
+    .. container:: sphx-glr-download sphx-glr-download-python
+
+      :download:`Download all examples as source code: generated_examples.zip </generated_examples/generated_examples.zip>`
+
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download all examples in Jupyter notebooks: generated_examples_jupyter.zip </generated_examples/generated_examples_jupyter.zip>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

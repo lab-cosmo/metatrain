@@ -1,0 +1,61 @@
+
+:orphan:
+
+.. _sphx_glr_generated_examples_1-advanced_sg_execution_times:
+
+
+Computation times
+=================
+**02:38.137** total execution time for 9 files **from generated_examples/1-advanced**:
+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_generated_examples_1-advanced_02-zbl.py` (``02-zbl.py``)
+     - 00:46.107
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_08-llpr-ensemble-training.py` (``08-llpr-ensemble-training.py``)
+     - 00:35.272
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_04-flashmd.py` (``04-flashmd.py``)
+     - 00:31.442
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_01-llpr.py` (``01-llpr.py``)
+     - 00:24.008
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_07-dos-training.py` (``07-dos-training.py``)
+     - 00:14.885
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_06-mixed-stress-training.py` (``06-mixed-stress-training.py``)
+     - 00:06.422
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_05-multi-gpu.py` (``05-multi-gpu.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_03-fitting-generic-targets.py` (``03-fitting-generic-targets.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_generated_examples_1-advanced_00-transfer-learning.py` (``00-transfer-learning.py``)
+     - 00:00.000
+     - 0.0

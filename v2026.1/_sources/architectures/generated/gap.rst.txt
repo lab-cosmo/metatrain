@@ -1,0 +1,119 @@
+.. _architecture-gap:
+
+GAP
+===
+
+This is an implementation of the sparse Gaussian Approximation Potential
+(GAP) :footcite:p:`bartok_representing_2013` using Smooth Overlap of Atomic Positions
+(SOAP) :footcite:p:`bartok_gaussian_2010` implemented in `featomic <FEATOMIC_>`_.
+
+.. _FEATOMIC: https://github.com/Luthaf/featomic
+
+The GAP model in metatrain can only train on CPU, but evaluation
+is also supported on GPU.
+
+.. _architecture-gap_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[gap]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``gap``.
+
+.. _architecture-gap_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``gap`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/gap-default-hypers.yaml
+   :language: yaml
+
+.. _architecture-gap_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.gap.documentation.ModelHypers.soap
+
+        .. autoattribute:: metatrain.gap.documentation.ModelHypers.krr
+
+        .. autoattribute:: metatrain.gap.documentation.ModelHypers.zbl
+
+
+
+with the following definitions needed to fully understand some of the parameters:
+
+.. autoclass:: metatrain.gap.documentation.KRRHypers
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.gap.documentation.SOAPHypers
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.gap.documentation.SOAPCutoffHypers
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.gap.documentation.SOAPCutoffSmoothingHypers
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.gap.documentation.SOAPDensityHypers
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.gap.documentation.SOAPDensityScalingHypers
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.gap.documentation.SOAPBasisHypers
+    :members:
+    :undoc-members:
+
+.. autoclass:: metatrain.gap.documentation.SOAPBasisRadialHypers
+    :members:
+    :undoc-members:
+
+.. _architecture-gap_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.gap.documentation.TrainerHypers.regularizer
+
+        .. autoattribute:: metatrain.gap.documentation.TrainerHypers.regularizer_forces
+
+
+
+.. _architecture-gap_references:
+
+References
+----------
+
+.. footbibliography::

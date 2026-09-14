@@ -1,0 +1,256 @@
+.. _architecture-mace:
+
+MACE
+====
+
+Higher order equivariant message passing graph neural network
+:footcite:p:`batatia2022mace`.
+
+.. _architecture-mace_implementation:
+
+Implementation
+--------------
+
+The architecture is a very thin wrapper around the official MACE implementation, which
+is `hosted here <https://github.com/ACEsuit/mace>`_. Arbitrary heads are added on top of
+MACE to predict an arbitrary number of targets with arbitrary symmetry properties. These
+heads take as input the output node features of MACE and pass them through a linear
+layer (or MLP for invariant targets) to obtain the final predictions.
+
+One important feature is that the architecture is ready to take a pretrained MACE model
+file as input. The heads required to predict the targets will be added on top of the
+MACE model, so one can continue training for arbitrary targets. See the
+``mace_model`` hyperparameter for more details. For simply exporting a foundation MACE
+model to use as a ``metatomic`` model (e.g. in ASE or LAMMPS), see :ref:`exporting a
+foundation MACE model <architecture-mace_export_foundation_model>`.
+
+.. _architecture-mace_installation:
+
+Installation
+------------
+
+To install this architecture along with the ``metatrain`` package, run:
+
+.. code-block:: bash
+
+    pip install metatrain[mace]
+
+where the square brackets indicate that you want to install the optional
+dependencies required for ``mace``.
+
+.. _architecture-mace_default_hypers:
+
+Default Hyperparameters
+-----------------------
+
+The description of all the hyperparameters used in ``mace`` is provided
+further down this page. However, here we provide you with a yaml file containing all
+the default hyperparameters, which might be convenient as a starting point to
+create your own hyperparameter files:
+
+.. literalinclude:: ../default_hypers/mace-default-hypers.yaml
+   :language: yaml
+
+Tuning hyperparameters
+----------------------
+
+The default hyperparameters above will work well in most cases, but they
+may not be optimal for your specific dataset. There is good number of
+parameters to tune, both for the
+:ref:`model <architecture-mace_model_hypers>` and the
+:ref:`trainer <architecture-mace_trainer_hypers>`. Since seeing them
+for the first time might be overwhelming, here we provide a **list of the
+parameters that are in general the most important**:
+
+.. container:: mtt-hypers-remove-classname
+
+  .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.mace_model
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.r_max
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.learning_rate
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.batch_size
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.hidden_irreps
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.correlation
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.num_interactions
+      :no-index:
+
+  .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.loss
+      :no-index:
+
+.. _architecture-mace_model_hypers:
+
+Model hyperparameters
+------------------------
+
+The parameters that go under the ``architecture.model`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.mace_model
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.mace_head_target
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.r_max
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.num_radial_basis
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.radial_type
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.num_cutoff_basis
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.max_ell
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.interaction
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.num_interactions
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.hidden_irreps
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.edge_irreps
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.apply_cutoff
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.avg_num_neighbors
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.pair_repulsion
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.distance_transform
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.correlation
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.gate
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.interaction_first
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.MLP_irreps
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.radial_MLP
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.use_embedding_readout
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.use_last_readout_only
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.ModelHypers.use_agnostic_product
+
+
+
+.. _architecture-mace_trainer_hypers:
+
+Trainer hyperparameters
+-------------------------
+
+The parameters that go under the ``architecture.trainer`` section of the config file
+are the following:
+
+.. container:: mtt-hypers-remove-classname
+
+    ..
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.optimizer
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.learning_rate
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.weight_decay
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.amsgrad
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.beta
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler_gamma
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.lr_factor
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.lr_scheduler_patience
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.distributed
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.distributed_port
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.batch_size
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.num_epochs
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.log_interval
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.checkpoint_interval
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.scale_targets
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.atomic_baseline
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.fixed_scaling_weights
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.per_structure_targets
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.num_workers
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.log_mae
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.log_separate_blocks
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.best_model_metric
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.grad_clip_norm
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.loss
+
+        .. autoattribute:: metatrain.experimental.mace.documentation.TrainerHypers.batch_atom_bounds
+
+
+
+.. _architecture-mace_export_foundation_model:
+
+Exporting a foundation MACE model
+---------------------------------
+
+As it is now, exporting a foundation MACE model from one of their `provided model
+files <https://github.com/ACEsuit/mace-foundations>`_ involves using ``mtt train``
+with 0 epochs. To do so, use the following ``options.yaml`` file:
+
+.. code-block:: yaml
+
+    architecture:
+        name: experimental.mace
+        model:
+            # Replace mace_model with the path to your file
+            mace_model: path/to/foundation/mace/model.model
+            mace_head_target: energy
+        training:
+            num_epochs: 0
+            batch_size: 1
+
+    training_set: dummy_dataset.xyz
+    validation_set: dummy_dataset.xyz
+
+with ``dummy_dataset.xyz`` being any dataset containing at least one structure
+with just the ``energy`` property. For example, you can use:
+
+.. code-block::
+
+    2
+    Properties=species:S:1:pos:R:3:forces:R:3 energy=-2.1
+    H 0.0 0.0 0.0 0.0 0.0 0.0
+    H 1.0 0.0 0.0 0.0 0.0 0.0
+
+.. _architecture-mace_references:
+
+References
+----------
+
+.. footbibliography::
