@@ -125,9 +125,12 @@ def test_load_model_checkpoint_older_version_upgrade_fails(
         model_from_checkpoint(checkpoint, context="restart")
 
 
-def test_load_trainer_checkpoint_wrong_version(
+def test_load_trainer_checkpoint_newer_version(
     monkeypatch, tmp_path, MODEL_PATH_64_BIT
 ):
+    """A trainer checkpoint version newer than the installed architecture should tell the
+    user to upgrade metatrain, instead of trying (and failing) to upgrade the
+    checkpoint."""
     monkeypatch.chdir(tmp_path)
     path = MODEL_PATH_64_BIT.with_suffix(".ckpt")
     model = torch.load(path, weights_only=False, map_location="cpu")
@@ -138,8 +141,10 @@ def test_load_trainer_checkpoint_wrong_version(
 
     message = (
         "Unable to load the trainer checkpoint for the 'soap_bpnn' architecture: the "
-        r"checkpoint is using version 5000000, while the current version is \d+; "
-        "and trying to upgrade the checkpoint failed."
+        r"checkpoint uses checkpoint format version 5000000, but the installed "
+        r"'soap_bpnn' architecture only supports up to version \d+\. You are using "
+        r"metatrain version .*, which is too old to read this checkpoint\. Please "
+        "upgrade metatrain to a newer version."
     )
 
     with pytest.raises(RuntimeError, match=message):
